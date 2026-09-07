@@ -5,7 +5,7 @@
  * Description:       Functionality and structured clinic data for Dr. Britto's Dentistry: treatments, testimonials, FAQs, clinic settings, the appointment enquiry form and local-business schema. Presentation lives in the theme.
  * Version:           1.0.0
  * Requires at least: 6.4
- * Requires PHP:      7.4
+ * Requires PHP:      8.1
  * Author:            Britto's Dentistry
  * License:           GPL v2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html

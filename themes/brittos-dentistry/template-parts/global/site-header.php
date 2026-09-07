@@ -23,7 +23,6 @@ $phone       = brittos_clinic_field( 'phone' );
 				class="site-header__logo"
 				width="160"
 				height="128"
-				fetchpriority="high"
 				decoding="async"
 			>
 			<span class="site-header__name"><?php echo esc_html( $clinic_name ); ?></span>

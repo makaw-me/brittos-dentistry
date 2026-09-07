@@ -111,8 +111,9 @@ function brittos_core_build_faq_schema() {
 
 	$faqs = get_posts( array(
 		'post_type'      => 'faq',
-		'posts_per_page' => 20,
+		'posts_per_page' => 8,
 		'post_status'    => 'publish',
+		'no_found_rows'  => true,
 		'orderby'        => 'menu_order',
 		'order'          => 'ASC',
 	) );

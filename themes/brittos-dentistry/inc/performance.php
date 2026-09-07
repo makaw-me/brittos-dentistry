@@ -40,24 +40,6 @@ remove_action( 'wp_head', 'wp_oembed_add_host_js' );
  */
 
 /**
- * Add async/defer where relevant for any future third-party scripts
- * registered with a `brittos-defer` data flag, without breaking scripts
- * that don't opt in.
- *
- * @param string $tag    Script tag markup.
- * @param string $handle Script handle.
- * @return string
- */
-function brittos_filter_script_tag( $tag, $handle ) {
-	$defer_handles = array( 'brittos-main', 'brittos-navigation' );
-	if ( in_array( $handle, $defer_handles, true ) && false === strpos( $tag, 'defer' ) ) {
-		$tag = str_replace( ' src', ' defer src', $tag );
-	}
-	return $tag;
-}
-add_filter( 'script_loader_tag', 'brittos_filter_script_tag', 10, 2 );
-
-/**
  * Ensure below-the-fold content images lazy-load via the native
  * `loading="lazy"` attribute (WordPress core already applies this from
  * 5.5+; this filter simply guarantees it stays on for post content).
