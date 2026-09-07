@@ -20,8 +20,9 @@ $hours       = brittos_clinic_field( 'opening_hours' );
 <footer class="site-footer" role="contentinfo">
 	<div class="container site-footer__inner">
 
-		<div class="site-footer__col">
+		<div class="site-footer__intro">
 			<p class="site-footer__brand"><?php echo esc_html( $clinic_name ); ?></p>
+			<p class="site-footer__tagline"><?php esc_html_e( 'Modern dentistry, delivered with time, clarity and care.', 'brittos-dentistry' ); ?></p>
 			<?php if ( $dentist ) : ?>
 				<p><?php echo esc_html( $dentist ); ?></p>
 			<?php endif; ?>

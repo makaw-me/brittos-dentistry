@@ -12,6 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
 <head>
+	<?php brittos_theme_color_mode_bootstrap(); ?>
 	<meta charset="<?php bloginfo( 'charset' ); ?>">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="profile" href="https://gmpg.org/xfn/11">

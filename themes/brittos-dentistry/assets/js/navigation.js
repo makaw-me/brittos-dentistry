@@ -9,6 +9,7 @@
 
 	var toggle = document.querySelector( '.nav-toggle' );
 	var nav = document.getElementById( 'primary-navigation' );
+	var close = nav ? nav.querySelector( '.nav-close' ) : null;
 
 	if ( ! toggle || ! nav ) {
 		return;
@@ -17,11 +18,13 @@
 	function closeNav() {
 		nav.classList.remove( 'is-open' );
 		toggle.setAttribute( 'aria-expanded', 'false' );
+		document.body.classList.remove( 'menu-is-open' );
 	}
 
 	function openNav() {
 		nav.classList.add( 'is-open' );
 		toggle.setAttribute( 'aria-expanded', 'true' );
+		document.body.classList.add( 'menu-is-open' );
 		var firstLink = nav.querySelector( 'a, button' );
 		if ( firstLink ) {
 			firstLink.focus();
@@ -37,10 +40,31 @@
 		}
 	} );
 
+	if ( close ) {
+		close.addEventListener( 'click', function () {
+			closeNav();
+			toggle.focus();
+		} );
+	}
+
 	document.addEventListener( 'keydown', function ( event ) {
 		if ( event.key === 'Escape' && nav.classList.contains( 'is-open' ) ) {
 			closeNav();
 			toggle.focus();
+		}
+
+		if ( 'Tab' === event.key && nav.classList.contains( 'is-open' ) ) {
+			var focusable = nav.querySelectorAll( 'a, button' );
+			var first = focusable[ 0 ];
+			var last = focusable[ focusable.length - 1 ];
+
+			if ( event.shiftKey && document.activeElement === first ) {
+				event.preventDefault();
+				last.focus();
+			} else if ( ! event.shiftKey && document.activeElement === last ) {
+				event.preventDefault();
+				first.focus();
+			}
 		}
 	} );
 

@@ -42,7 +42,18 @@ $phone       = brittos_clinic_field( 'phone' );
 			<span class="screen-reader-text"><?php esc_html_e( 'Menu', 'brittos-dentistry' ); ?></span>
 		</button>
 
+		<button type="button" class="theme-toggle theme-toggle--mobile" data-theme-toggle aria-pressed="false" aria-label="<?php esc_attr_e( 'Switch to dark mode', 'brittos-dentistry' ); ?>" title="<?php esc_attr_e( 'Switch to dark mode', 'brittos-dentistry' ); ?>">
+			<span class="theme-toggle__icon" aria-hidden="true"></span>
+			<span class="screen-reader-text"><?php esc_html_e( 'Toggle color mode', 'brittos-dentistry' ); ?></span>
+		</button>
+
 		<nav id="primary-navigation" class="primary-nav" aria-label="<?php esc_attr_e( 'Primary', 'brittos-dentistry' ); ?>">
+			<div class="primary-nav__header">
+				<span class="primary-nav__label"><?php esc_html_e( 'Navigate', 'brittos-dentistry' ); ?></span>
+				<button type="button" class="nav-close" aria-label="<?php esc_attr_e( 'Close menu', 'brittos-dentistry' ); ?>">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
 			<?php brittos_nav_menu( 'primary' ); ?>
 
 			<div class="primary-nav__actions">
@@ -54,6 +65,10 @@ $phone       = brittos_clinic_field( 'phone' );
 				<a class="button button--primary" href="#appointment-form">
 					<?php esc_html_e( 'Book an appointment', 'brittos-dentistry' ); ?>
 				</a>
+				<button type="button" class="theme-toggle theme-toggle--desktop" data-theme-toggle aria-pressed="false" aria-label="<?php esc_attr_e( 'Switch to dark mode', 'brittos-dentistry' ); ?>" title="<?php esc_attr_e( 'Switch to dark mode', 'brittos-dentistry' ); ?>">
+					<span class="theme-toggle__icon" aria-hidden="true"></span>
+					<span class="screen-reader-text"><?php esc_html_e( 'Toggle color mode', 'brittos-dentistry' ); ?></span>
+				</button>
 			</div>
 		</nav>
 

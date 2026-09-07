@@ -15,12 +15,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 function brittos_enqueue_assets() {
 
 	$main_css_path = BRITTOS_THEME_DIR . '/assets/css/main.css';
+	$fonts_css_path = BRITTOS_THEME_DIR . '/assets/css/fonts.css';
 	$components_css_path = BRITTOS_THEME_DIR . '/assets/css/components.css';
+
+	wp_enqueue_style(
+		'brittos-fonts',
+		BRITTOS_THEME_URI . '/assets/css/fonts.css',
+		array(),
+		file_exists( $fonts_css_path ) ? filemtime( $fonts_css_path ) : BRITTOS_THEME_VERSION
+	);
 
 	wp_enqueue_style(
 		'brittos-main',
 		BRITTOS_THEME_URI . '/assets/css/main.css',
-		array(),
+		array( 'brittos-fonts' ),
 		file_exists( $main_css_path ) ? filemtime( $main_css_path ) : BRITTOS_THEME_VERSION
 	);
 

@@ -20,6 +20,7 @@ define( 'BRITTOS_THEME_URI', get_template_directory_uri() );
 $brittos_theme_includes = array(
 	'/inc/setup.php',
 	'/inc/enqueue.php',
+	'/inc/theme-mode.php',
 	'/inc/security.php',
 	'/inc/performance.php',
 	'/inc/accessibility.php',
