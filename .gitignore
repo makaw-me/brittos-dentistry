@@ -1,0 +1,156 @@
+# ============================================================
+
+# WordPress wp-content — Git Ignore
+
+# ============================================================
+
+# ------------------------------------------------------------
+
+# User uploads
+
+# ------------------------------------------------------------
+
+# Uploaded images, PDFs, videos, etc.
+
+uploads/
+
+# ------------------------------------------------------------
+
+# Cache / generated files
+
+# ------------------------------------------------------------
+
+cache/
+upgrade/
+upgrade-temp-backup/
+backup-*/
+ai1wm-backups/
+wflogs/
+et-cache/
+
+# Plugin-generated cache / optimization files
+
+**/cache/
+**/caches/
+**/logs/
+**/log/
+**/tmp/
+**/temp/
+
+# Common generated optimization files
+
+**/.htaccess
+**/*.cache
+**/*.min.css
+**/*.min.js
+
+# ------------------------------------------------------------
+
+# Backup / export files
+
+# ------------------------------------------------------------
+
+*.sql
+*.sql.gz
+*.zip
+*.tar
+*.tar.gz
+*.bak
+*.backup
+*.old
+
+# ------------------------------------------------------------
+
+# Environment / secrets
+
+# ------------------------------------------------------------
+
+.env
+.env.*
+!.env.example
+
+# ------------------------------------------------------------
+
+# OS / editor files
+
+# ------------------------------------------------------------
+
+.DS_Store
+Thumbs.db
+desktop.ini
+
+.vscode/
+.idea/
+
+*.swp
+*.swo
+*~
+
+# ------------------------------------------------------------
+
+# Debug / logs
+
+# ------------------------------------------------------------
+
+*.log
+
+# ------------------------------------------------------------
+
+# Temporary files
+
+# ------------------------------------------------------------
+
+*.tmp
+*.temp
+*.orig
+
+# ------------------------------------------------------------
+
+# Plugin-specific generated files
+
+# ------------------------------------------------------------
+
+# Wordfence
+
+wflogs/
+
+# WP Super Cache
+
+cache/supercache/
+
+# WP Rocket
+
+/cache/wp-rocket/
+
+# LiteSpeed Cache
+
+litespeed/
+.litespeed/
+
+# Elementor generated CSS/cache
+
+uploads/elementor/
+elementor/css/
+
+# WooCommerce generated data
+
+uploads/wc-logs/
+uploads/wc-secure-uploads/
+
+# ------------------------------------------------------------
+
+# Local development artifacts
+
+# ------------------------------------------------------------
+
+phpcs.xml
+phpunit.xml
+.phpunit.result.cache
+coverage/
+vendor/
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+EOF
