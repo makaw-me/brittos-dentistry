@@ -2,6 +2,7 @@
 /**
  * About the dentist section. Pulls from clinic fields where available and
  * falls back to clearly-labelled placeholder copy otherwise.
+ * Fully configurable from Settings > Clinic Info.
  *
  * @package Brittos_Dentistry
  */
@@ -13,6 +14,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 $dentist      = brittos_clinic_field( 'dentist_name' );
 $credentials  = brittos_clinic_field( 'credentials' );
 $about_photo  = brittos_clinic_field( 'dentist_photo_id' );
+
+$eyebrow      = brittos_clinic_field( 'about_eyebrow', __( 'About your dentist', 'brittos-dentistry' ) );
+$heading      = brittos_clinic_field( 'about_heading' );
+if ( ! $heading ) {
+	$heading = $dentist ? $dentist : __( 'A steady, familiar face at every visit', 'brittos-dentistry' );
+}
+
+$para_1       = brittos_clinic_field(
+	'about_para_1',
+	__( 'Every patient is seen personally, start to finish — no hand-offs, no guesswork. Treatment plans are explained plainly, timelines are realistic, and there is never any pressure to say yes on the spot.', 'brittos-dentistry' )
+);
+
+$para_2       = brittos_clinic_field(
+	'about_para_2',
+	__( 'This is a small, independently run clinic by design: fewer chairs, more attention, and the same dentist you saw last time.', 'brittos-dentistry' )
+);
 ?>
 <section class="about-doctor" aria-labelledby="about-doctor-heading">
 	<div class="container about-doctor__inner">
@@ -32,8 +49,8 @@ $about_photo  = brittos_clinic_field( 'dentist_photo_id' );
 
 		<div class="about-doctor__content">
 			<?php get_template_part( 'template-parts/components/section-heading', null, array(
-				'eyebrow' => __( 'About your dentist', 'brittos-dentistry' ),
-				'heading' => $dentist ? $dentist : __( 'A steady, familiar face at every visit', 'brittos-dentistry' ),
+				'eyebrow' => $eyebrow,
+				'heading' => $heading,
 				'id'      => 'about-doctor-heading',
 			) ); ?>
 
@@ -41,22 +58,13 @@ $about_photo  = brittos_clinic_field( 'dentist_photo_id' );
 				<p class="about-doctor__credentials"><?php echo esc_html( $credentials ); ?></p>
 			<?php endif; ?>
 
-			<p>
-				<?php
-				esc_html_e(
-					'Every patient is seen personally, start to finish — no hand-offs, no guesswork. Treatment plans are explained plainly, timelines are realistic, and there is never any pressure to say yes on the spot.',
-					'brittos-dentistry'
-				);
-				?>
-			</p>
-			<p>
-				<?php
-				esc_html_e(
-					'This is a small, independently run clinic by design: fewer chairs, more attention, and the same dentist you saw last time.',
-					'brittos-dentistry'
-				);
-				?>
-			</p>
+			<?php if ( $para_1 ) : ?>
+				<p><?php echo wp_kses_post( nl2br( $para_1 ) ); ?></p>
+			<?php endif; ?>
+
+			<?php if ( $para_2 ) : ?>
+				<p><?php echo wp_kses_post( nl2br( $para_2 ) ); ?></p>
+			<?php endif; ?>
 		</div>
 
 	</div>

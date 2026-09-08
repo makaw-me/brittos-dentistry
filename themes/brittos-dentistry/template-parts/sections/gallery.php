@@ -1,8 +1,8 @@
 <?php
 /**
  * Clinic gallery. Reads an array of attachment IDs from the
- * `brittos_gallery_ids` clinic option (managed in the core plugin's
- * clinic settings screen). Renders nothing if empty.
+ * `gallery_ids` clinic option (managed in Settings > Clinic Info).
+ * Renders nothing if empty.
  *
  * @package Brittos_Dentistry
  */
@@ -11,7 +11,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+$eyebrow     = brittos_clinic_field( 'gallery_eyebrow', __( 'The clinic', 'brittos-dentistry' ) );
+$heading     = brittos_clinic_field( 'gallery_heading', __( 'A calm space to visit', 'brittos-dentistry' ) );
 $gallery_ids = brittos_clinic_field( 'gallery_ids', array() );
+
 if ( is_string( $gallery_ids ) ) {
 	$gallery_ids = array_filter( array_map( 'absint', explode( ',', $gallery_ids ) ) );
 }
@@ -24,8 +27,8 @@ if ( empty( $gallery_ids ) || ! is_array( $gallery_ids ) ) {
 	<div class="container">
 
 		<?php get_template_part( 'template-parts/components/section-heading', null, array(
-			'eyebrow' => __( 'The clinic', 'brittos-dentistry' ),
-			'heading' => __( 'A calm space to visit', 'brittos-dentistry' ),
+			'eyebrow' => $eyebrow,
+			'heading' => $heading,
 			'align'   => 'center',
 			'id'      => 'gallery-heading',
 		) ); ?>

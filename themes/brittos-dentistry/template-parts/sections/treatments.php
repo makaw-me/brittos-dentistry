@@ -2,6 +2,7 @@
 /**
  * Treatments overview grid, pulled from the `treatment` CPT (brittos-core).
  * Renders gracefully with an empty-state message when none exist yet.
+ * Configurable from Settings > Clinic Info.
  *
  * @package Brittos_Dentistry
  */
@@ -9,6 +10,11 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+
+$eyebrow  = brittos_clinic_field( 'treatments_eyebrow', __( 'Treatments', 'brittos-dentistry' ) );
+$heading  = brittos_clinic_field( 'treatments_heading', __( 'Care built around what you actually need', 'brittos-dentistry' ) );
+$lede     = brittos_clinic_field( 'treatments_lede', __( 'A focused range of general and cosmetic treatments — explained clearly, with no upselling.', 'brittos-dentistry' ) );
+$btn_text = brittos_clinic_field( 'treatments_btn_text', __( 'View all treatments', 'brittos-dentistry' ) );
 
 $treatments = post_type_exists( 'treatment' ) ? new WP_Query( array(
 	'post_type'      => 'treatment',
@@ -23,9 +29,9 @@ $treatments = post_type_exists( 'treatment' ) ? new WP_Query( array(
 	<div class="container">
 
 		<?php get_template_part( 'template-parts/components/section-heading', null, array(
-			'eyebrow' => __( 'Treatments', 'brittos-dentistry' ),
-			'heading' => __( 'Care built around what you actually need', 'brittos-dentistry' ),
-			'lede'    => __( 'A focused range of general and cosmetic treatments — explained clearly, with no upselling.', 'brittos-dentistry' ),
+			'eyebrow' => $eyebrow,
+			'heading' => $heading,
+			'lede'    => $lede,
 			'align'   => 'center',
 			'id'      => 'treatments-heading',
 		) ); ?>
@@ -46,7 +52,7 @@ $treatments = post_type_exists( 'treatment' ) ? new WP_Query( array(
 				?>
 				<p class="treatments__all">
 					<a class="button button--secondary" href="<?php echo esc_url( $archive_link ); ?>">
-						<?php esc_html_e( 'View all treatments', 'brittos-dentistry' ); ?>
+						<?php echo esc_html( $btn_text ); ?>
 					</a>
 				</p>
 			<?php endif; ?>

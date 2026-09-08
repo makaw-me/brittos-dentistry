@@ -18,6 +18,11 @@
 			toggle.setAttribute( 'title', 'dark' === theme ? 'Switch to light mode' : 'Switch to dark mode' );
 			toggle.setAttribute( 'aria-pressed', 'dark' === theme ? 'true' : 'false' );
 			toggle.setAttribute( 'data-next-theme', nextTheme );
+
+			var label = toggle.querySelector( '.theme-toggle__label' );
+			if ( label ) {
+				label.textContent = 'dark' === theme ? 'Light Mode' : 'Dark Mode';
+			}
 		} );
 	}
 
