@@ -28,8 +28,11 @@ if ( '' === $short_desc ) {
 				'alt'      => '',
 			) ); ?>
 		<?php else : ?>
-			<span class="treatment-card__image treatment-card__image--placeholder" aria-hidden="true"></span>
+			<span class="treatment-card__image treatment-card__image--placeholder" aria-hidden="true">
+				<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="treatment-card__icon-placeholder"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+			</span>
 		<?php endif; ?>
+		<span class="treatment-card__badge-overlay"><?php esc_html_e( 'Explore', 'brittos-dentistry' ); ?></span>
 	</a>
 
 	<div class="treatment-card__body">
@@ -42,7 +45,12 @@ if ( '' === $short_desc ) {
 		<?php endif; ?>
 
 		<a class="treatment-card__link" href="<?php the_permalink(); ?>">
-			<span aria-hidden="true"><?php esc_html_e( 'Learn more', 'brittos-dentistry' ); ?> &rarr;</span>
+			<span class="treatment-card__link-text"><?php esc_html_e( 'View treatment details', 'brittos-dentistry' ); ?></span>
+			<span class="treatment-card__link-icon" aria-hidden="true">
+				<svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+					<path d="M3.33337 8H12.6667M12.6667 8L8.66671 4M12.6667 8L8.66671 12" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+				</svg>
+			</span>
 			<span class="screen-reader-text">
 				<?php
 				printf(
