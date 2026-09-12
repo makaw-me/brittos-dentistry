@@ -1,0 +1,16 @@
+{
+  "name": "brittos-dentistry-theme",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Build pipeline for bundling and minifying Britto's Dentistry theme assets.",
+  "scripts": {
+    "build": "npm run build:css && npm run build:js",
+    "build:css": "esbuild assets/src/css/site.css --bundle --minify --outfile=assets/dist/css/site.min.css",
+    "build:js": "esbuild assets/src/js/site.js --bundle --minify --target=es2018 --outfile=assets/dist/js/site.min.js",
+    "watch:css": "esbuild assets/src/css/site.css --bundle --minify --watch --outfile=assets/dist/css/site.min.css",
+    "watch:js": "esbuild assets/src/js/site.js --bundle --minify --target=es2018 --watch --outfile=assets/dist/js/site.min.js"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.9"
+  }
+}

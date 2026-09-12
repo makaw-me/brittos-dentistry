@@ -1,0 +1,26 @@
+/* about doctor */
+.about-doctor__inner {
+  display: grid;
+  gap: var(--space-lg);
+  align-items: center;
+}
+@media (min-width: 900px) {
+  .about-doctor__inner {
+    grid-template-columns: 0.8fr 1.2fr;
+  }
+}
+.about-doctor__image,
+.about-doctor__image--placeholder {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-border);
+}
+.about-doctor__image--placeholder {
+  background: var(--brand-sage-soft);
+}
+.about-doctor__credentials {
+  font-weight: 600;
+  color: var(--britto-accent);
+}

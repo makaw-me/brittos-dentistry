@@ -5,7 +5,7 @@
  * Expected $args:
  *   text     (string, required)
  *   url      (string, required)
- *   style    (string) primary|secondary|ghost|outline — default primary
+ *   style    (string) primary|secondary|ghost — default primary
  *   icon     (string|bool) arrow|phone|calendar|none — default depends on style
  *   class    (string) optional extra classes
  *   new_tab  (bool)
@@ -30,7 +30,7 @@ if ( '' === $args['text'] || '' === $args['url'] ) {
 	return;
 }
 
-$allowed_styles = array( 'primary', 'secondary', 'ghost', 'outline' );
+$allowed_styles = array( 'primary', 'secondary', 'ghost' );
 $style          = in_array( $args['style'], $allowed_styles, true ) ? $args['style'] : 'primary';
 
 $extra_class = $args['class'] ? ' ' . esc_attr( $args['class'] ) : '';

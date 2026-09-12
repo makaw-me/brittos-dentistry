@@ -37,18 +37,7 @@ function brittos_theme_color_mode_bootstrap() {
 	<?php
 }
 
-/**
- * Enqueue the interaction layer after the page is parsed.
+/*
+ * Script loading for theme-mode interactions is handled in inc/enqueue.php,
+ * either from the bundled dist asset or from source-file fallbacks.
  */
-function brittos_theme_mode_assets() {
-	$path = BRITTOS_THEME_DIR . '/assets/js/theme-mode.js';
-
-	wp_enqueue_script(
-		'brittos-theme-mode',
-		BRITTOS_THEME_URI . '/assets/js/theme-mode.js',
-		array(),
-		file_exists( $path ) ? filemtime( $path ) : BRITTOS_THEME_VERSION,
-		array( 'strategy' => 'defer', 'in_footer' => true )
-	);
-}
-add_action( 'wp_enqueue_scripts', 'brittos_theme_mode_assets' );

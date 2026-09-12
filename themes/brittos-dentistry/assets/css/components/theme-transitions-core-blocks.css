@@ -1,0 +1,88 @@
+/* theme transitions core blocks */
+.homepage-editorial-content .wp-block-cover {
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  margin-block: var(--space-lg);
+  min-height: 420px;
+}
+.homepage-editorial-content
+  .wp-block-cover
+  video.wp-block-cover__video-background {
+  object-fit: cover;
+}
+.homepage-editorial-content .wp-block-media-text {
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  margin-block: var(--space-lg);
+}
+html.theme-ready body,
+html.theme-ready .site-header,
+html.theme-ready .primary-nav,
+html.theme-ready section,
+html.theme-ready .treatment-card,
+html.theme-ready .testimonial-card,
+html.theme-ready .faq-item__details,
+html.theme-ready .contact-form-card,
+html.theme-ready input,
+html.theme-ready select,
+html.theme-ready textarea,
+html.theme-ready .button,
+html.theme-ready .theme-toggle {
+  transition:
+    background-color var(--transition-fast),
+    color var(--transition-fast),
+    border-color var(--transition-fast),
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+html[data-theme="dark"] .site-header,
+html[data-theme="dark"] .primary-nav,
+html[data-theme="dark"] .contact-form-card,
+html[data-theme="dark"] .breadcrumbs__inner,
+html[data-theme="dark"] .treatment-facts__card,
+html[data-theme="dark"] .mega-panel,
+html[data-theme="dark"] .sub-menu,
+html[data-theme="dark"] .wp-block-search__input,
+html[data-theme="dark"] .wp-block-input,
+html[data-theme="dark"] .wp-block-post-template,
+html[data-theme="dark"] .wp-block-query-pagination,
+html[data-theme="dark"] .wp-block-details,
+html[data-theme="dark"] .wp-block-quote,
+html[data-theme="dark"] .wp-block-pullquote {
+  background-color: var(--britto-surface);
+  color: var(--britto-text);
+  border-color: var(--britto-border);
+}
+html[data-theme="dark"] .wp-block-button__link,
+html[data-theme="dark"] .wp-element-button {
+  background-color: var(--britto-text);
+  color: var(--britto-bg);
+}
+html[data-theme="dark"] .wp-block-separator {
+  border-color: var(--britto-border);
+}
+html[data-theme="dark"] .wp-block-navigation-item__content,
+html[data-theme="dark"] .wp-block-post-title a,
+html[data-theme="dark"] .wp-block-search__button {
+  color: var(--britto-text);
+}
+html[data-theme="dark"] .wp-block-search__button {
+  background-color: var(--britto-text);
+}
+@media (prefers-reduced-motion: reduce) {
+  html.theme-ready body,
+  html.theme-ready .site-header,
+  html.theme-ready .primary-nav,
+  html.theme-ready section,
+  html.theme-ready .treatment-card,
+  html.theme-ready .testimonial-card,
+  html.theme-ready .faq-item__details,
+  html.theme-ready .contact-form-card,
+  html.theme-ready input,
+  html.theme-ready select,
+  html.theme-ready textarea,
+  html.theme-ready .button,
+  html.theme-ready .theme-toggle {
+    transition: none;
+  }
+}
