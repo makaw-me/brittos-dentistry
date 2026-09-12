@@ -150,7 +150,8 @@ h4,
 
 /* Navigation polish: unified left-to-right underline interaction */
 .site-footer__list a,
-.site-footer__link {
+.site-footer__link,
+.site-footer__credit a {
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -164,7 +165,8 @@ h4,
 }
 
 .site-footer__list a::after,
-.site-footer__link::after {
+.site-footer__link::after,
+.site-footer__credit a::after {
   content: "";
   position: absolute;
   left: 0;
@@ -180,7 +182,9 @@ h4,
 .site-footer__list a:hover,
 .site-footer__list a:focus-visible,
 .site-footer__link:hover,
-.site-footer__link:focus-visible {
+.site-footer__link:focus-visible,
+.site-footer__credit a:hover,
+.site-footer__credit a:focus-visible {
   color: var(--brand-ink);
   background: transparent;
   transform: none;
@@ -189,20 +193,25 @@ h4,
 .site-footer__list a:hover::after,
 .site-footer__list a:focus-visible::after,
 .site-footer__link:hover::after,
-.site-footer__link:focus-visible::after {
+.site-footer__link:focus-visible::after,
+.site-footer__credit a:hover::after,
+.site-footer__credit a:focus-visible::after {
   transform: scaleX(1);
 }
 
 html[data-theme="dark"] .site-footer__list a:hover,
 html[data-theme="dark"] .site-footer__list a:focus-visible,
 html[data-theme="dark"] .site-footer__link:hover,
-html[data-theme="dark"] .site-footer__link:focus-visible {
+html[data-theme="dark"] .site-footer__link:focus-visible,
+html[data-theme="dark"] .site-footer__credit a:hover,
+html[data-theme="dark"] .site-footer__credit a:focus-visible {
   color: var(--britto-text);
   background: transparent;
 }
 
 html[data-theme="dark"] .site-footer__list a::after,
-html[data-theme="dark"] .site-footer__link::after {
+html[data-theme="dark"] .site-footer__link::after,
+html[data-theme="dark"] .site-footer__credit a::after {
   background: var(--brand-champagne);
 }
 

@@ -59,6 +59,7 @@ function brittos_core_clinic_tabs() {
 		'why_us'         => __( 'Why Choose Us', 'brittos-core' ),
 		'treatments_cta' => __( 'Treatments & CTA', 'brittos-core' ),
 		'gallery'        => __( 'Gallery', 'brittos-core' ),
+		'footer'         => __( 'Footer', 'brittos-core' ),
 	);
 }
 
@@ -171,6 +172,26 @@ function brittos_core_clinic_field_definitions() {
 		'gallery_eyebrow'       => array( 'tab' => 'gallery', 'label' => __( 'Gallery Eyebrow', 'brittos-core' ), 'type' => 'text', 'help' => __( 'Default: The clinic', 'brittos-core' ) ),
 		'gallery_heading'       => array( 'tab' => 'gallery', 'label' => __( 'Gallery Heading', 'brittos-core' ), 'type' => 'text', 'help' => __( 'Default: A calm space to visit', 'brittos-core' ) ),
 		'gallery_ids'           => array( 'tab' => 'gallery', 'label' => __( 'Clinic Gallery Images', 'brittos-core' ), 'type' => 'gallery', 'help' => __( 'Select photos of the clinic, equipment, and treatment spaces.', 'brittos-core' ) ),
+
+		// TAB: Footer
+		'footer_show_tagline'   => array( 'tab' => 'footer', 'label' => __( 'Show clinic tagline', 'brittos-core' ), 'type' => 'checkbox', 'default' => '1', 'help' => __( 'Show the short brand statement below the clinic name.', 'brittos-core' ) ),
+		'footer_show_dentist'   => array( 'tab' => 'footer', 'label' => __( 'Show lead clinician', 'brittos-core' ), 'type' => 'checkbox', 'default' => '1', 'help' => __( 'Show the clinician name when it has been entered.', 'brittos-core' ) ),
+		'footer_show_address'   => array( 'tab' => 'footer', 'label' => __( 'Show address', 'brittos-core' ), 'type' => 'checkbox', 'default' => '1', 'help' => __( 'Show the configured street address and city.', 'brittos-core' ) ),
+		'footer_show_contact'   => array( 'tab' => 'footer', 'label' => __( 'Show direct contact', 'brittos-core' ), 'type' => 'checkbox', 'default' => '1', 'help' => __( 'Show the phone number and email address.', 'brittos-core' ) ),
+		'footer_show_hours'     => array( 'tab' => 'footer', 'label' => __( 'Show clinic hours', 'brittos-core' ), 'type' => 'checkbox', 'default' => '1', 'help' => __( 'Show the configured opening hours.', 'brittos-core' ) ),
+		'footer_show_navigation' => array( 'tab' => 'footer', 'label' => __( 'Show footer navigation', 'brittos-core' ), 'type' => 'checkbox', 'default' => '1', 'help' => __( 'Show the Footer Navigation menu column.', 'brittos-core' ) ),
+		'footer_show_credit'    => array( 'tab' => 'footer', 'label' => __( 'Show footer credit', 'brittos-core' ), 'type' => 'checkbox', 'default' => '1', 'help' => __( 'Show the short clinical precision and human warmth statement.', 'brittos-core' ) ),
+		'footer_tagline'        => array( 'tab' => 'footer', 'label' => __( 'Footer tagline', 'brittos-core' ), 'type' => 'text', 'default' => __( 'Quiet confidence. Modern dentistry. Human care.', 'brittos-core' ), 'help' => __( 'Shown below the clinic name when the tagline is enabled.', 'brittos-core' ) ),
+		'footer_dentist_label'  => array( 'tab' => 'footer', 'label' => __( 'Clinician badge label', 'brittos-core' ), 'type' => 'text', 'default' => __( 'Lead Clinician', 'brittos-core' ), 'help' => __( 'Shown above the clinician name.', 'brittos-core' ) ),
+		'footer_contact_heading' => array( 'tab' => 'footer', 'label' => __( 'Contact column heading', 'brittos-core' ), 'type' => 'text', 'default' => __( 'Direct Contact', 'brittos-core' ) ),
+		'footer_hours_heading'  => array( 'tab' => 'footer', 'label' => __( 'Hours column heading', 'brittos-core' ), 'type' => 'text', 'default' => __( 'Clinic Hours', 'brittos-core' ) ),
+		'footer_navigation_heading' => array( 'tab' => 'footer', 'label' => __( 'Navigation column heading', 'brittos-core' ), 'type' => 'text', 'default' => __( 'Navigation', 'brittos-core' ) ),
+		'footer_copyright_text' => array( 'tab' => 'footer', 'label' => __( 'Copyright text', 'brittos-core' ), 'type' => 'text', 'default' => __( 'All rights reserved.', 'brittos-core' ), 'help' => __( 'Shown after the year and clinic name.', 'brittos-core' ) ),
+		'footer_credit_text'    => array( 'tab' => 'footer', 'label' => __( 'Footer credit text', 'brittos-core' ), 'type' => 'text', 'default' => __( 'Clinical precision & human warmth.', 'brittos-core' ), 'help' => __( 'Shown at the bottom of the footer when the credit is enabled.', 'brittos-core' ) ),
+		'footer_credit_link_enabled' => array( 'tab' => 'footer', 'label' => __( 'Use linked footer credit', 'brittos-core' ), 'type' => 'checkbox', 'default' => '1', 'help' => __( 'Show the linked credit instead of the plain footer credit text.', 'brittos-core' ) ),
+		'footer_credit_prefix'  => array( 'tab' => 'footer', 'label' => __( 'Credit link prefix', 'brittos-core' ), 'type' => 'text', 'default' => __( 'Powered by', 'brittos-core' ) ),
+		'footer_credit_name'    => array( 'tab' => 'footer', 'label' => __( 'Credit link name', 'brittos-core' ), 'type' => 'text', 'default' => 'MAKAW' ),
+		'footer_credit_url'     => array( 'tab' => 'footer', 'label' => __( 'Credit link URL', 'brittos-core' ), 'type' => 'url', 'default' => 'https://makaw.me' ),
 	);
 }
 
@@ -195,9 +216,17 @@ add_action( 'admin_init', 'brittos_core_register_clinic_settings' );
 function brittos_core_sanitize_clinic_fields( $input ) {
 	$clean = array();
 	$input = is_array( $input ) ? $input : array();
+	$existing = get_option( BRITTOS_CORE_CLINIC_OPTION, array() );
+	$existing = is_array( $existing ) ? $existing : array();
 
 	foreach ( brittos_core_clinic_field_definitions() as $key => $field ) {
-		$raw = isset( $input[ $key ] ) ? $input[ $key ] : '';
+		if ( array_key_exists( $key, $input ) ) {
+			$raw = $input[ $key ];
+		} elseif ( ! array_key_exists( $key, $existing ) && isset( $field['default'] ) ) {
+			$raw = $field['default'];
+		} else {
+			$raw = '';
+		}
 
 		switch ( $field['type'] ) {
 			case 'email':
@@ -241,8 +270,10 @@ function brittos_core_sanitize_clinic_fields( $input ) {
  * @param array  $field Field definition.
  */
 function brittos_core_render_single_field( $key, $field ) {
-	$value = brittos_core_get_clinic_field( $key, '' );
-	$name  = BRITTOS_CORE_CLINIC_OPTION . '[' . $key . ']';
+	$settings = brittos_core_get_clinic_field();
+	$settings = is_array( $settings ) ? $settings : array();
+	$value    = array_key_exists( $key, $settings ) ? $settings[ $key ] : ( isset( $field['default'] ) ? $field['default'] : '' );
+	$name     = BRITTOS_CORE_CLINIC_OPTION . '[' . $key . ']';
 	?>
 	<tr>
 		<th scope="row">

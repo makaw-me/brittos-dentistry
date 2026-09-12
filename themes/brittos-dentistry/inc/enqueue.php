@@ -23,7 +23,8 @@ function brittos_enqueue_assets() {
 	$main_js_path         = BRITTOS_THEME_DIR . '/assets/js/main.js';
 	$animations_js_path   = BRITTOS_THEME_DIR . '/assets/js/animations.js';
 	$theme_mode_js_path   = BRITTOS_THEME_DIR . '/assets/js/theme-mode.js';
-	$use_dist_assets      = file_exists( $dist_css_path ) && file_exists( $dist_js_path );
+	$use_dist_css        = file_exists( $dist_css_path );
+	$use_dist_js         = file_exists( $dist_js_path ) && ! is_page( 'privacy-policy' );
 
 	wp_enqueue_style(
 		'brittos-fonts',
@@ -32,7 +33,7 @@ function brittos_enqueue_assets() {
 		file_exists( $fonts_css_path ) ? filemtime( $fonts_css_path ) : BRITTOS_THEME_VERSION
 	);
 
-	if ( $use_dist_assets ) {
+	if ( $use_dist_css ) {
 		wp_enqueue_style(
 			'brittos-site',
 			BRITTOS_THEME_URI . '/assets/dist/css/site.min.css',
@@ -40,13 +41,6 @@ function brittos_enqueue_assets() {
 			filemtime( $dist_css_path )
 		);
 
-		wp_enqueue_script(
-			'brittos-site',
-			BRITTOS_THEME_URI . '/assets/dist/js/site.min.js',
-			array(),
-			filemtime( $dist_js_path ),
-			array( 'strategy' => 'defer', 'in_footer' => true )
-		);
 	} else {
 		wp_enqueue_style(
 			'brittos-main',
@@ -62,6 +56,17 @@ function brittos_enqueue_assets() {
 			file_exists( $components_css_path ) ? filemtime( $components_css_path ) : BRITTOS_THEME_VERSION
 		);
 
+	}
+
+	if ( $use_dist_js ) {
+		wp_enqueue_script(
+			'brittos-site',
+			BRITTOS_THEME_URI . '/assets/dist/js/site.min.js',
+			array(),
+			filemtime( $dist_js_path ),
+			array( 'strategy' => 'defer', 'in_footer' => true )
+		);
+	} else {
 		wp_enqueue_script(
 			'brittos-navigation',
 			BRITTOS_THEME_URI . '/assets/js/navigation.js',
@@ -93,6 +98,11 @@ function brittos_enqueue_assets() {
 			file_exists( $theme_mode_js_path ) ? filemtime( $theme_mode_js_path ) : BRITTOS_THEME_VERSION,
 			array( 'strategy' => 'defer', 'in_footer' => true )
 		);
+
+		if ( is_page( 'privacy-policy' ) ) {
+			wp_dequeue_script( 'brittos-main' );
+			wp_dequeue_script( 'brittos-animations' );
+		}
 	}
 
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
