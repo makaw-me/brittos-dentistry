@@ -21,7 +21,7 @@ $panel_id = 'faq-panel-' . $faq_index;
 			<span class="faq-item__icon" aria-hidden="true"></span>
 		</summary>
 		<div class="faq-item__answer" id="<?php echo esc_attr( $panel_id ); ?>">
-			<?php the_content(); ?>
+			<div class="faq-item__answer-inner"><?php the_content(); ?></div>
 		</div>
 	</details>
 </div>

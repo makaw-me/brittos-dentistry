@@ -17,6 +17,18 @@ $faqs = post_type_exists( 'faq' ) ? new WP_Query( array(
 	'no_found_rows'  => true,
 	'orderby'        => 'menu_order',
 	'order'          => 'ASC',
+	'meta_query'     => array(
+		'relation' => 'OR',
+		array(
+			'key'     => 'brittos_faq_show_on_home',
+			'value'   => '1',
+			'compare' => '=',
+		),
+		array(
+			'key'     => 'brittos_faq_show_on_home',
+			'compare' => 'NOT EXISTS',
+		),
+	),
 ) ) : null;
 
 if ( ! $faqs || ! $faqs->have_posts() ) {

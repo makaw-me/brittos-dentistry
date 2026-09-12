@@ -55,9 +55,9 @@ function brittos_core_clinic_tabs() {
 		'hero'           => __( 'Hero Section', 'brittos-core' ),
 		'trust_strip'    => __( 'Trust Strip', 'brittos-core' ),
 		'about_doctor'   => __( 'About Doctor', 'brittos-core' ),
+		'about_page'     => __( 'About Page', 'brittos-core' ),
 		'why_us'         => __( 'Why Choose Us', 'brittos-core' ),
 		'treatments_cta' => __( 'Treatments & CTA', 'brittos-core' ),
-		'treatments_hero' => __( 'Treatments Page Hero', 'brittos-core' ),
 		'gallery'        => __( 'Gallery', 'brittos-core' ),
 	);
 }
@@ -115,6 +115,29 @@ function brittos_core_clinic_field_definitions() {
 		'dentist_photo_id'      => array( 'tab' => 'about_doctor', 'label' => __( 'Dentist Photo', 'brittos-core' ), 'type' => 'media', 'help' => __( 'Portrait photography of the doctor/clinic.', 'brittos-core' ) ),
 		'about_para_1'          => array( 'tab' => 'about_doctor', 'label' => __( 'Bio Paragraph 1', 'brittos-core' ), 'type' => 'textarea', 'help' => __( 'Leave empty for default clinic story copy.', 'brittos-core' ) ),
 		'about_para_2'          => array( 'tab' => 'about_doctor', 'label' => __( 'Bio Paragraph 2', 'brittos-core' ), 'type' => 'textarea', 'help' => __( 'Leave empty for default clinic story copy.', 'brittos-core' ) ),
+		'about_hero_eyebrow'    => array( 'tab' => 'about_page', 'label' => __( 'About Page Hero Eyebrow', 'brittos-core' ), 'type' => 'text' ),
+		'about_hero_title'      => array( 'tab' => 'about_page', 'label' => __( 'About Page Hero Heading', 'brittos-core' ), 'type' => 'textarea' ),
+		'about_hero_lede'       => array( 'tab' => 'about_page', 'label' => __( 'About Page Hero Description', 'brittos-core' ), 'type' => 'textarea' ),
+		'about_hero_image_id'   => array( 'tab' => 'about_page', 'label' => __( 'About Page Hero Image', 'brittos-core' ), 'type' => 'media' ),
+		'about_hero_fullbleed'  => array( 'tab' => 'about_page', 'label' => __( 'Use a full-bleed About hero', 'brittos-core' ), 'type' => 'checkbox', 'help' => __( 'When enabled, the About hero image fills the background with a readable overlay. When disabled, it appears beside the text.', 'brittos-core' ) ),
+		'about_dentist_photo_id' => array( 'tab' => 'about_page', 'label' => __( 'About Page Dentist Photo', 'brittos-core' ), 'type' => 'media', 'help' => __( 'Optional portrait used only in the About page Meet the Dentist section. Falls back to the shared Dentist Photo when empty.', 'brittos-core' ) ),
+		'about_qualifications'  => array( 'tab' => 'about_page', 'label' => __( 'Qualifications & Experience', 'brittos-core' ), 'type' => 'textarea' ),
+		'about_approach'       => array( 'tab' => 'about_page', 'label' => __( 'Personal Approach to Care', 'brittos-core' ), 'type' => 'textarea' ),
+		'about_philosophy_heading' => array( 'tab' => 'about_page', 'label' => __( 'Philosophy Heading', 'brittos-core' ), 'type' => 'text' ),
+		'about_philosophy_lede' => array( 'tab' => 'about_page', 'label' => __( 'Philosophy Introduction', 'brittos-core' ), 'type' => 'textarea' ),
+		'about_philosophy_1_title' => array( 'tab' => 'about_page', 'label' => __( 'Philosophy Principle 1 Title', 'brittos-core' ), 'type' => 'text' ),
+		'about_philosophy_1_text' => array( 'tab' => 'about_page', 'label' => __( 'Philosophy Principle 1 Text', 'brittos-core' ), 'type' => 'textarea' ),
+		'about_philosophy_2_title' => array( 'tab' => 'about_page', 'label' => __( 'Philosophy Principle 2 Title', 'brittos-core' ), 'type' => 'text' ),
+		'about_philosophy_2_text' => array( 'tab' => 'about_page', 'label' => __( 'Philosophy Principle 2 Text', 'brittos-core' ), 'type' => 'textarea' ),
+		'about_philosophy_3_title' => array( 'tab' => 'about_page', 'label' => __( 'Philosophy Principle 3 Title', 'brittos-core' ), 'type' => 'text' ),
+		'about_philosophy_3_text' => array( 'tab' => 'about_page', 'label' => __( 'Philosophy Principle 3 Text', 'brittos-core' ), 'type' => 'textarea' ),
+		'about_philosophy_4_title' => array( 'tab' => 'about_page', 'label' => __( 'Philosophy Principle 4 Title', 'brittos-core' ), 'type' => 'text' ),
+		'about_philosophy_4_text' => array( 'tab' => 'about_page', 'label' => __( 'Philosophy Principle 4 Text', 'brittos-core' ), 'type' => 'textarea' ),
+		'about_clinic_heading' => array( 'tab' => 'about_page', 'label' => __( 'About Page Clinic Heading', 'brittos-core' ), 'type' => 'text' ),
+		'about_clinic_text'    => array( 'tab' => 'about_page', 'label' => __( 'About Page Clinic Description', 'brittos-core' ), 'type' => 'textarea' ),
+		'about_clinic_image_id' => array( 'tab' => 'about_page', 'label' => __( 'About Page Clinic Image', 'brittos-core' ), 'type' => 'media' ),
+		'about_experience_heading' => array( 'tab' => 'about_page', 'label' => __( 'Patient Experience Heading', 'brittos-core' ), 'type' => 'text' ),
+		'about_experience_steps' => array( 'tab' => 'about_page', 'label' => __( 'Patient Experience Steps', 'brittos-core' ), 'type' => 'textarea', 'help' => __( 'One step per line. Only enter steps that reflect the actual patient experience.', 'brittos-core' ) ),
 
 		// TAB: Why Choose Us
 		'why_eyebrow'           => array( 'tab' => 'why_us', 'label' => __( 'Eyebrow', 'brittos-core' ), 'type' => 'text', 'help' => __( 'Default: The Britto Difference', 'brittos-core' ) ),
@@ -138,10 +161,11 @@ function brittos_core_clinic_field_definitions() {
 		'cta_heading'           => array( 'tab' => 'treatments_cta', 'label' => __( 'Final CTA Heading', 'brittos-core' ), 'type' => 'text', 'help' => __( 'Default: Request an appointment', 'brittos-core' ) ),
 		'cta_lede'              => array( 'tab' => 'treatments_cta', 'label' => __( 'Final CTA Description', 'brittos-core' ), 'type' => 'textarea', 'help' => __( 'Default: Send a few details and the clinic will get back to you to confirm a time.', 'brittos-core' ) ),
 
-		'treatments_hero_badge_text' => array( 'tab' => 'treatments_hero', 'label' => __( 'Badge Text', 'brittos-core' ), 'type' => 'text', 'help' => __( 'Default: Our Treatments', 'brittos-core' ) ),
-		'treatments_hero_title'      => array( 'tab' => 'treatments_hero', 'label' => __( 'Hero Title / H1', 'brittos-core' ), 'type' => 'textarea', 'help' => __( 'Default: Care built around what you actually need', 'brittos-core' ) ),
-		'treatments_hero_lede'       => array( 'tab' => 'treatments_hero', 'label' => __( 'Hero Description', 'brittos-core' ), 'type' => 'textarea', 'help' => __( 'Default: Explore every treatment we offer, grouped by the kind of care you need.', 'brittos-core' ) ),
-		'treatments_hero_bg_image_id' => array( 'tab' => 'treatments_hero', 'label' => __( 'Hero Background Image (optional)', 'brittos-core' ), 'type' => 'media', 'help' => __( 'Leave empty for the plain hero style used elsewhere when no image is set.', 'brittos-core' ) ),
+		'treatments_hero_badge_text' => array( 'tab' => 'treatments_cta', 'label' => __( 'Legacy Treatments Hero Badge Text', 'brittos-core' ), 'type' => 'text', 'deprecated' => true ),
+		'treatments_hero_title'      => array( 'tab' => 'treatments_cta', 'label' => __( 'Legacy Treatments Hero Title', 'brittos-core' ), 'type' => 'textarea', 'deprecated' => true ),
+		'treatments_hero_lede'       => array( 'tab' => 'treatments_cta', 'label' => __( 'Legacy Treatments Hero Description', 'brittos-core' ), 'type' => 'textarea', 'deprecated' => true ),
+		'treatments_hero_bg_image_id' => array( 'tab' => 'treatments_cta', 'label' => __( 'Treatments Hero Background Image (optional)', 'brittos-core' ), 'type' => 'media', 'help' => __( 'Optional background image for the Treatments archive hero.', 'brittos-core' ) ),
+		'treatments_hero_fullbleed' => array( 'tab' => 'treatments_cta', 'label' => __( 'Use a full-bleed Treatments hero', 'brittos-core' ), 'type' => 'checkbox', 'help' => __( 'Uses the Treatments hero background image as a full-bleed hero when enabled.', 'brittos-core' ) ),
 
 		// TAB: Gallery
 		'gallery_eyebrow'       => array( 'tab' => 'gallery', 'label' => __( 'Gallery Eyebrow', 'brittos-core' ), 'type' => 'text', 'help' => __( 'Default: The clinic', 'brittos-core' ) ),
@@ -199,6 +223,9 @@ function brittos_core_sanitize_clinic_fields( $input ) {
 					$clean[ $key ] = array_values( array_filter( array_map( 'absint', explode( ',', (string) $raw ) ) ) );
 				}
 				break;
+			case 'checkbox':
+				$clean[ $key ] = ! empty( $raw ) ? '1' : '';
+				break;
 			default:
 				$clean[ $key ] = sanitize_text_field( $raw );
 		}
@@ -230,6 +257,16 @@ function brittos_core_render_single_field( $key, $field ) {
 						esc_attr( $key ),
 						esc_attr( $name ),
 						esc_textarea( $value )
+					);
+					break;
+
+				case 'checkbox':
+					printf(
+						'<label><input type="checkbox" id="%1$s" name="%2$s" value="1" %3$s> %4$s</label>',
+						esc_attr( $key ),
+						esc_attr( $name ),
+						checked( '1', $value, false ),
+						esc_html__( 'Enabled', 'brittos-core' )
 					);
 					break;
 
@@ -365,7 +402,7 @@ function brittos_core_render_clinic_settings_page() {
 						<tbody>
 							<?php
 							foreach ( $fields as $field_key => $field ) {
-								if ( $field['tab'] === $tab_key ) {
+								if ( $field['tab'] === $tab_key && empty( $field['deprecated'] ) ) {
 									brittos_core_render_single_field( $field_key, $field );
 								}
 							}

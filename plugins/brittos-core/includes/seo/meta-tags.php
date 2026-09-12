@@ -126,7 +126,23 @@ function brittos_core_get_meta_description() {
 		);
 	}
 
-	// 5. Singular Post / Standard Page
+	// 5. About Page
+	if ( is_page_template( 'page-about.php' ) || is_page( 'about' ) ) {
+		$about_lede = brittos_core_get_clinic_field( 'about_hero_lede', '' );
+		$about_title = brittos_core_get_clinic_field( 'about_hero_title', '' );
+		$candidate = $about_lede ? $about_lede : $about_title;
+		if ( $candidate ) {
+			return brittos_core_clean_seo_excerpt( $candidate );
+		}
+		return sprintf(
+			/* translators: 1: clinic name, 2: dentist name */
+			__( 'Meet %2$s and learn about the thoughtful approach behind %1$s.', 'brittos-core' ),
+			$clinic_name,
+			$dentist_name ? $dentist_name : __( 'the dentist', 'brittos-core' )
+		);
+	}
+
+	// 6. Singular Post / Standard Page
 	if ( is_singular() ) {
 		$post = get_post();
 		if ( ! empty( $post->post_excerpt ) ) {
@@ -143,7 +159,7 @@ function brittos_core_get_meta_description() {
 		);
 	}
 
-	// 6. Generic Archive / Blog
+	// 7. Generic Archive / Blog
 	if ( is_archive() ) {
 		$archive_title = get_the_archive_title();
 		return sprintf(
@@ -167,6 +183,16 @@ function brittos_core_get_meta_description() {
  * @return string
  */
 function brittos_core_get_seo_image_url() {
+	if ( is_page_template( 'page-about.php' ) || is_page( 'about' ) ) {
+		$about_image_id = brittos_core_get_clinic_field( 'about_hero_image_id' );
+		if ( $about_image_id ) {
+			$about_image_url = wp_get_attachment_image_url( $about_image_id, 'brittos-hero' );
+			if ( $about_image_url ) {
+				return esc_url( $about_image_url );
+			}
+		}
+	}
+
 	if ( is_singular() && has_post_thumbnail() ) {
 		$thumb_url = get_the_post_thumbnail_url( get_the_ID(), 'brittos-hero' );
 		if ( $thumb_url ) {

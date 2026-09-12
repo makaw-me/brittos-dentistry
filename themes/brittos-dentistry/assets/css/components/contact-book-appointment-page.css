@@ -16,6 +16,7 @@
   display: grid;
   gap: var(--space-lg);
   align-items: start;
+  min-width: 0;
 }
 @media (min-width: 960px) {
   .contact-layout {
@@ -27,6 +28,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-md);
+  min-width: 0;
 }
 .contact-info__card {
   background: var(--brand-white);
@@ -64,6 +66,7 @@
 .contact-info__value {
   color: var(--brand-ink);
   font-weight: 600;
+  overflow-wrap: anywhere;
 }
 .contact-info__value a {
   color: inherit;
@@ -84,6 +87,7 @@
   padding: clamp(1.75rem, 4vw, 2.75rem);
   box-shadow: var(--shadow-lg);
   overflow: hidden;
+  min-width: 0;
 }
 .contact-form-card:before {
   content: "";
@@ -106,4 +110,17 @@
   color: var(--color-text-muted);
   margin-top: var(--space-sm);
   text-align: center;
+}
+
+@media (max-width: 599px) {
+  .contact-form-card {
+    padding: clamp(1rem, 5vw, 1.75rem);
+  }
+
+  .contact-form-card .appointment-form input,
+  .contact-form-card .appointment-form select,
+  .contact-form-card .appointment-form textarea {
+    min-width: 0;
+    max-width: 100%;
+  }
 }

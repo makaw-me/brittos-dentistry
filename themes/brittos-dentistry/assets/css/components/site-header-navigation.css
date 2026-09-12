@@ -418,10 +418,13 @@ html[data-theme="dark"] .site-header__logo--dark {
 }
 .mega-panel {
   display: none;
-  margin-top: 0.5rem;
-  margin-left: 1rem;
-  padding: 1rem;
-  border-radius: var(--radius-md);
+  margin: 0.35rem 0 0.5rem 1rem;
+  padding: 0.35rem 0 0.35rem 1rem;
+  background: transparent;
+  border: 0;
+  border-left: 1px solid var(--color-border);
+  border-radius: 0;
+  box-shadow: none;
 }
 .primary-nav__item--mega.is-open .mega-panel {
   display: block;
@@ -456,11 +459,11 @@ html[data-theme="dark"] .site-header__logo--dark {
   }
   .sub-menu {
     position: absolute;
-    top: calc(100% + 14px);
+    top: 100%;
     /* --_panel-shift is set by JS to nudge the panel when it would overflow
        either edge of the viewport. Falls back to 0px when JS is absent. */
     left: calc( 50% + var(--_panel-shift, 0px) );
-    transform: translate(-50%) translateY(8px) scale(0.97);
+    transform: translate(-50%);
     width: max-content;
     min-width: 200px;
     max-width: 280px;
@@ -468,18 +471,16 @@ html[data-theme="dark"] .site-header__logo--dark {
     padding: 0.5rem;
     background: var(--britto-surface);
     border: 1px solid var(--britto-border);
-    border-radius: 16px;
-    box-shadow:
-      0 20px 48px -8px #0d11101f,
-      0 2px 8px #0d11100a;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    border-top: 0;
+    border-radius: 0 0 var(--radius-md) var(--radius-md);
+    background: color-mix(in srgb, var(--brand-porcelain) 92%, transparent);
+    backdrop-filter: blur(12px) saturate(160%);
+    -webkit-backdrop-filter: blur(12px) saturate(160%);
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
     transition:
       opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1),
-      transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
       visibility 0.22s;
     z-index: 200;
   }
@@ -488,7 +489,7 @@ html[data-theme="dark"] .site-header__logo--dark {
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
-    transform: translate(-50%) translateY(0) scale(1);
+    transform: translate(-50%);
   }
   .sub-menu li a {
     border-radius: 8px;
@@ -512,26 +513,23 @@ html[data-theme="dark"] .site-header__logo--dark {
   .mega-panel {
     display: block;
     position: absolute;
-    top: calc(100% + 14px);
+    top: 100%;
     left: calc( 50% + var(--_panel-shift, 0px) );
-    transform: translate(-50%) translateY(10px) scale(0.98);
+    transform: translate(-50%);
     width: min(600px, 92vw);
     margin: 0;
     padding: 1.5rem 1.75rem 1.25rem;
-    border-radius: 22px;
-    background: var(--britto-surface);
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    background: color-mix(in srgb, var(--brand-porcelain) 92%, transparent);
     border: 1px solid var(--britto-border);
-    box-shadow:
-      0 24px 60px -12px #0d111024,
-      0 4px 16px #0d11100a;
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
+    border-top: 0;
+    backdrop-filter: blur(12px) saturate(160%);
+    -webkit-backdrop-filter: blur(12px) saturate(160%);
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
     transition:
       opacity 0.24s cubic-bezier(0.16, 1, 0.3, 1),
-      transform 0.24s cubic-bezier(0.16, 1, 0.3, 1),
       visibility 0.24s;
     z-index: 200;
     overflow: hidden;
@@ -542,7 +540,7 @@ html[data-theme="dark"] .site-header__logo--dark {
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
-    transform: translate(-50%) translateY(0) scale(1);
+    transform: translate(-50%);
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -647,14 +645,19 @@ html[data-theme="dark"] .site-header__logo--dark {
   }
   .primary-nav__link:hover,
   .primary-nav__link:focus-visible {
-    background: color-mix(in srgb, var(--britto-secondary-soft) 85%, transparent);
+    background: transparent;
     color: var(--brand-ink);
-    transform: translate(0, -1px);
+    transform: none;
+  }
+
+  html[data-theme="dark"] .site-header .sub-menu,
+  html[data-theme="dark"] .site-header .mega-panel {
+    background: color-mix(in srgb, var(--britto-surface) 94%, transparent);
   }
   html[data-theme="dark"] .primary-nav__link:hover,
   html[data-theme="dark"] .primary-nav__link:focus-visible {
     color: var(--britto-text);
-    background: #ffffff14;
+    background: transparent;
   }
   .primary-nav__link:active {
     transform: none;

@@ -13,23 +13,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $dentist      = brittos_clinic_field( 'dentist_name' );
 $credentials  = brittos_clinic_field( 'credentials' );
-$about_photo  = brittos_clinic_field( 'dentist_photo_id' );
+$is_page      = isset( $args['variant'] ) && 'page' === $args['variant'];
+$about_photo  = $is_page
+	? brittos_clinic_field( 'about_dentist_photo_id', brittos_clinic_field( 'dentist_photo_id' ) )
+	: brittos_clinic_field( 'dentist_photo_id' );
 
 $eyebrow      = brittos_clinic_field( 'about_eyebrow', __( 'About your dentist', 'brittos-dentistry' ) );
 $heading      = brittos_clinic_field( 'about_heading' );
 if ( ! $heading ) {
-	$heading = $dentist ? $dentist : __( 'A steady, familiar face at every visit', 'brittos-dentistry' );
+	$heading = $dentist ? $dentist : ( $is_page ? '' : __( 'A steady, familiar face at every visit', 'brittos-dentistry' ) );
 }
 
-$para_1       = brittos_clinic_field(
-	'about_para_1',
-	__( 'Every patient is seen personally, start to finish — no hand-offs, no guesswork. Treatment plans are explained plainly, timelines are realistic, and there is never any pressure to say yes on the spot.', 'brittos-dentistry' )
-);
-
-$para_2       = brittos_clinic_field(
-	'about_para_2',
-	__( 'This is a small, independently run clinic by design: fewer chairs, more attention, and the same dentist you saw last time.', 'brittos-dentistry' )
-);
+$para_1       = brittos_clinic_field( 'about_para_1', $is_page ? '' : __( 'Every patient is seen personally, start to finish — no hand-offs, no guesswork. Treatment plans are explained plainly, timelines are realistic, and there is never any pressure to say yes on the spot.', 'brittos-dentistry' ) );
+$para_2       = brittos_clinic_field( 'about_para_2', $is_page ? '' : __( 'This is a small, independently run clinic by design: fewer chairs, more attention, and the same dentist you saw last time.', 'brittos-dentistry' ) );
+$qualifications = $is_page ? brittos_clinic_field( 'about_qualifications' ) : '';
+$approach       = $is_page ? brittos_clinic_field( 'about_approach' ) : '';
 ?>
 <section class="about-doctor" aria-labelledby="about-doctor-heading">
 	<div class="container about-doctor__inner">
@@ -65,6 +63,9 @@ $para_2       = brittos_clinic_field(
 			<?php if ( $para_2 ) : ?>
 				<p><?php echo wp_kses_post( nl2br( $para_2 ) ); ?></p>
 			<?php endif; ?>
+
+			<?php if ( $qualifications ) : ?><p class="about-doctor__detail"><strong><?php esc_html_e( 'Qualifications & experience', 'brittos-dentistry' ); ?></strong><?php echo wp_kses_post( nl2br( $qualifications ) ); ?></p><?php endif; ?>
+			<?php if ( $approach ) : ?><p class="about-doctor__detail"><strong><?php esc_html_e( 'Personal approach', 'brittos-dentistry' ); ?></strong><?php echo wp_kses_post( nl2br( $approach ) ); ?></p><?php endif; ?>
 		</div>
 
 	</div>

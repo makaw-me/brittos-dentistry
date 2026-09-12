@@ -8,28 +8,20 @@
 	 */
   --phase1-card-radius: 24px;
   --phase1-surface-glow: 0 14px 40px rgba(13, 17, 16, 0.08);
-  --phase1-header-bg: color-mix(
-    in srgb,
-    var(--brand-porcelain) 82%,
-    transparent
-  );
-  --phase1-header-border: color-mix(
-    in srgb,
-    var(--brand-border) 92%,
-    transparent
-  );
+  --phase1-header-bg: color-mix(in srgb,
+      var(--brand-porcelain) 82%,
+      transparent);
+  --phase1-header-border: color-mix(in srgb,
+      var(--brand-border) 92%,
+      transparent);
   --phase1-header-shadow: 0 10px 30px rgba(13, 17, 16, 0.08);
   --phase1-hero-ambient:
-    radial-gradient(
-      circle at 86% 12%,
+    radial-gradient(circle at 86% 12%,
       color-mix(in srgb, var(--brand-champagne-soft) 56%, transparent),
-      transparent 60%
-    ),
-    radial-gradient(
-      circle at 8% 88%,
+      transparent 60%),
+    radial-gradient(circle at 8% 88%,
       color-mix(in srgb, var(--brand-sage-soft) 72%, transparent),
-      transparent 60%
-    );
+      transparent 60%);
 }
 
 body {
@@ -86,11 +78,9 @@ h4,
 }
 
 .site-header--transparent:not(.is-scrolled) {
-  background: linear-gradient(
-    180deg,
-    rgba(13, 17, 16, 0.36) 0%,
-    rgba(13, 17, 16, 0) 100%
-  );
+  background: linear-gradient(180deg,
+      rgba(13, 17, 16, 0.36) 0%,
+      rgba(13, 17, 16, 0) 100%);
   box-shadow: none;
 }
 
@@ -124,6 +114,38 @@ h4,
 
 .primary-nav__link {
   letter-spacing: 0.01em;
+}
+
+.primary-nav__link:hover,
+.primary-nav__link:focus-visible {
+  background: transparent;
+  transform: none;
+}
+
+.primary-nav__link:hover::before,
+.primary-nav__link:focus-visible::before,
+.primary-nav__item.current-menu-item > .primary-nav__link::before,
+.primary-nav__link[aria-current="page"]::before {
+  transform: scaleX(1);
+}
+
+@media (min-width: 960px) {
+  .primary-nav__link,
+  .primary-nav__link:hover,
+  .primary-nav__link:focus-visible,
+  .primary-nav__item.current-menu-item > .primary-nav__link,
+  .primary-nav__link[aria-current="page"] {
+    background: transparent;
+    border-radius: 0;
+    box-shadow: none;
+    transform: none;
+  }
+
+  .primary-nav__item.current-menu-item > .primary-nav__link::after,
+  .primary-nav__link[aria-current="page"]::after {
+    display: none;
+    content: none;
+  }
 }
 
 /* Navigation polish: unified left-to-right underline interaction */
@@ -205,30 +227,25 @@ html[data-theme="dark"] .site-footer__link::after {
   .site-header .sub-menu {
     left: 0;
     right: auto;
-    top: calc(100% + 10px);
-    transform: translateY(10px) scale(0.98);
+    top: 100%;
+    transform: none;
     transform-origin: top left;
     min-width: 230px;
     max-width: 320px;
-    padding: 0.7rem 0.6rem;
-    border-radius: 18px;
+    padding: 0.5rem 0.6rem;
+    border-radius: 0 0 var(--radius-md) var(--radius-md);
     border: 1px solid color-mix(in srgb, var(--britto-border) 92%, transparent);
-    background: color-mix(
-      in srgb,
-      var(--britto-surface) 94%,
-      var(--brand-white) 6%
-    );
-    box-shadow:
-      0 20px 50px -10px rgba(13, 17, 16, 0.2),
-      0 3px 10px rgba(13, 17, 16, 0.06);
+    border-top: 0;
+    background: color-mix(in srgb, var(--brand-porcelain) 92%, transparent);
+    box-shadow: none;
   }
 
-  .site-header .menu-item-has-children:hover > .sub-menu,
-  .site-header .menu-item-has-children:focus-within > .sub-menu {
-    transform: translateY(0) scale(1);
+  .site-header .menu-item-has-children:hover>.sub-menu,
+  .site-header .menu-item-has-children:focus-within>.sub-menu {
+    transform: none;
   }
 
-  .site-header .sub-menu li + li {
+  .site-header .sub-menu li+li {
     margin-top: 0.14rem;
   }
 
@@ -329,8 +346,7 @@ html:not([data-theme="dark"]) .hero--has-media .hero__metric-label {
 
 .home .trust-strip {
   margin-top: -0.75rem;
-  border-radius: 22px;
-  max-width: min(1280px, calc(100% - 2rem));
+  width: 100%;
   margin-inline: auto;
   box-shadow: 0 14px 40px rgba(13, 17, 16, 0.08);
   border: 1px solid var(--britto-border);
@@ -339,7 +355,7 @@ html:not([data-theme="dark"]) .hero--has-media .hero__metric-label {
 }
 
 .home .trust-strip__inner {
-  justify-content: center;
+  /* justify-content: center; */
   gap: 0.9rem 2.2rem;
 }
 
@@ -430,15 +446,5 @@ html:not([data-theme="dark"]) .hero--has-media .hero__metric-label {
 
   .hero__metric-divider {
     display: none;
-  }
-
-  .home .trust-strip {
-    margin-top: -0.5rem;
-    border-radius: 18px;
-    max-width: calc(100% - 1.2rem);
-  }
-
-  .home .trust-strip__item {
-    font-size: 0.76rem;
   }
 }
