@@ -111,4 +111,98 @@
 			closeNav();
 		}
 	} );
+
+	// Homepage-only: the header starts fully transparent over the hero and
+	// solidifies once the visitor scrolls, so nav links stay legible over
+	// ordinary page content further down.
+	var transparentHeader = document.querySelector( '.site-header--transparent' );
+	if ( transparentHeader ) {
+		var scrollThreshold = 24;
+		var ticking = false;
+
+		function updateHeaderState() {
+			var isScrolled = window.scrollY > scrollThreshold;
+			transparentHeader.classList.toggle( 'is-scrolled', isScrolled );
+			ticking = false;
+		}
+
+		function requestHeaderUpdate() {
+			if ( ! ticking ) {
+				window.requestAnimationFrame( updateHeaderState );
+				ticking = true;
+			}
+		}
+
+		updateHeaderState();
+		window.addEventListener( 'scroll', requestHeaderUpdate, { passive: true } );
+	}
+
+	/**
+	 * Treatments mega menu enhancement. The panel already works with
+	 * zero JavaScript via :hover/:focus-within in CSS (see
+	 * assets/css/components.css) — this only adds a proper disclosure
+	 * button for touch users, explicit click/tap control, Escape, and
+	 * outside-click handling. Removing this script entirely still
+	 * leaves a fully working (if less refined) menu.
+	 */
+	var megaItems = document.querySelectorAll( '.primary-nav__item--mega' );
+
+	megaItems.forEach( function ( item ) {
+		var link = item.querySelector( '.primary-nav__link--mega' );
+		var panel = item.querySelector( '.mega-panel' );
+		if ( ! link || ! panel ) {
+			return;
+		}
+
+		var toggleButton = document.createElement( 'button' );
+		toggleButton.type = 'button';
+		toggleButton.className = 'mega-panel-toggle';
+		toggleButton.setAttribute( 'aria-expanded', 'false' );
+		toggleButton.setAttribute( 'aria-controls', panel.id );
+		toggleButton.setAttribute( 'aria-label', link.textContent.trim() + ' menu' );
+		toggleButton.innerHTML = '<svg class="mega-panel-toggle__chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>';
+		item.appendChild( toggleButton );
+
+		function closeMegaPanel() {
+			item.classList.remove( 'is-open' );
+			toggleButton.setAttribute( 'aria-expanded', 'false' );
+		}
+
+		function openMegaPanel() {
+			megaItems.forEach( function ( other ) {
+				if ( other !== item ) {
+					other.classList.remove( 'is-open' );
+					var otherToggle = other.querySelector( '.mega-panel-toggle' );
+					if ( otherToggle ) {
+						otherToggle.setAttribute( 'aria-expanded', 'false' );
+					}
+				}
+			} );
+			item.classList.add( 'is-open' );
+			toggleButton.setAttribute( 'aria-expanded', 'true' );
+		}
+
+		toggleButton.addEventListener( 'click', function ( event ) {
+			event.stopPropagation();
+			if ( item.classList.contains( 'is-open' ) ) {
+				closeMegaPanel();
+			} else {
+				openMegaPanel();
+			}
+		} );
+
+		item.addEventListener( 'keydown', function ( event ) {
+			if ( event.key === 'Escape' && item.classList.contains( 'is-open' ) ) {
+				closeMegaPanel();
+				link.focus();
+			}
+		} );
+
+		// Outside click (desktop hover-dropdown left open via a prior click).
+		document.addEventListener( 'click', function ( event ) {
+			if ( item.classList.contains( 'is-open' ) && ! item.contains( event.target ) ) {
+				closeMegaPanel();
+			}
+		} );
+	} );
 } )();

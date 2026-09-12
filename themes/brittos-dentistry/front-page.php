@@ -30,19 +30,19 @@ $trust_pt4 = brittos_clinic_field( 'trust_point_4', __( 'Calm, comfortable visit
 ?>
 <section class="trust-strip" aria-label="<?php esc_attr_e( 'What to expect', 'brittos-dentistry' ); ?>">
 	<div class="container trust-strip__inner">
-		<div class="trust-strip__item">
+		<div class="trust-strip__item" data-reveal data-reveal-group="trust-strip">
 			<span class="trust-strip__icon" aria-hidden="true">✦</span>
 			<span class="trust-strip__text"><?php echo esc_html( $trust_pt1 ); ?></span>
 		</div>
-		<div class="trust-strip__item">
+		<div class="trust-strip__item" data-reveal data-reveal-group="trust-strip">
 			<span class="trust-strip__icon" aria-hidden="true">✦</span>
 			<span class="trust-strip__text"><?php echo esc_html( $trust_pt2 ); ?></span>
 		</div>
-		<div class="trust-strip__item">
+		<div class="trust-strip__item" data-reveal data-reveal-group="trust-strip">
 			<span class="trust-strip__icon" aria-hidden="true">✦</span>
 			<span class="trust-strip__text"><?php echo esc_html( $trust_pt3 ); ?></span>
 		</div>
-		<div class="trust-strip__item">
+		<div class="trust-strip__item" data-reveal data-reveal-group="trust-strip">
 			<span class="trust-strip__icon" aria-hidden="true">✦</span>
 			<span class="trust-strip__text"><?php echo esc_html( $trust_pt4 ); ?></span>
 		</div>

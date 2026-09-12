@@ -14,8 +14,6 @@ get_header();
 
 <div class="container page-content">
 
-	<?php get_template_part( 'template-parts/global/breadcrumbs' ); ?>
-
 	<header class="archive-header">
 		<h1 class="archive-header__title"><?php the_archive_title(); ?></h1>
 		<?php the_archive_description( '<div class="archive-header__description">', '</div>' ); ?>

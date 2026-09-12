@@ -44,6 +44,7 @@ function brittos_core_includes() {
 		'includes/taxonomies/treatment-category.php',
 		'includes/fields/clinic-fields.php',
 		'includes/fields/treatment-fields.php',
+		'includes/fields/faq-fields.php',
 		'includes/forms/appointment.php',
 		'includes/seo/schema.php',
 	);

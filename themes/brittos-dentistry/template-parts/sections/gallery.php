@@ -36,7 +36,7 @@ if ( empty( $gallery_ids ) || ! is_array( $gallery_ids ) ) {
 		<ul class="gallery__grid">
 			<?php foreach ( $gallery_ids as $attachment_id ) : ?>
 				<?php if ( wp_attachment_is_image( $attachment_id ) ) : ?>
-					<li class="gallery__item">
+					<li class="gallery__item" data-reveal data-reveal-group="gallery">
 						<?php echo wp_get_attachment_image( $attachment_id, 'brittos-card', false, array(
 							'class'    => 'gallery__image',
 							'loading'  => 'lazy',

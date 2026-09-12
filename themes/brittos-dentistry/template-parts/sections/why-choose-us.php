@@ -54,7 +54,7 @@ $points = array(
 
 		<ul class="why-choose-us__grid">
 			<?php foreach ( $points as $point ) : ?>
-				<li class="why-choose-us__item">
+				<li class="why-choose-us__item" data-reveal data-reveal-group="why-choose-us">
 					<div class="why-choose-us__header">
 						<div class="why-choose-us__icon" aria-hidden="true">
 							<?php echo $point['icon']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>

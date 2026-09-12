@@ -51,7 +51,7 @@ function brittos_core_build_local_business_schema() {
 		'url'      => home_url( '/' ),
 	);
 
-	$logo = get_template_directory_uri() . '/assets/images/logo.webp';
+	$logo = get_template_directory_uri() . '/assets/images/logo.png';
 	if ( $logo ) {
 		$schema['image'] = $logo;
 		$schema['logo']  = $logo;
@@ -143,6 +143,92 @@ function brittos_core_build_faq_schema() {
 }
 
 /**
+ * Build Service schema for a single treatment, nested under the clinic.
+ * Only ever uses data the clinic owner actually entered (title, short
+ * description, category) — never invents pricing, duration claims, or
+ * outcomes that weren't explicitly provided.
+ *
+ * @param int $treatment_id Treatment post ID.
+ * @return array|null
+ */
+function brittos_core_build_treatment_service_schema( $treatment_id ) {
+	$clinic_name = brittos_core_get_clinic_field( 'clinic_name' );
+	if ( ! $clinic_name ) {
+		return null;
+	}
+
+	$schema = array(
+		'@context'    => 'https://schema.org',
+		'@type'       => 'Service',
+		'name'        => get_the_title( $treatment_id ),
+		'url'         => get_permalink( $treatment_id ),
+		'serviceType' => get_the_title( $treatment_id ),
+		'provider'    => array(
+			'@type' => 'Dentist',
+			'name'  => $clinic_name,
+			'url'   => home_url( '/' ),
+		),
+	);
+
+	$description = brittos_core_get_treatment_field( $treatment_id, 'short_description' );
+	if ( ! $description ) {
+		$description = get_the_excerpt( $treatment_id );
+	}
+	if ( $description ) {
+		$schema['description'] = wp_strip_all_tags( $description );
+	}
+
+	$categories = get_the_terms( $treatment_id, 'treatment_category' );
+	if ( $categories && ! is_wp_error( $categories ) ) {
+		$schema['category'] = wp_list_pluck( $categories, 'name' );
+	}
+
+	$city = brittos_core_get_clinic_field( 'city' );
+	if ( $city ) {
+		$schema['areaServed'] = $city;
+	}
+
+	return $schema;
+}
+
+/**
+ * Build FAQPage schema scoped to a single treatment's related FAQs
+ * (as tagged on the FAQ side — see includes/fields/faq-fields.php).
+ *
+ * @param int $treatment_id Treatment post ID.
+ * @return array|null
+ */
+function brittos_core_build_treatment_faq_schema( $treatment_id ) {
+	if ( ! function_exists( 'brittos_core_get_related_faqs_for_treatment' ) ) {
+		return null;
+	}
+
+	$query = brittos_core_get_related_faqs_for_treatment( $treatment_id, 20 );
+	if ( ! $query->have_posts() ) {
+		return null;
+	}
+
+	$entities = array();
+	foreach ( $query->posts as $faq ) {
+		$answer     = apply_filters( 'the_content', $faq->post_content );
+		$entities[] = array(
+			'@type'          => 'Question',
+			'name'           => wp_strip_all_tags( get_the_title( $faq ) ),
+			'acceptedAnswer' => array(
+				'@type' => 'Answer',
+				'text'  => wp_strip_all_tags( $answer ),
+			),
+		);
+	}
+
+	return array(
+		'@context'   => 'https://schema.org',
+		'@type'      => 'FAQPage',
+		'mainEntity' => $entities,
+	);
+}
+
+/**
  * Print schema as a single JSON-LD script tag in wp_head, only on the
  * front page (business schema) and wherever FAQs are actually rendered.
  */
@@ -167,6 +253,16 @@ function brittos_core_output_schema() {
 		$business = brittos_core_build_local_business_schema();
 		if ( $business ) {
 			$graphs[] = $business;
+		}
+
+		$service = brittos_core_build_treatment_service_schema( get_the_ID() );
+		if ( $service ) {
+			$graphs[] = $service;
+		}
+
+		$treatment_faqs = brittos_core_build_treatment_faq_schema( get_the_ID() );
+		if ( $treatment_faqs ) {
+			$graphs[] = $treatment_faqs;
 		}
 	}
 

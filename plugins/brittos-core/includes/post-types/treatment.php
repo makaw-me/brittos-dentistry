@@ -27,7 +27,7 @@ function brittos_core_register_treatment_cpt() {
 		'not_found'             => __( 'No treatments found', 'brittos-core' ),
 		'not_found_in_trash'    => __( 'No treatments found in Trash', 'brittos-core' ),
 		'all_items'             => __( 'All Treatments', 'brittos-core' ),
-		'archives'              => __( 'Treatment Archives', 'brittos-core' ),
+		'archives'              => __( 'Treatments', 'brittos-core' ),
 		'featured_image'        => __( 'Treatment Image', 'brittos-core' ),
 		'set_featured_image'    => __( 'Set treatment image', 'brittos-core' ),
 		'remove_featured_image' => __( 'Remove treatment image', 'brittos-core' ),
@@ -54,3 +54,23 @@ function brittos_core_register_treatment_cpt() {
 	register_post_type( 'treatment', $args );
 }
 add_action( 'init', 'brittos_core_register_treatment_cpt' );
+
+/**
+ * Force the "Treatments" post-type-archive menu item to always display
+ * as "Treatments" — even if it was added to a menu before the CPT's
+ * `archives` label was corrected, since WordPress snapshots a menu
+ * item's title into the database at the moment it's added and never
+ * re-reads the CPT label afterwards.
+ *
+ * @param array $items Nav menu item objects.
+ * @return array
+ */
+function brittos_core_fix_treatment_archive_menu_label( $items ) {
+	foreach ( $items as $item ) {
+		if ( 'post_type_archive' === $item->type && 'treatment' === $item->object ) {
+			$item->title = __( 'Treatments', 'brittos-core' );
+		}
+	}
+	return $items;
+}
+add_filter( 'wp_nav_menu_objects', 'brittos_core_fix_treatment_archive_menu_label' );
