@@ -116,6 +116,18 @@ function brittos_core_build_faq_schema() {
 		'no_found_rows'  => true,
 		'orderby'        => 'menu_order',
 		'order'          => 'ASC',
+		'meta_query'     => array(
+			'relation' => 'OR',
+			array(
+				'key'     => 'brittos_faq_show_on_home',
+				'value'   => '1',
+				'compare' => '=',
+			),
+			array(
+				'key'     => 'brittos_faq_show_on_home',
+				'compare' => 'NOT EXISTS',
+			),
+		),
 	) );
 
 	if ( ! $faqs ) {

@@ -15,11 +15,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$badge_text = brittos_clinic_field( 'treatments_hero_badge_text', __( 'Our Treatments', 'brittos-dentistry' ) );
-$title      = brittos_clinic_field( 'treatments_hero_title', __( 'Care built around what you actually need', 'brittos-dentistry' ) );
-$lede       = brittos_clinic_field( 'treatments_hero_lede', __( 'Explore every treatment we offer, grouped by the kind of care you need.', 'brittos-dentistry' ) );
+$badge_text = brittos_clinic_field( 'treatments_eyebrow', brittos_clinic_field( 'treatments_hero_badge_text', __( 'Our Treatments', 'brittos-dentistry' ) ) );
+$title      = brittos_clinic_field( 'treatments_heading', brittos_clinic_field( 'treatments_hero_title', __( 'Care built around what you actually need', 'brittos-dentistry' ) ) );
+$lede       = brittos_clinic_field( 'treatments_lede', brittos_clinic_field( 'treatments_hero_lede', __( 'Explore every treatment we offer, grouped by the kind of care you need.', 'brittos-dentistry' ) ) );
 $bg_image_id = absint( brittos_clinic_field( 'treatments_hero_bg_image_id' ) );
-$has_media   = $bg_image_id && wp_attachment_is_image( $bg_image_id );
+$has_image   = $bg_image_id && wp_attachment_is_image( $bg_image_id );
+$has_media   = '1' === brittos_clinic_field( 'treatments_hero_fullbleed' ) && $has_image;
 ?>
 <header class="treatment-hero<?php echo $has_media ? ' treatment-hero--overlay' : ''; ?>">
 	<?php if ( $has_media ) : ?>
@@ -42,5 +43,11 @@ $has_media   = $bg_image_id && wp_attachment_is_image( $bg_image_id );
 				<p class="hero__lede treatment-hero__lede"><?php echo esc_html( $lede ); ?></p>
 			<?php endif; ?>
 		</div>
+
+		<?php if ( $has_image && ! $has_media ) : ?>
+			<div class="treatment-hero__media" data-reveal>
+				<?php echo wp_get_attachment_image( $bg_image_id, 'brittos-hero', false, array( 'class' => 'treatment-hero__image', 'loading' => 'eager', 'fetchpriority' => 'high', 'decoding' => 'async' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+			</div>
+		<?php endif; ?>
 	</div>
 </header>

@@ -1,0 +1,306 @@
+.about-hero .hero__inner {
+  min-height: 600px;
+}
+
+.about-hero .hero__badge {
+  display: inline-flex;
+}
+
+.about-hero--fullbleed {
+  color: var(--overlay-on-dark);
+}
+
+.about-hero__background,
+.about-hero__background-overlay {
+  position: absolute;
+  inset: 0;
+}
+
+.about-hero__background {
+  z-index: 0;
+}
+
+.about-hero__background-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.about-hero__background-overlay {
+  z-index: 1;
+  background: linear-gradient(90deg, #0d1110db 0%, #0d111099 48%, #0d111033 100%);
+}
+
+.about-hero--fullbleed .hero__inner {
+  z-index: 2;
+}
+
+.about-hero--fullbleed .hero__badge,
+.about-hero--fullbleed .hero__title,
+.about-hero--fullbleed .hero__lede {
+  color: var(--overlay-on-dark);
+}
+
+.about-hero--fullbleed .hero__lede {
+  color: var(--overlay-on-dark-soft);
+}
+
+.about-hero .hero__media {
+  display: block;
+  align-self: stretch;
+  min-height: 20rem;
+}
+
+.about-hero .hero__media-wrapper {
+  height: 100%;
+}
+
+.about-hero .hero__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 20rem;
+  object-fit: cover;
+  border-radius: var(--radius-xl);
+}
+
+.about-doctor__detail {
+  margin-top: var(--space-md);
+}
+
+.about-doctor__detail strong {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: var(--britto-accent);
+  font-weight: 500;
+}
+
+.about-philosophy,
+.about-experience {
+  padding: var(--space-xl) 0;
+}
+
+.about-philosophy__inner {
+  display: grid;
+  gap: var(--space-lg);
+  align-items: start;
+}
+
+.about-philosophy__intro {
+  max-width: 30rem;
+}
+
+.about-philosophy__list {
+  display: grid;
+  gap: 0;
+  margin: var(--space-lg) 0 0;
+  padding: 0 0 0 var(--space-sm);
+  list-style: none;
+  border-top: 1px solid var(--color-border);
+}
+
+.about-philosophy__item {
+  position: relative;
+  display: grid;
+  grid-template-columns: 3rem 1fr;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-sm);
+  border-bottom: 1px solid var(--color-border);
+  transition: background-color 420ms ease, border-color 420ms ease, transform 420ms ease;
+}
+
+.about-philosophy__item h3 {
+  margin: 0 0 0.4rem;
+  font-weight: 600;
+}
+
+.about-philosophy__item p {
+  max-width: 58ch;
+  margin: 0;
+}
+
+.about-philosophy__item:hover,
+.about-philosophy__item:focus-visible {
+  border-color: var(--britto-accent);
+  background: var(--brand-sage-soft);
+  transform: translateX(-0.35rem);
+}
+
+.about-philosophy__number {
+  color: var(--britto-accent);
+  font-weight: 500;
+}
+
+.about-clinic {
+  padding: var(--space-xl) 0;
+  background: var(--brand-sage-soft);
+}
+
+.about-clinic__inner {
+  display: grid;
+  gap: var(--space-lg);
+  align-items: center;
+}
+
+.about-clinic__image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: var(--radius-xl);
+}
+
+.about-clinic__content h2,
+.about-experience h2 {
+  margin-top: 0;
+  font-weight: 600;
+}
+
+.about-experience__list {
+  position: relative;
+  display: grid;
+  gap: 0;
+  margin: var(--space-lg) 0 0;
+  padding: 0 0 0 var(--space-md);
+  list-style: none;
+  border-left: 1px solid var(--color-border);
+}
+
+.about-experience__list::before,
+.about-experience__list::after {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -1px;
+  width: 1px;
+  content: '';
+}
+
+.about-experience__list::before {
+  background: var(--color-border);
+}
+
+.about-experience__list::after {
+  background: var(--britto-accent);
+  transform: scaleY(0);
+  transform-origin: top;
+}
+
+.about-experience__list li {
+  position: relative;
+  display: block;
+  padding: var(--space-md) var(--space-sm);
+  border-bottom: 1px solid var(--color-border);
+  transition: background-color 180ms ease, border-color 180ms ease;
+}
+
+.about-experience__list li::before {
+  position: absolute;
+  top: 1.35rem;
+  left: calc(var(--space-md) * -1 - 0.3rem);
+  width: 0.55rem;
+  height: 0.55rem;
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  background: var(--color-bg);
+  content: '';
+  transition: background-color 180ms ease, border-color 180ms ease;
+}
+
+.about-experience__list li:hover,
+.about-experience__list li:focus-visible {
+  border-color: var(--britto-accent);
+  background: var(--brand-sage-soft);
+}
+
+.about-experience__list li:hover::before,
+.about-experience__list li:focus-visible::before {
+  border-color: var(--britto-accent);
+  background: var(--britto-accent);
+}
+
+@media (min-width: 900px) {
+  .about-hero .hero__media {
+    min-height: 32rem;
+  }
+
+  .about-hero .hero__image {
+    min-height: 32rem;
+  }
+
+  .about-philosophy__inner {
+    grid-template-columns: minmax(16rem, 0.75fr) minmax(0, 1.25fr);
+    gap: clamp(3rem, 8vw, 8rem);
+  }
+
+  .about-philosophy__list {
+    margin-top: 0;
+  }
+
+  .about-clinic__inner {
+    grid-template-columns: 0.9fr 1.1fr;
+  }
+
+  .about-experience__list {
+    grid-template-columns: repeat(var(--experience-count), minmax(0, 1fr));
+    column-gap: var(--space-md);
+    padding: 0 0 0 var(--space-sm);
+    border-top: 1px solid var(--color-border);
+    border-left: 0;
+  }
+
+  .about-experience__list::before,
+  .about-experience__list::after {
+    top: -1px;
+    right: 0;
+    bottom: auto;
+    left: 0;
+    width: auto;
+    height: 1px;
+    transform: none;
+  }
+
+  .about-experience__list::after {
+    width: 0;
+  }
+
+  .about-experience__list li {
+    padding: var(--space-md) var(--space-sm) 0 var(--space-sm);
+    border-bottom: 0;
+  }
+
+  .about-experience__list li::before {
+    top: -0.3rem;
+    left: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-page [data-reveal],
+  .about-philosophy__item,
+  .about-experience__list li,
+  .about-experience__list li::before {
+    transition: none;
+    transform: none;
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (max-width: 899px) and (prefers-reduced-motion: no-preference) {
+    .about-experience__list::after {
+      animation: about-experience-progress linear both;
+      animation-timeline: view(block 10% 90%);
+    }
+  }
+}
+
+@keyframes about-experience-progress {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}

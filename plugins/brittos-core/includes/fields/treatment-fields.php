@@ -104,7 +104,7 @@ function brittos_core_render_treatment_meta_box( $post ) {
 	<p>
 		<label>
 			<input type="checkbox" name="brittos_treatment_hero_overlay" value="1" <?php checked( '1', $hero_overlay ); ?>>
-			<strong><?php esc_html_e( 'Use featured image as a full-bleed hero background with a dark overlay', 'brittos-core' ); ?></strong>
+			<strong><?php esc_html_e( 'Use featured image as an optional full-bleed hero background with a dark overlay', 'brittos-core' ); ?></strong>
 		</label><br>
 		<span class="description"><?php esc_html_e( 'Off by default (the featured image shows as a card beside the text instead). Requires a featured image to be set below.', 'brittos-core' ); ?></span>
 	</p>

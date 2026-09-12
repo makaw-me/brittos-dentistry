@@ -221,10 +221,15 @@
 
 		var panelRect  = panelEl.getBoundingClientRect();
 		var margin     = 12; // min gap from viewport edge, px
+		var safeRight  = window.innerWidth - margin;
+		var navActions = document.querySelector( '.primary-nav__actions' );
+		if ( navActions && navActions.getBoundingClientRect().width > 0 ) {
+			safeRight = Math.min( safeRight, navActions.getBoundingClientRect().left - margin );
+		}
 		var overflow   = 0;
 
-		if ( panelRect.right > window.innerWidth - margin ) {
-			overflow = -( panelRect.right - window.innerWidth + margin );
+		if ( panelRect.right > safeRight ) {
+			overflow = -( panelRect.right - safeRight );
 		} else if ( panelRect.left < margin ) {
 			overflow = margin - panelRect.left;
 		}

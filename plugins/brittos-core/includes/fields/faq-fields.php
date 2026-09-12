@@ -24,13 +24,17 @@ define( 'BRITTOS_CORE_FAQ_NONCE', 'brittos_core_faq_nonce' );
  * Read a structured FAQ field.
  *
  * @param int    $post_id FAQ post ID.
- * @param string $key     Currently only 'related_treatments' is supported.
+ * @param string $key     Supported keys: related_treatments, show_on_home.
  * @return array
  */
 function brittos_core_get_faq_field( $post_id, $key ) {
 	if ( 'related_treatments' === $key ) {
 		$ids = get_post_meta( $post_id, 'brittos_faq_related_treatment_id' );
 		return array_map( 'absint', (array) $ids );
+	}
+	if ( 'show_on_home' === $key ) {
+		$value = get_post_meta( $post_id, 'brittos_faq_show_on_home', true );
+		return '' === $value ? '1' : ( '1' === $value ? '1' : '' );
 	}
 	return array();
 }
@@ -56,6 +60,7 @@ function brittos_core_render_faq_meta_box( $post ) {
 	wp_nonce_field( 'brittos_core_save_faq', BRITTOS_CORE_FAQ_NONCE );
 
 	$related = brittos_core_get_faq_field( $post->ID, 'related_treatments' );
+	$show_on_home = brittos_core_get_faq_field( $post->ID, 'show_on_home' );
 
 	$treatments = get_posts( array(
 		'post_type'      => 'treatment',
@@ -67,6 +72,12 @@ function brittos_core_render_faq_meta_box( $post ) {
 	?>
 	<p class="description">
 		<?php esc_html_e( 'Leave all unchecked for a general FAQ shown site-wide. Check one or more to also show it on those specific treatment pages.', 'brittos-core' ); ?>
+	</p>
+	<p>
+		<label>
+			<input type="checkbox" name="brittos_faq_show_on_home" value="1" <?php checked( '1', $show_on_home ); ?>>
+			<strong><?php esc_html_e( 'Show this FAQ on the homepage', 'brittos-core' ); ?></strong>
+		</label>
 	</p>
 	<?php if ( $treatments ) : ?>
 		<div style="max-height:220px;overflow-y:auto;">
@@ -114,5 +125,11 @@ function brittos_core_save_faq_meta( $post_id ) {
 			add_post_meta( $post_id, 'brittos_faq_related_treatment_id', $treatment_id, false );
 		}
 	}
+
+	update_post_meta(
+		$post_id,
+		'brittos_faq_show_on_home',
+		! empty( $_POST['brittos_faq_show_on_home'] ) ? '1' : ''
+	);
 }
 add_action( 'save_post', 'brittos_core_save_faq_meta' );

@@ -63,13 +63,13 @@ $floating_sub     = brittos_clinic_field( 'hero_floating_sub', __( 'Same trusted
 				muted
 				loop
 				playsinline
-				<?php if ( $hero_bg_img ) : ?>poster="<?php echo esc_url( wp_get_attachment_image_url( $hero_bg_img, 'full' ) ); ?>"<?php endif; ?>
+				<?php if ( $hero_bg_img ) : ?>poster="<?php echo esc_url( wp_get_attachment_image_url( $hero_bg_img, 'brittos-hero' ) ); ?>"<?php endif; ?>
 			>
 				<source src="<?php echo esc_url( $hero_video ); ?>" type="video/mp4">
 			</video>
 			<div class="hero__bg-overlay"></div>
 		<?php elseif ( $hero_bg_img ) : ?>
-			<div class="hero__bg-image" style="background-image: url('<?php echo esc_url( wp_get_attachment_image_url( $hero_bg_img, 'full' ) ); ?>');"></div>
+			<div class="hero__bg-image" style="background-image: url('<?php echo esc_url( wp_get_attachment_image_url( $hero_bg_img, 'brittos-hero' ) ); ?>');"></div>
 			<div class="hero__bg-overlay"></div>
 		<?php else : ?>
 			<div class="hero__glow hero__glow--1"></div>
@@ -79,7 +79,7 @@ $floating_sub     = brittos_clinic_field( 'hero_floating_sub', __( 'Same trusted
 
 	<div class="container hero__inner">
 
-		<div class="hero__content">
+		<div class="hero__content" data-reveal>
 			<div class="hero__badge">
 				<span class="hero__badge-dot" aria-hidden="true"></span>
 				<span class="hero__badge-text"><?php echo esc_html( $badge_text ); ?></span>
@@ -133,7 +133,7 @@ $floating_sub     = brittos_clinic_field( 'hero_floating_sub', __( 'Same trusted
 			</div>
 		</div>
 
-		<div class="hero__media">
+		<div class="hero__media" data-reveal>
 			<div class="hero__media-wrapper">
 				<?php if ( $hero_id ) : ?>
 					<?php echo brittos_lcp_image( $hero_id, 'brittos-hero', array( 'class' => 'hero__image', 'alt' => esc_attr( get_the_title() ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
