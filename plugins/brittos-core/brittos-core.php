@@ -47,6 +47,7 @@ function brittos_core_includes() {
 		'includes/fields/faq-fields.php',
 		'includes/forms/appointment.php',
 		'includes/seo/schema.php',
+		'includes/seo/meta-tags.php',
 	);
 
 	foreach ( $files as $file ) {
