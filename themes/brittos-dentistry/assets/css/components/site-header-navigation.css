@@ -131,11 +131,6 @@ html[data-theme="dark"] .site-header__logo--dark {
   opacity: 1;
   pointer-events: auto;
 }
-html.menu-is-open,
-body.menu-is-open {
-  overflow: hidden;
-  touch-action: none;
-}
 .primary-nav {
   position: fixed;
   top: 0;
@@ -462,7 +457,9 @@ body.menu-is-open {
   .sub-menu {
     position: absolute;
     top: calc(100% + 14px);
-    left: 50%;
+    /* --_panel-shift is set by JS to nudge the panel when it would overflow
+       either edge of the viewport. Falls back to 0px when JS is absent. */
+    left: calc( 50% + var(--_panel-shift, 0px) );
     transform: translate(-50%) translateY(8px) scale(0.97);
     width: max-content;
     min-width: 200px;
@@ -497,6 +494,7 @@ body.menu-is-open {
     border-radius: 8px;
     padding: 0.5rem 0.8rem;
     font-weight: 500;
+    position: relative;
     transition:
       background var(--transition-fast),
       color var(--transition-fast),
@@ -505,7 +503,7 @@ body.menu-is-open {
   .sub-menu li a:hover,
   .sub-menu li a:focus-visible {
     background: var(--britto-secondary-soft);
-    color: var(--britto-text);
+    color: var(--britto-accent);
     transform: translate(3px);
   }
   .mega-panel-toggle {
@@ -515,7 +513,7 @@ body.menu-is-open {
     display: block;
     position: absolute;
     top: calc(100% + 14px);
-    left: 50%;
+    left: calc( 50% + var(--_panel-shift, 0px) );
     transform: translate(-50%) translateY(10px) scale(0.98);
     width: min(600px, 92vw);
     margin: 0;
@@ -630,20 +628,33 @@ body.menu-is-open {
   .primary-nav__link {
     font-size: var(--fs-sm);
     font-weight: 500;
-    padding: 0.2rem 0;
-    border-radius: 0;
+    /* Extra horizontal padding so the hover bg pill has comfortable width */
+    padding: 0.25rem 0.6rem;
+    margin-inline: -0.6rem;
+    border-radius: var(--radius-sm);
     color: var(--britto-text-muted);
     position: relative;
     transition:
       color var(--transition-fast),
-      gap var(--transition-fast);
+      background var(--transition-fast),
+      transform var(--transition-fast);
   }
+  /* Keep the underline indicator; re-anchor it to the new padding */
   .primary-nav__link:before {
-    bottom: -2px;
+    bottom: 1px;
+    left: 0.6rem;
+    width: calc(100% - 1.2rem);
   }
-  .primary-nav__link:hover {
-    background: transparent;
+  .primary-nav__link:hover,
+  .primary-nav__link:focus-visible {
+    background: color-mix(in srgb, var(--britto-secondary-soft) 85%, transparent);
     color: var(--brand-ink);
+    transform: translate(0, -1px);
+  }
+  html[data-theme="dark"] .primary-nav__link:hover,
+  html[data-theme="dark"] .primary-nav__link:focus-visible {
+    color: var(--britto-text);
+    background: #ffffff14;
   }
   .primary-nav__link:active {
     transform: none;
@@ -651,8 +662,6 @@ body.menu-is-open {
   .primary-nav__link:focus-visible {
     outline: 2px solid var(--britto-focus);
     outline-offset: 2px;
-    background: transparent;
-    color: var(--brand-ink);
   }
   .primary-nav__item.current-menu-item > .primary-nav__link,
   .primary-nav__link[aria-current="page"] {

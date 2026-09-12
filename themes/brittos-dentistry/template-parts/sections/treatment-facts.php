@@ -5,9 +5,8 @@
  * entered for this treatment (see Treatment Details > Quick Facts in
  * wp-admin). Renders nothing if the treatment has no facts set.
  *
- * Presented as an elevated card strip that overlaps into view right
- * under the breadcrumb bar, so it reads as a distinct, discoverable
- * surface rather than blending into the page background.
+ * Presented as an elevated card strip that reads as a distinct,
+ * discoverable surface rather than blending into the page background.
  *
  * Expects $treatment_id in scope.
  *

@@ -30,7 +30,3 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <main id="primary-content" class="site-main">
 <?php
-if ( ! is_front_page() ) {
-	get_template_part( 'template-parts/global/breadcrumbs' );
-}
-?>
