@@ -140,7 +140,7 @@ $floating_sub     = brittos_clinic_field( 'hero_floating_sub', __( 'Same trusted
 				<?php else : ?>
 					<div class="hero__media-card">
 						<img
-							src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/logo.webp' ); ?>"
+							src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/logo.png' ); ?>"
 							alt="<?php esc_attr_e( 'Britto\'s Dentistry Emblem', 'brittos-dentistry' ); ?>"
 							class="hero__image hero__image--logo"
 							width="480"

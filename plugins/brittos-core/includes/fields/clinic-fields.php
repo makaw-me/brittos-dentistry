@@ -84,6 +84,7 @@ function brittos_core_clinic_field_definitions() {
 		'appointment_url'       => array( 'tab' => 'general', 'label' => __( 'External Booking URL (optional)', 'brittos-core' ), 'type' => 'url', 'help' => __( 'If set, this takes priority over the Booking Page below for all CTA buttons.', 'brittos-core' ) ),
 		'booking_page_id'       => array( 'tab' => 'general', 'label' => __( 'Booking / Contact Page', 'brittos-core' ), 'type' => 'page', 'help' => __( 'The page "Book an appointment" CTAs link to. Assign the "Contact / Book Appointment" page template to a page, then select it here.', 'brittos-core' ) ),
 		'notification_email'    => array( 'tab' => 'general', 'label' => __( 'Appointment Notification Email', 'brittos-core' ), 'type' => 'email', 'help' => __( 'Where enquiries are sent. Defaults to the site admin email if left blank.', 'brittos-core' ) ),
+		'meta_description'      => array( 'tab' => 'general', 'label' => __( 'Homepage Meta Description (SEO)', 'brittos-core' ), 'type' => 'textarea', 'help' => __( 'Compelling 120–155 character description for Google search results and social cards.', 'brittos-core' ) ),
 
 		// TAB: Hero Section
 		'hero_badge_text'       => array( 'tab' => 'hero', 'label' => __( 'Badge Text', 'brittos-core' ), 'type' => 'text', 'help' => __( 'Default: Independent Private Dental Practice', 'brittos-core' ) ),
