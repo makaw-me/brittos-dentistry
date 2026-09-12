@@ -55,7 +55,8 @@ $uncategorised = new WP_Query( array(
 $has_any_treatments = ! empty( $categories ) || $uncategorised->have_posts();
 ?>
 
-<div class="container page-content">
+<main class="treatments-archive" id="main-content">
+	<div class="container page-content treatments-archive__content">
 
 	<?php get_template_part( 'template-parts/components/section-heading', null, array(
 		'eyebrow' => __( 'Explore by category', 'brittos-dentistry' ),
@@ -86,37 +87,56 @@ $has_any_treatments = ! empty( $categories ) || $uncategorised->have_posts();
 			if ( ! $category_query->have_posts() ) {
 				continue;
 			}
+
+			$category_count = count( $category_query->posts );
 			?>
 			<section class="treatment-category-group" aria-labelledby="category-<?php echo esc_attr( $category->term_id ); ?>-heading">
-				<h2 id="category-<?php echo esc_attr( $category->term_id ); ?>-heading" class="treatment-category-group__heading" data-reveal>
-					<?php echo esc_html( $category->name ); ?>
-				</h2>
-				<?php if ( $category->description ) : ?>
-					<p class="treatment-category-group__description"><?php echo esc_html( $category->description ); ?></p>
-				<?php endif; ?>
+				<header class="treatment-category-group__header" data-reveal>
+					<h2 id="category-<?php echo esc_attr( $category->term_id ); ?>-heading" class="treatment-category-group__heading">
+						<?php echo esc_html( $category->name ); ?>
+					</h2>
+					<span class="treatment-category-group__count">
+						<?php
+						/* translators: %s: number of treatments in the category */
+						printf( esc_html__( '%s treatments', 'brittos-dentistry' ), esc_html( number_format_i18n( $category_count ) ) );
+						?>
+					</span>
+				</header>
 
-				<div class="treatments__grid">
+				<div class="treatments__index" role="list">
 					<?php
 					while ( $category_query->have_posts() ) :
 						$category_query->the_post();
-						get_template_part( 'template-parts/components/treatment-card' );
+						get_template_part( 'template-parts/components/treatment-card', null, array( 'variant' => 'index' ) );
 					endwhile;
 					wp_reset_postdata();
 					?>
 				</div>
+
+				<?php if ( $category->description ) : ?>
+					<p class="treatment-category-group__description" data-reveal><?php echo esc_html( $category->description ); ?></p>
+				<?php endif; ?>
 			</section>
 		<?php endforeach; ?>
 
 		<?php if ( $uncategorised->have_posts() ) : ?>
 			<section class="treatment-category-group" aria-labelledby="category-other-heading">
-				<h2 id="category-other-heading" class="treatment-category-group__heading">
+				<header class="treatment-category-group__header" data-reveal>
+					<h2 id="category-other-heading" class="treatment-category-group__heading">
 					<?php esc_html_e( 'Other Treatments', 'brittos-dentistry' ); ?>
-				</h2>
-				<div class="treatments__grid">
+					</h2>
+					<span class="treatment-category-group__count">
+						<?php
+						/* translators: %s: number of uncategorised treatments */
+						printf( esc_html__( '%s treatments', 'brittos-dentistry' ), esc_html( number_format_i18n( $uncategorised->post_count ) ) );
+						?>
+					</span>
+				</header>
+				<div class="treatments__index" role="list">
 					<?php
 					while ( $uncategorised->have_posts() ) :
 						$uncategorised->the_post();
-						get_template_part( 'template-parts/components/treatment-card' );
+						get_template_part( 'template-parts/components/treatment-card', null, array( 'variant' => 'index' ) );
 					endwhile;
 					wp_reset_postdata();
 					?>
@@ -130,6 +150,7 @@ $has_any_treatments = ! empty( $categories ) || $uncategorised->have_posts();
 		</p>
 	<?php endif; ?>
 
-</div>
+	</div>
+</main>
 
 <?php get_footer(); ?>

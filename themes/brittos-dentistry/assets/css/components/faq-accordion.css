@@ -1,0 +1,109 @@
+/* faq accordion */
+.faq__list {
+  max-width: 48rem;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.faq-item__details {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.25rem;
+  background: var(--brand-white);
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+.faq-item__details[open] {
+  border-color: var(--brand-champagne);
+  box-shadow: var(--shadow-sm);
+}
+.faq-item__question {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--brand-ink);
+  padding: 0;
+}
+.faq-item__question::-webkit-details-marker {
+  display: none;
+}
+.faq-item__icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  position: relative;
+}
+.faq-item__icon:before,
+.faq-item__icon:after {
+  content: "";
+  position: absolute;
+  background: var(--brand-ink);
+  transition: transform var(--transition-fast);
+}
+.faq-item__icon:before {
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  transform: translateY(-50%);
+}
+.faq-item__icon:after {
+  top: 0;
+  left: 50%;
+  width: 2px;
+  height: 100%;
+  transform: translate(-50%);
+}
+.faq-item__details[open] .faq-item__icon:after {
+  transform: translate(-50%) scaleY(0);
+}
+.faq-item__answer {
+  padding-top: var(--space-sm);
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+html.theme-ready body,
+html.theme-ready .site-header,
+html.theme-ready .primary-nav,
+html.theme-ready section,
+html.theme-ready .treatment-card,
+html.theme-ready .testimonial-card,
+html.theme-ready .faq-item__details,
+html.theme-ready .contact-form-card,
+html.theme-ready input,
+html.theme-ready select,
+html.theme-ready textarea,
+html.theme-ready .button,
+html.theme-ready .theme-toggle {
+  transition:
+    background-color var(--transition-fast),
+    color var(--transition-fast),
+    border-color var(--transition-fast),
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+@media (prefers-reduced-motion: reduce) {
+  html.theme-ready body,
+  html.theme-ready .site-header,
+  html.theme-ready .primary-nav,
+  html.theme-ready section,
+  html.theme-ready .treatment-card,
+  html.theme-ready .testimonial-card,
+  html.theme-ready .faq-item__details,
+  html.theme-ready .contact-form-card,
+  html.theme-ready input,
+  html.theme-ready select,
+  html.theme-ready textarea,
+  html.theme-ready .button,
+  html.theme-ready .theme-toggle {
+    transition: none;
+  }
+}

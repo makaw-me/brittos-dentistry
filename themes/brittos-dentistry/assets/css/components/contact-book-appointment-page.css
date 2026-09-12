@@ -1,0 +1,109 @@
+/* contact book appointment page */
+.contact-hero {
+  background: linear-gradient(
+    180deg,
+    var(--britto-secondary-soft) 0%,
+    var(--britto-bg) 100%
+  );
+  padding-block: var(--space-lg) var(--space-md);
+  text-align: center;
+}
+.contact-hero .section-heading {
+  margin-inline: auto;
+}
+.contact-layout {
+  padding-block: var(--space-lg);
+  display: grid;
+  gap: var(--space-lg);
+  align-items: start;
+}
+@media (min-width: 960px) {
+  .contact-layout {
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: var(--space-xl);
+  }
+}
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+.contact-info__card {
+  background: var(--brand-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+}
+.contact-info__row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-xs);
+}
+.contact-info__row + .contact-info__row {
+  margin-top: var(--space-sm);
+}
+.contact-info__icon {
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--britto-secondary-soft);
+  color: var(--britto-accent);
+}
+.contact-info__label {
+  font-family: var(--font-ui);
+  font-size: var(--fs-2xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+  margin-bottom: 0.15rem;
+}
+.contact-info__value {
+  color: var(--brand-ink);
+  font-weight: 600;
+}
+.contact-info__value a {
+  color: inherit;
+  text-decoration: none;
+}
+.contact-info__value a:hover {
+  color: var(--britto-accent);
+}
+.contact-info__map-note {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+.contact-form-card {
+  position: relative;
+  background: var(--brand-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: clamp(1.75rem, 4vw, 2.75rem);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+.contact-form-card:before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.9),
+    transparent
+  );
+}
+.contact-form-card .appointment-form button[type="submit"] {
+  width: 100%;
+  margin-top: 0.25rem;
+}
+.contact-form-card__required-note {
+  font-size: var(--fs-2xs);
+  color: var(--color-text-muted);
+  margin-top: var(--space-sm);
+  text-align: center;
+}

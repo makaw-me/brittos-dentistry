@@ -1,0 +1,172 @@
+/* modern sleek footer */
+.site-footer {
+  background: var(--brand-white);
+  border-top: 1px solid var(--color-border);
+  position: relative;
+  overflow: hidden;
+}
+.site-footer__inner {
+  display: grid;
+  gap: 2.5rem;
+  padding-block: clamp(3rem, 6vw, 5rem);
+  grid-template-columns: 1fr;
+}
+@media (min-width: 700px) {
+  .site-footer__inner {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 1024px) {
+  .site-footer__inner {
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  }
+}
+.site-footer__brand-block {
+  margin-bottom: 1.25rem;
+}
+.site-footer__brand {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--brand-ink);
+  margin-bottom: 0.35rem;
+}
+.site-footer__tagline {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+  margin-bottom: 0;
+  line-height: 1.5;
+}
+.site-footer__dentist {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin-bottom: 1.25rem;
+  background: var(--brand-porcelain);
+  padding: 0.6rem 0.9rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+}
+.site-footer__dentist-badge {
+  font-size: var(--fs-2xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--britto-accent);
+}
+.site-footer__dentist-name {
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: var(--fs-sm);
+  color: var(--brand-ink);
+  margin-bottom: 0;
+}
+.site-footer__address {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+.site-footer__address svg {
+  margin-top: 3px;
+  color: var(--britto-accent);
+  flex-shrink: 0;
+}
+.site-footer__heading {
+  font-family: var(--font-ui);
+  font-size: var(--fs-2xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--brand-ink);
+  margin-bottom: 1.25rem;
+}
+.site-footer__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: var(--fs-sm);
+}
+.site-footer__list a,
+.site-footer__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  padding: 0.35rem 0.65rem;
+  margin-inline: -0.65rem;
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+  transition:
+    color var(--transition-fast),
+    transform var(--transition-fast),
+    background var(--transition-fast);
+  position: relative;
+}
+.site-footer__list a:hover,
+.site-footer__list a:focus-visible,
+.site-footer__link:hover,
+.site-footer__link:focus-visible {
+  color: var(--brand-ink);
+  transform: translate(4px);
+  background: color-mix(in srgb, var(--britto-secondary-soft) 85%, transparent);
+}
+html[data-theme="dark"] .site-footer__list a:hover,
+html[data-theme="dark"] .site-footer__list a:focus-visible,
+html[data-theme="dark"] .site-footer__link:hover,
+html[data-theme="dark"] .site-footer__link:focus-visible {
+  color: var(--britto-text);
+  background: #ffffff14;
+}
+.site-footer__link svg {
+  color: var(--britto-accent);
+  flex-shrink: 0;
+  transition:
+    transform var(--transition-fast),
+    color var(--transition-fast);
+}
+.site-footer__link:hover svg,
+.site-footer__link:focus-visible svg {
+  transform: scale(1.18);
+  color: var(--britto-accent);
+}
+.site-footer__hours {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+.site-footer__hours svg {
+  margin-top: 3px;
+  color: var(--britto-accent);
+  flex-shrink: 0;
+}
+.site-footer__bottom {
+  border-top: 1px solid var(--color-border);
+  padding-block: 1.25rem;
+  font-size: var(--fs-2xs);
+  color: var(--color-text-muted);
+}
+.site-footer__bottom-inner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+}
+.site-footer__bottom p {
+  margin: 0;
+}
+.site-footer__credit {
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
