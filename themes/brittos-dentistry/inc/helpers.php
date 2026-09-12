@@ -82,3 +82,69 @@ function brittos_button( $args ) {
 function brittos_is_empty_state( $items ) {
 	return empty( $items );
 }
+
+/**
+ * Build the breadcrumb trail for the current view. Rendered sitewide on
+ * all non-front-page views via template-parts/global/breadcrumbs.php.
+ *
+ * @return array Array of [ 'label' => string, 'url' => string ], empty on the front page.
+ */
+function brittos_get_breadcrumb_trail() {
+	if ( is_front_page() ) {
+		return array();
+	}
+
+	$trail = array(
+		array(
+			'label' => __( 'Home', 'brittos-dentistry' ),
+			'url'   => home_url( '/' ),
+		),
+	);
+
+	if ( is_singular( 'treatment' ) ) {
+		$archive_link = get_post_type_archive_link( 'treatment' );
+		if ( $archive_link ) {
+			$trail[] = array(
+				'label' => __( 'Treatments', 'brittos-dentistry' ),
+				'url'   => $archive_link,
+			);
+		}
+
+		$trail[] = array(
+			'label' => get_the_title(),
+			'url'   => '',
+		);
+	} elseif ( is_post_type_archive( 'treatment' ) || is_tax( 'treatment_category' ) ) {
+		$trail[] = array(
+			'label' => __( 'Treatments', 'brittos-dentistry' ),
+			'url'   => '',
+		);
+	} elseif ( is_page() ) {
+		$trail[] = array(
+			'label' => get_the_title(),
+			'url'   => '',
+		);
+	} elseif ( is_singular() ) {
+		$trail[] = array(
+			'label' => get_the_title(),
+			'url'   => '',
+		);
+	} elseif ( is_search() ) {
+		$trail[] = array(
+			'label' => __( 'Search results', 'brittos-dentistry' ),
+			'url'   => '',
+		);
+	} elseif ( is_404() ) {
+		$trail[] = array(
+			'label' => __( 'Page not found', 'brittos-dentistry' ),
+			'url'   => '',
+		);
+	} else {
+		$trail[] = array(
+			'label' => wp_get_document_title(),
+			'url'   => '',
+		);
+	}
+
+	return $trail;
+}

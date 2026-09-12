@@ -18,7 +18,7 @@ if ( '' === $short_desc ) {
 	$short_desc = get_the_excerpt();
 }
 ?>
-<article <?php post_class( 'treatment-card' ); ?>>
+<article <?php post_class( 'treatment-card' ); ?> data-reveal data-reveal-group="treatments">
 	<a class="treatment-card__media-link" href="<?php the_permalink(); ?>" tabindex="-1" aria-hidden="true">
 		<?php if ( has_post_thumbnail() ) : ?>
 			<?php the_post_thumbnail( 'brittos-card', array(

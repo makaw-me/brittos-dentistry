@@ -57,6 +57,7 @@ function brittos_core_clinic_tabs() {
 		'about_doctor'   => __( 'About Doctor', 'brittos-core' ),
 		'why_us'         => __( 'Why Choose Us', 'brittos-core' ),
 		'treatments_cta' => __( 'Treatments & CTA', 'brittos-core' ),
+		'treatments_hero' => __( 'Treatments Page Hero', 'brittos-core' ),
 		'gallery'        => __( 'Gallery', 'brittos-core' ),
 	);
 }
@@ -80,7 +81,8 @@ function brittos_core_clinic_field_definitions() {
 		'city'                  => array( 'tab' => 'general', 'label' => __( 'City', 'brittos-core' ), 'type' => 'text' ),
 		'postal_code'           => array( 'tab' => 'general', 'label' => __( 'Postal Code', 'brittos-core' ), 'type' => 'text' ),
 		'opening_hours'         => array( 'tab' => 'general', 'label' => __( 'Opening Hours', 'brittos-core' ), 'type' => 'textarea', 'help' => __( 'One line per schedule item, e.g. "Mon–Sat: 9:00 AM – 7:00 PM".', 'brittos-core' ) ),
-		'appointment_url'       => array( 'tab' => 'general', 'label' => __( 'External Booking URL (optional)', 'brittos-core' ), 'type' => 'url', 'help' => __( 'If set, CTA buttons can link here instead of the on-page form.', 'brittos-core' ) ),
+		'appointment_url'       => array( 'tab' => 'general', 'label' => __( 'External Booking URL (optional)', 'brittos-core' ), 'type' => 'url', 'help' => __( 'If set, this takes priority over the Booking Page below for all CTA buttons.', 'brittos-core' ) ),
+		'booking_page_id'       => array( 'tab' => 'general', 'label' => __( 'Booking / Contact Page', 'brittos-core' ), 'type' => 'page', 'help' => __( 'The page "Book an appointment" CTAs link to. Assign the "Contact / Book Appointment" page template to a page, then select it here.', 'brittos-core' ) ),
 		'notification_email'    => array( 'tab' => 'general', 'label' => __( 'Appointment Notification Email', 'brittos-core' ), 'type' => 'email', 'help' => __( 'Where enquiries are sent. Defaults to the site admin email if left blank.', 'brittos-core' ) ),
 
 		// TAB: Hero Section
@@ -88,7 +90,7 @@ function brittos_core_clinic_field_definitions() {
 		'hero_title'            => array( 'tab' => 'hero', 'label' => __( 'Hero Main Title / H1', 'brittos-core' ), 'type' => 'textarea', 'help' => __( 'Default: Gentle, unhurried dentistry from someone who knows your name.', 'brittos-core' ) ),
 		'hero_lede'             => array( 'tab' => 'hero', 'label' => __( 'Hero Subtitle / Description', 'brittos-core' ), 'type' => 'textarea', 'help' => __( 'Main introductory statement. Fallback uses dentist name if left empty.', 'brittos-core' ) ),
 		'hero_cta_primary_text' => array( 'tab' => 'hero', 'label' => __( 'Primary CTA Button Text', 'brittos-core' ), 'type' => 'text', 'help' => __( 'Default: Book an appointment', 'brittos-core' ) ),
-		'hero_cta_primary_url'  => array( 'tab' => 'hero', 'label' => __( 'Primary CTA Button URL', 'brittos-core' ), 'type' => 'text', 'help' => __( 'Default: #appointment-form', 'brittos-core' ) ),
+		'hero_cta_primary_url'  => array( 'tab' => 'hero', 'label' => __( 'Primary CTA Button URL', 'brittos-core' ), 'type' => 'text', 'help' => __( 'Leave blank to use the Booking/Contact page set under General & Contact.', 'brittos-core' ) ),
 		'hero_bg_image_id'      => array( 'tab' => 'hero', 'label' => __( 'Hero Background Image', 'brittos-core' ), 'type' => 'media', 'help' => __( 'Atmospheric background image / video poster.', 'brittos-core' ) ),
 		'hero_bg_video_url'     => array( 'tab' => 'hero', 'label' => __( 'Hero Background Video URL', 'brittos-core' ), 'type' => 'video', 'help' => __( 'MP4 / WebM video. Autoplays muted, looped with contrast overlay.', 'brittos-core' ) ),
 		'hero_stat1_val'        => array( 'tab' => 'hero', 'label' => __( 'Stat 1 Value', 'brittos-core' ), 'type' => 'text', 'help' => __( 'Default: 1:1', 'brittos-core' ) ),
@@ -135,6 +137,11 @@ function brittos_core_clinic_field_definitions() {
 		'cta_heading'           => array( 'tab' => 'treatments_cta', 'label' => __( 'Final CTA Heading', 'brittos-core' ), 'type' => 'text', 'help' => __( 'Default: Request an appointment', 'brittos-core' ) ),
 		'cta_lede'              => array( 'tab' => 'treatments_cta', 'label' => __( 'Final CTA Description', 'brittos-core' ), 'type' => 'textarea', 'help' => __( 'Default: Send a few details and the clinic will get back to you to confirm a time.', 'brittos-core' ) ),
 
+		'treatments_hero_badge_text' => array( 'tab' => 'treatments_hero', 'label' => __( 'Badge Text', 'brittos-core' ), 'type' => 'text', 'help' => __( 'Default: Our Treatments', 'brittos-core' ) ),
+		'treatments_hero_title'      => array( 'tab' => 'treatments_hero', 'label' => __( 'Hero Title / H1', 'brittos-core' ), 'type' => 'textarea', 'help' => __( 'Default: Care built around what you actually need', 'brittos-core' ) ),
+		'treatments_hero_lede'       => array( 'tab' => 'treatments_hero', 'label' => __( 'Hero Description', 'brittos-core' ), 'type' => 'textarea', 'help' => __( 'Default: Explore every treatment we offer, grouped by the kind of care you need.', 'brittos-core' ) ),
+		'treatments_hero_bg_image_id' => array( 'tab' => 'treatments_hero', 'label' => __( 'Hero Background Image (optional)', 'brittos-core' ), 'type' => 'media', 'help' => __( 'Leave empty for the plain hero style used elsewhere when no image is set.', 'brittos-core' ) ),
+
 		// TAB: Gallery
 		'gallery_eyebrow'       => array( 'tab' => 'gallery', 'label' => __( 'Gallery Eyebrow', 'brittos-core' ), 'type' => 'text', 'help' => __( 'Default: The clinic', 'brittos-core' ) ),
 		'gallery_heading'       => array( 'tab' => 'gallery', 'label' => __( 'Gallery Heading', 'brittos-core' ), 'type' => 'text', 'help' => __( 'Default: A calm space to visit', 'brittos-core' ) ),
@@ -179,6 +186,9 @@ function brittos_core_sanitize_clinic_fields( $input ) {
 				$clean[ $key ] = sanitize_textarea_field( $raw );
 				break;
 			case 'media':
+				$clean[ $key ] = absint( $raw );
+				break;
+			case 'page':
 				$clean[ $key ] = absint( $raw );
 				break;
 			case 'gallery':
@@ -252,6 +262,21 @@ function brittos_core_render_single_field( $key, $field ) {
 						$value ? '' : 'style="display:none"',
 						esc_html__( 'Remove', 'brittos-core' )
 					);
+					break;
+
+				case 'page':
+					echo '<select id="' . esc_attr( $key ) . '" name="' . esc_attr( $name ) . '">';
+					echo '<option value="0">' . esc_html__( '— Select a page —', 'brittos-core' ) . '</option>';
+					$pages = get_pages( array( 'sort_column' => 'post_title' ) );
+					foreach ( $pages as $page_option ) {
+						printf(
+							'<option value="%1$d" %2$s>%3$s</option>',
+							esc_attr( $page_option->ID ),
+							selected( absint( $value ), $page_option->ID, false ),
+							esc_html( $page_option->post_title )
+						);
+					}
+					echo '</select>';
 					break;
 
 				case 'gallery':
@@ -374,3 +399,25 @@ function brittos_core_clinic_settings_assets( $hook ) {
 	);
 }
 add_action( 'admin_enqueue_scripts', 'brittos_core_clinic_settings_assets' );
+
+/**
+ * The URL every "Book an appointment" CTA across the site should point
+ * to. Priority: an explicit external booking URL (e.g. a third-party
+ * scheduling tool), then the assigned Booking/Contact page, then a
+ * same-page anchor fallback so nothing ever links nowhere.
+ *
+ * @return string
+ */
+function brittos_core_get_booking_url() {
+	$external = brittos_core_get_clinic_field( 'appointment_url' );
+	if ( $external ) {
+		return $external;
+	}
+
+	$page_id = absint( brittos_core_get_clinic_field( 'booking_page_id' ) );
+	if ( $page_id && 'publish' === get_post_status( $page_id ) ) {
+		return get_permalink( $page_id );
+	}
+
+	return home_url( '/#appointment-form' );
+}

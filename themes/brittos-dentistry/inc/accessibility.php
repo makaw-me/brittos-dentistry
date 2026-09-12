@@ -48,5 +48,10 @@ function brittos_nav_menu( $location, $extra = array() ) {
 		'fallback_cb'    => 'brittos_fallback_menu',
 		'depth'          => 2,
 	);
+
+	if ( 'primary' === $location && class_exists( 'Brittos_Primary_Nav_Walker' ) ) {
+		$defaults['walker'] = new Brittos_Primary_Nav_Walker();
+	}
+
 	wp_nav_menu( wp_parse_args( $extra, $defaults ) );
 }

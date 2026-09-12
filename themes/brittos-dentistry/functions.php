@@ -23,6 +23,7 @@ $brittos_theme_includes = array(
 	'/inc/theme-mode.php',
 	'/inc/security.php',
 	'/inc/performance.php',
+	'/inc/nav-walker.php',
 	'/inc/accessibility.php',
 	'/inc/helpers.php',
 );

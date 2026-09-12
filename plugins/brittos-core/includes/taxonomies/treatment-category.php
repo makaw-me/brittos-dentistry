@@ -29,13 +29,31 @@ function brittos_core_register_treatment_category_taxonomy() {
 	$args = array(
 		'labels'            => $labels,
 		'hierarchical'      => true,
+		'public'            => false,
+		'publicly_queryable'=> false,
 		'show_ui'           => true,
 		'show_in_rest'      => true,
 		'show_admin_column' => true,
-		'query_var'         => true,
-		'rewrite'           => array( 'slug' => 'treatment-category', 'with_front' => false ),
+		'query_var'         => false,
+		'rewrite'           => false,
 	);
 
 	register_taxonomy( 'treatment_category', array( 'treatment' ), $args );
 }
 add_action( 'init', 'brittos_core_register_treatment_category_taxonomy' );
+
+/**
+ * Defensive redirect: ensure any direct requests to legacy category URLs
+ * permanently 301 redirect to the main Treatments catalog archive.
+ */
+function brittos_core_redirect_treatment_category_archives() {
+	if ( is_tax( 'treatment_category' ) ) {
+		$archive_url = get_post_type_archive_link( 'treatment' );
+		if ( ! $archive_url ) {
+			$archive_url = home_url( '/' );
+		}
+		wp_safe_redirect( $archive_url, 301 );
+		exit;
+	}
+}
+add_action( 'template_redirect', 'brittos_core_redirect_treatment_category_archives' );

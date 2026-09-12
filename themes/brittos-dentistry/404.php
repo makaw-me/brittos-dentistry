@@ -14,8 +14,6 @@ get_header();
 
 <div class="container page-content not-found">
 
-	<?php get_template_part( 'template-parts/global/breadcrumbs' ); ?>
-
 	<h1 class="not-found__title"><?php esc_html_e( 'Page not found', 'brittos-dentistry' ); ?></h1>
 	<p class="not-found__text">
 		<?php esc_html_e( 'The page you were looking for may have moved or no longer exists.', 'brittos-dentistry' ); ?>

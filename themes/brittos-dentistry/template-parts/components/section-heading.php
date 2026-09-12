@@ -32,7 +32,7 @@ if ( '' === $args['heading'] ) {
 $level = in_array( (int) $args['level'], array( 2, 3, 4 ), true ) ? (int) $args['level'] : 2;
 $align = 'center' === $args['align'] ? 'center' : 'left';
 ?>
-<div class="section-heading section-heading--<?php echo esc_attr( $align ); ?>">
+<div class="section-heading section-heading--<?php echo esc_attr( $align ); ?>" data-reveal>
 	<?php if ( $args['eyebrow'] ) : ?>
 		<p class="section-heading__eyebrow"><?php echo esc_html( $args['eyebrow'] ); ?></p>
 	<?php endif; ?>

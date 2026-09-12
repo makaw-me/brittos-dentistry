@@ -13,6 +13,16 @@
 	--brand-ink-deep: #0d1110;
 	--brand-porcelain: #f7f5f0;
 	--brand-white: #ffffff;
+
+	/*
+	 * Stays literally white/near-white in BOTH color modes. --brand-white
+	 * is a theme-aware surface token (it flips dark in dark mode), so it's
+	 * wrong for text sitting on a dark photo/video overlay — that overlay
+	 * is dark regardless of site theme, so the text needs a color that
+	 * doesn't flip with it. Never redefined in the dark-mode block below.
+	 */
+	--overlay-on-dark: #ffffff;
+	--overlay-on-dark-soft: rgba(255, 255, 255, 0.82);
 	--brand-champagne: #c8a77b;
 	--brand-champagne-soft: #e8ddcb;
 	--brand-sage: #7f9287;
@@ -323,6 +333,25 @@ section {
 	border-radius: var(--radius-md);
 	padding: var(--space-md);
 	color: var(--color-text-muted);
+}
+
+/* -----------------------------
+   Scroll reveal (assets/js/animations.js)
+   Subtle, one-time fade + lift as content enters the viewport. Scoped
+   to `html.js` (set synchronously in header.php, matching the dark-mode
+   bootstrap pattern) so content is fully visible by default and only
+   ever hidden when JavaScript has actually run to reveal it again.
+------------------------------ */
+html.js [data-reveal] {
+	opacity: 0;
+	transform: translateY(16px);
+}
+
+html.js [data-reveal].is-visible {
+	opacity: 1;
+	transform: none;
+	transition: opacity var(--transition-base), transform var(--transition-base);
+	transition-delay: var(--reveal-delay, 0ms);
 }
 
 /* -----------------------------

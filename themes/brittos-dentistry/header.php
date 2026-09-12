@@ -13,6 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <html <?php language_attributes(); ?>>
 <head>
 	<?php brittos_theme_color_mode_bootstrap(); ?>
+	<script>document.documentElement.classList.add( 'js' );</script>
 	<meta charset="<?php bloginfo( 'charset' ); ?>">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="profile" href="https://gmpg.org/xfn/11">
@@ -28,3 +29,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 <?php get_template_part( 'template-parts/global/site-header' ); ?>
 
 <main id="primary-content" class="site-main">
+<?php
+if ( ! is_front_page() ) {
+	get_template_part( 'template-parts/global/breadcrumbs' );
+}
+?>

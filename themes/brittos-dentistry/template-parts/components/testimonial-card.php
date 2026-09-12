@@ -16,7 +16,7 @@ if ( '' === $patient_name ) {
 	$patient_name = get_the_title();
 }
 ?>
-<figure <?php post_class( 'testimonial-card' ); ?>>
+<figure <?php post_class( 'testimonial-card' ); ?> data-reveal data-reveal-group="testimonials">
 	<blockquote class="testimonial-card__quote">
 		<?php the_content(); ?>
 	</blockquote>

@@ -41,6 +41,7 @@ function brittos_enqueue_assets() {
 
 	$nav_js_path  = BRITTOS_THEME_DIR . '/assets/js/navigation.js';
 	$main_js_path = BRITTOS_THEME_DIR . '/assets/js/main.js';
+	$animations_js_path = BRITTOS_THEME_DIR . '/assets/js/animations.js';
 
 	wp_enqueue_script(
 		'brittos-navigation',
@@ -55,6 +56,14 @@ function brittos_enqueue_assets() {
 		BRITTOS_THEME_URI . '/assets/js/main.js',
 		array(),
 		file_exists( $main_js_path ) ? filemtime( $main_js_path ) : BRITTOS_THEME_VERSION,
+		array( 'strategy' => 'defer', 'in_footer' => true )
+	);
+
+	wp_enqueue_script(
+		'brittos-animations',
+		BRITTOS_THEME_URI . '/assets/js/animations.js',
+		array(),
+		file_exists( $animations_js_path ) ? filemtime( $animations_js_path ) : BRITTOS_THEME_VERSION,
 		array( 'strategy' => 'defer', 'in_footer' => true )
 	);
 

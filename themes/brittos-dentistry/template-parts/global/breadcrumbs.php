@@ -1,7 +1,11 @@
 <?php
 /**
- * Simple, accessible breadcrumb trail. Also feeds BreadcrumbList schema
- * via the core plugin's SEO module (see plugin includes/seo/schema.php).
+ * The one breadcrumb component used across the entire site — ordinary
+ * pages, the Treatments archive, and every Treatment single page all
+ * render identically from here, so spacing/positioning/visual treatment
+ * never drifts between them. Always rendered as its own solid,
+ * self-contained surface (never overlaid on a hero image), and always
+ * placed immediately after the header, before any hero/page content.
  *
  * @package Brittos_Dentistry
  */
@@ -10,71 +14,31 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-if ( is_front_page() ) {
+$trail = brittos_get_breadcrumb_trail();
+
+if ( empty( $trail ) ) {
 	return;
 }
 
-$trail = array(
-	array(
-		'label' => __( 'Home', 'brittos-dentistry' ),
-		'url'   => home_url( '/' ),
-	),
-);
-
-if ( is_singular( 'treatment' ) ) {
-	$archive_link = get_post_type_archive_link( 'treatment' );
-	if ( $archive_link ) {
-		$trail[] = array(
-			'label' => __( 'Treatments', 'brittos-dentistry' ),
-			'url'   => $archive_link,
-		);
-	}
-	$trail[] = array(
-		'label' => get_the_title(),
-		'url'   => '',
-	);
-} elseif ( is_post_type_archive( 'treatment' ) ) {
-	$trail[] = array(
-		'label' => __( 'Treatments', 'brittos-dentistry' ),
-		'url'   => '',
-	);
-} elseif ( is_page() ) {
-	$trail[] = array(
-		'label' => get_the_title(),
-		'url'   => '',
-	);
-} elseif ( is_singular() ) {
-	$trail[] = array(
-		'label' => get_the_title(),
-		'url'   => '',
-	);
-} elseif ( is_search() ) {
-	$trail[] = array(
-		'label' => __( 'Search results', 'brittos-dentistry' ),
-		'url'   => '',
-	);
-} elseif ( is_404() ) {
-	$trail[] = array(
-		'label' => __( 'Page not found', 'brittos-dentistry' ),
-		'url'   => '',
-	);
-} else {
-	$trail[] = array(
-		'label' => wp_get_document_title(),
-		'url'   => '',
-	);
-}
+$crumb_count = count( $trail );
 ?>
-<nav class="breadcrumbs" aria-label="<?php esc_attr_e( 'Breadcrumb', 'brittos-dentistry' ); ?>">
-	<ol class="breadcrumbs__list">
-		<?php foreach ( $trail as $index => $crumb ) : ?>
-			<li class="breadcrumbs__item">
-				<?php if ( $crumb['url'] ) : ?>
-					<a href="<?php echo esc_url( $crumb['url'] ); ?>"><?php echo esc_html( $crumb['label'] ); ?></a>
-				<?php else : ?>
-					<span aria-current="page"><?php echo esc_html( $crumb['label'] ); ?></span>
+<div class="breadcrumbs">
+	<nav class="breadcrumbs__inner" aria-label="<?php esc_attr_e( 'Breadcrumb', 'brittos-dentistry' ); ?>">
+		<ol class="breadcrumbs__list">
+			<?php foreach ( $trail as $index => $crumb ) : ?>
+				<li class="breadcrumbs__item">
+					<?php if ( $crumb['url'] ) : ?>
+						<a class="breadcrumbs__link" href="<?php echo esc_url( $crumb['url'] ); ?>"><?php echo esc_html( $crumb['label'] ); ?></a>
+					<?php else : ?>
+						<span class="breadcrumbs__current" aria-current="page"><?php echo esc_html( $crumb['label'] ); ?></span>
+					<?php endif; ?>
+				</li>
+				<?php if ( $index < $crumb_count - 1 ) : ?>
+					<li class="breadcrumbs__sep" role="presentation" aria-hidden="true">
+						<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+					</li>
 				<?php endif; ?>
-			</li>
-		<?php endforeach; ?>
-	</ol>
-</nav>
+			<?php endforeach; ?>
+		</ol>
+	</nav>
+</div>

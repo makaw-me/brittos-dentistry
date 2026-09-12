@@ -17,6 +17,7 @@ $phone            = brittos_clinic_field( 'phone' );
 $hero_id          = get_post_thumbnail_id();
 $hero_bg_img      = brittos_clinic_field( 'hero_bg_image_id' );
 $hero_video       = brittos_clinic_field( 'hero_bg_video_url' );
+$has_media        = $hero_bg_img || $hero_video;
 
 $badge_text       = brittos_clinic_field( 'hero_badge_text', __( 'Independent Private Dental Practice', 'brittos-dentistry' ) );
 $hero_title       = brittos_clinic_field( 'hero_title' );
@@ -38,7 +39,10 @@ if ( ! $hero_lede ) {
 }
 
 $cta_primary_text = brittos_clinic_field( 'hero_cta_primary_text', __( 'Book an appointment', 'brittos-dentistry' ) );
-$cta_primary_url  = brittos_clinic_field( 'hero_cta_primary_url', '#appointment-form' );
+$cta_primary_url  = brittos_clinic_field( 'hero_cta_primary_url' );
+if ( ! $cta_primary_url ) {
+	$cta_primary_url = function_exists( 'brittos_core_get_booking_url' ) ? brittos_core_get_booking_url() : '#appointment-form';
+}
 
 $stat1_val        = brittos_clinic_field( 'hero_stat1_val', '1:1' );
 $stat1_label      = brittos_clinic_field( 'hero_stat1_label', __( 'Direct Dentist Care', 'brittos-dentistry' ) );
@@ -50,7 +54,7 @@ $stat3_label      = brittos_clinic_field( 'hero_stat3_label', __( 'Rushed Visits
 $floating_title   = brittos_clinic_field( 'hero_floating_title', __( 'Dedicated Continuity', 'brittos-dentistry' ) );
 $floating_sub     = brittos_clinic_field( 'hero_floating_sub', __( 'Same trusted dentist every visit', 'brittos-dentistry' ) );
 ?>
-<section class="hero hero--full-bleed" aria-label="<?php esc_attr_e( 'Introduction', 'brittos-dentistry' ); ?>">
+<section class="hero hero--full-bleed<?php echo $has_media ? ' hero--has-media' : ''; ?>" aria-label="<?php esc_attr_e( 'Introduction', 'brittos-dentistry' ); ?>">
 	<div class="hero__bg-ambient" aria-hidden="true">
 		<?php if ( $hero_video ) : ?>
 			<video

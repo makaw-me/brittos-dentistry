@@ -51,7 +51,21 @@
 	background: var(--britto-action);
 	color: var(--britto-on-action);
 	border-color: var(--britto-action);
-	box-shadow: 0 4px 14px rgba(13, 17, 16, 0.12);
+	box-shadow: 0 4px 14px color-mix(in srgb, var(--britto-action) 35%, transparent);
+}
+
+.button--primary::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.22) 48%, rgba(255, 255, 255, 0.22) 52%, transparent 70%);
+	transform: translateX(-120%);
+	transition: transform 550ms cubic-bezier(0.16, 1, 0.3, 1);
+	pointer-events: none;
+}
+
+.button--primary:hover::after {
+	transform: translateX(120%);
 }
 
 .button--primary:hover {
@@ -59,7 +73,7 @@
 	border-color: var(--britto-action-hover);
 	color: var(--britto-on-action);
 	transform: translateY(-2px);
-	box-shadow: 0 6px 20px rgba(13, 17, 16, 0.18);
+	box-shadow: 0 8px 24px color-mix(in srgb, var(--britto-action) 40%, transparent);
 }
 
 .button--secondary {
@@ -101,7 +115,8 @@
 }
 
 .button:active {
-	transform: translateY(0);
+	transform: translateY(0) scale(0.97);
+	transition: transform 200ms var(--transition-spring);
 }
 
 .theme-toggle {
@@ -178,6 +193,32 @@ html[data-theme="dark"] .theme-toggle__icon--moon {
 	transition: background var(--transition-fast), border-color var(--transition-fast);
 }
 
+/*
+ * Homepage only: the header floats over the hero with no background of
+ * its own — just the logo and nav links, since the hero already carries
+ * the booking/call CTAs. It solidifies once the visitor scrolls past the
+ * hero (`.is-scrolled`, toggled in assets/js/navigation.js) so nav stays
+ * legible over ordinary page content.
+ */
+.site-header--transparent {
+	position: fixed;
+	inset-inline: 0;
+	border-bottom-color: transparent;
+}
+
+.site-header--transparent:not(.is-scrolled) {
+	background: transparent;
+	backdrop-filter: none;
+	-webkit-backdrop-filter: none;
+}
+
+.site-header--transparent.is-scrolled {
+	background: color-mix(in srgb, var(--brand-porcelain) 88%, transparent);
+	backdrop-filter: blur(12px) saturate(160%);
+	-webkit-backdrop-filter: blur(12px) saturate(160%);
+	border-bottom-color: var(--color-border);
+}
+
 .site-header__inner {
 	display: flex;
 	align-items: center;
@@ -204,6 +245,18 @@ html[data-theme="dark"] .theme-toggle__icon--moon {
 	height: 42px;
 	width: auto;
 	object-fit: contain;
+}
+
+.site-header__logo--dark {
+	display: none;
+}
+
+html[data-theme="dark"] .site-header__logo--light {
+	display: none;
+}
+
+html[data-theme="dark"] .site-header__logo--dark {
+	display: block;
 }
 
 .site-header__name {
@@ -408,6 +461,354 @@ body.menu-is-open {
 	padding-left: 1.25rem;
 }
 
+/*
+ * Generic WordPress sub-menu fallback (a plain nested menu built in
+ * Appearance > Menus, without the `treatments-mega` class). Gets the
+ * same "tray" treatment as the mega panel, just without grouped columns
+ * — so any multi-level menu the site owner builds looks intentional.
+ */
+.sub-menu {
+	list-style: none;
+	margin: 0.35rem 0 0.5rem 1rem;
+	padding: 0.5rem 0;
+	border-left: 2px solid var(--color-border);
+}
+
+.sub-menu .primary-nav__link,
+.sub-menu a {
+	display: block;
+	padding: 0.55rem 1rem;
+	color: var(--britto-text-muted);
+	text-decoration: none;
+	font-size: 0.95rem;
+	font-weight: 500;
+	border-radius: var(--radius-sm);
+	transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.sub-menu a:hover,
+.sub-menu a:focus-visible {
+	background: var(--britto-secondary-soft);
+	color: var(--britto-accent);
+}
+
+/*
+ * Treatments mega menu (inc/nav-walker.php auto-populates this from
+ * real CPT/taxonomy data). Baseline works with zero JavaScript via
+ * :hover/:focus-within; assets/js/navigation.js layers a disclosure
+ * button + click/Escape/outside-click handling on top for touch and
+ * more deliberate keyboard control, toggling the same `.is-open` class.
+ */
+.primary-nav__link--mega {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+}
+
+.primary-nav__link--mega::after {
+	content: "";
+	width: 6px;
+	height: 6px;
+	border-right: 1.75px solid currentColor;
+	border-bottom: 1.75px solid currentColor;
+	transform: rotate(45deg) translateY(-2px);
+	transition: transform var(--transition-base);
+}
+
+.primary-nav__item--mega.is-open .primary-nav__link--mega::after,
+.primary-nav__item--mega:focus-within .primary-nav__link--mega::after,
+.primary-nav__item--mega:hover .primary-nav__link--mega::after {
+	transform: rotate(225deg) translateY(0);
+}
+
+.mega-panel-toggle {
+	display: none;
+}
+
+.mega-panel {
+	background: var(--britto-surface);
+	border: 1px solid var(--britto-border);
+}
+
+.mega-panel__grid {
+	display: grid;
+	gap: 1.25rem 1.75rem;
+	grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+}
+
+.mega-panel__column {
+	min-width: 0;
+}
+
+.mega-panel__category {
+	display: flex;
+	align-items: center;
+	gap: 0.45rem;
+	font-family: var(--font-ui);
+	font-weight: 700;
+	font-size: 0.72rem;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--britto-text-muted);
+	margin-bottom: 0.75rem;
+	padding-bottom: 0.25rem;
+}
+
+.mega-panel__category::before {
+	content: "";
+	display: inline-block;
+	width: 5px;
+	height: 5px;
+	border-radius: 50%;
+	background: var(--britto-accent);
+}
+
+.mega-panel__list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+}
+
+.mega-panel__link {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0.4rem 0.6rem;
+	margin-inline: -0.6rem;
+	border-radius: 8px;
+	color: var(--britto-text);
+	text-decoration: none;
+	font-size: var(--fs-sm);
+	font-weight: 500;
+	transition: background var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+}
+
+.mega-panel__link-text {
+	flex: 1 1 auto;
+}
+
+.mega-panel__link-arrow {
+	opacity: 0;
+	transform: translateX(-4px);
+	color: var(--britto-accent);
+	transition: opacity var(--transition-fast), transform var(--transition-fast);
+	flex-shrink: 0;
+}
+
+.mega-panel__link:hover,
+.mega-panel__link:focus-visible {
+	background: var(--britto-secondary-soft);
+	color: var(--britto-text);
+	transform: translateX(3px);
+}
+
+.mega-panel__link:hover .mega-panel__link-arrow,
+.mega-panel__link:focus-visible .mega-panel__link-arrow {
+	opacity: 1;
+	transform: translateX(0);
+}
+
+.mega-panel__footer {
+	margin-top: 1.25rem;
+	padding-top: 0.9rem;
+	border-top: 1px solid var(--britto-border);
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+}
+
+.mega-panel__all {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.45rem;
+	font-size: var(--fs-sm);
+	font-weight: 600;
+	color: var(--britto-text);
+	text-decoration: none;
+	padding: 0.45rem 0.95rem;
+	border-radius: var(--radius-pill);
+	background: color-mix(in srgb, var(--britto-accent) 12%, transparent);
+	border: 1px solid transparent;
+	transition: background var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+}
+
+.mega-panel__all:hover {
+	background: var(--britto-action);
+	color: var(--britto-on-action);
+	transform: translateY(-1px);
+}
+
+/* Mobile / drawer: inline disclosure, no absolute positioning. */
+.mega-panel {
+	display: none;
+	margin-top: 0.5rem;
+	margin-left: 1rem;
+	padding: 1rem;
+	border-radius: var(--radius-md);
+}
+
+.primary-nav__item--mega.is-open .mega-panel {
+	display: block;
+}
+
+.mega-panel-toggle {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 44px;
+	height: 44px;
+	flex-shrink: 0;
+	background: transparent;
+	border: none;
+	color: var(--britto-text);
+	cursor: pointer;
+}
+
+.primary-nav__item--mega {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.mega-panel-toggle__chevron {
+	transition: transform var(--transition-fast);
+}
+
+.mega-panel-toggle[aria-expanded="true"] .mega-panel-toggle__chevron {
+	transform: rotate(180deg);
+}
+
+@media (min-width: 960px) {
+	.primary-nav__item--mega {
+		position: relative;
+	}
+
+	/*
+	 * Hover "bridge": the visible gap between the trigger and the panel
+	 * (see .mega-panel's top offset below) is otherwise a dead zone —
+	 * moving the mouse from the link down into the panel crosses empty
+	 * space where neither element is hovered, so :hover drops and the
+	 * panel closes before the cursor arrives. This invisible strip keeps
+	 * the hover chain continuous across that gap without changing how
+	 * anything looks.
+	 */
+	.primary-nav__item--mega::before {
+		content: "";
+		position: absolute;
+		top: 100%;
+		left: 0;
+		right: 0;
+		height: 18px;
+	}
+
+	.menu-item-has-children {
+		position: relative;
+	}
+
+	.menu-item-has-children::before {
+		content: "";
+		position: absolute;
+		top: 100%;
+		left: 0;
+		right: 0;
+		height: 14px;
+	}
+
+	.sub-menu {
+		position: absolute;
+		top: calc(100% + 14px);
+		left: 50%;
+		transform: translateX(-50%) translateY(8px) scale(0.97);
+		width: max-content;
+		min-width: 200px;
+		max-width: 280px;
+		margin: 0;
+		padding: 0.5rem;
+		background: var(--britto-surface);
+		border: 1px solid var(--britto-border);
+		border-radius: 16px;
+		box-shadow: 0 20px 48px -8px rgba(13, 17, 16, 0.12), 0 2px 8px rgba(13, 17, 16, 0.04);
+		backdrop-filter: blur(20px);
+		-webkit-backdrop-filter: blur(20px);
+		opacity: 0;
+		visibility: hidden;
+		pointer-events: none;
+		transition: opacity 220ms cubic-bezier(0.16, 1, 0.3, 1), transform 220ms cubic-bezier(0.16, 1, 0.3, 1), visibility 220ms;
+		z-index: 200;
+	}
+
+	.menu-item-has-children:hover > .sub-menu,
+	.menu-item-has-children:focus-within > .sub-menu {
+		opacity: 1;
+		visibility: visible;
+		pointer-events: auto;
+		transform: translateX(-50%) translateY(0) scale(1);
+	}
+
+	.sub-menu li a {
+		border-radius: 8px;
+		padding: 0.5rem 0.8rem;
+		font-weight: 500;
+		transition: background var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+	}
+
+	.sub-menu li a:hover,
+	.sub-menu li a:focus-visible {
+		background: var(--britto-secondary-soft);
+		color: var(--britto-text);
+		transform: translateX(3px);
+	}
+
+	.mega-panel-toggle {
+		display: none !important;
+	}
+
+	.mega-panel {
+		display: block;
+		position: absolute;
+		top: calc(100% + 14px);
+		left: 50%;
+		transform: translateX(-50%) translateY(10px) scale(0.98);
+		width: min(600px, 92vw);
+		margin: 0;
+		padding: 1.5rem 1.75rem 1.25rem;
+		border-radius: 22px;
+		background: var(--britto-surface);
+		border: 1px solid var(--britto-border);
+		box-shadow: 0 24px 60px -12px rgba(13, 17, 16, 0.14), 0 4px 16px rgba(13, 17, 16, 0.04);
+		backdrop-filter: blur(24px);
+		-webkit-backdrop-filter: blur(24px);
+		opacity: 0;
+		visibility: hidden;
+		pointer-events: none;
+		transition: opacity 240ms cubic-bezier(0.16, 1, 0.3, 1), transform 240ms cubic-bezier(0.16, 1, 0.3, 1), visibility 240ms;
+		z-index: 200;
+		overflow: hidden;
+	}
+
+	.primary-nav__item--mega:hover .mega-panel,
+	.primary-nav__item--mega:focus-within .mega-panel,
+	.primary-nav__item--mega.is-open .mega-panel {
+		opacity: 1;
+		visibility: visible;
+		pointer-events: auto;
+		transform: translateX(-50%) translateY(0) scale(1);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.mega-panel,
+	.mega-panel__list a,
+	.primary-nav__link::after,
+	.primary-nav__link--mega::after,
+	.mega-panel-toggle__chevron {
+		transition: none;
+	}
+}
+
 .primary-nav__actions {
 	display: flex;
 	flex-direction: column;
@@ -415,16 +816,6 @@ body.menu-is-open {
 	padding-top: 1.5rem;
 	margin-top: 1.5rem;
 	border-top: 1px solid var(--britto-border);
-}
-
-.primary-nav__actions .button {
-	width: 100%;
-}
-
-.site-header__phone {
-	gap: 0.5rem;
-	font-size: var(--fs-sm);
-	color: var(--britto-text-muted);
 }
 
 @media (min-width: 960px) {
@@ -480,6 +871,19 @@ body.menu-is-open {
 		z-index: auto;
 	}
 
+	/*
+	 * The shared dark-mode surface rule (`html[data-theme="dark"] .primary-nav`)
+	 * has higher specificity than the plain `.primary-nav { background: transparent }`
+	 * above, so it was winning even at desktop width and painting a solid
+	 * dark panel behind the inline nav on the homepage. The extra `.site-header`
+	 * ancestor here outranks it without needing !important.
+	 */
+	html[data-theme="dark"] .site-header .primary-nav {
+		background-color: transparent;
+		border-color: transparent;
+		box-shadow: none;
+	}
+
 	.primary-nav__header {
 		display: none;
 	}
@@ -491,20 +895,57 @@ body.menu-is-open {
 	.primary-nav__list {
 		flex-direction: row;
 		margin: 0;
-		gap: 1.5rem;
+		gap: 0.5rem;
+		align-items: center;
 	}
 
 	.primary-nav__link {
 		font-size: var(--fs-sm);
-		padding: 0.4rem 0.6rem;
-		border-radius: var(--radius-sm);
+		font-weight: 600;
+		padding: 0.5rem 0.95rem;
+		border-radius: var(--radius-pill);
+		color: var(--britto-text);
+		position: relative;
+		transition: background var(--transition-fast), color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
 	}
 
-	.primary-nav__link:hover,
+	.primary-nav__link:hover {
+		background: color-mix(in srgb, var(--britto-secondary-soft) 85%, transparent);
+		color: var(--britto-text);
+		transform: translateY(-1.5px);
+		box-shadow: 0 4px 12px rgba(13, 17, 16, 0.05);
+	}
+
+	.primary-nav__link:active {
+		transform: translateY(0) scale(0.96);
+		box-shadow: none;
+	}
+
 	.primary-nav__link:focus-visible {
-		background: transparent;
-		color: var(--britto-accent);
-		padding-left: 0.6rem;
+		outline: 2px solid var(--britto-focus);
+		outline-offset: 2px;
+		background: var(--britto-secondary-soft);
+		color: var(--britto-text);
+	}
+
+	.primary-nav__item.current-menu-item > .primary-nav__link,
+	.primary-nav__link[aria-current="page"] {
+		background: color-mix(in srgb, var(--britto-accent) 14%, transparent);
+		color: var(--britto-text);
+		font-weight: 700;
+	}
+
+	.primary-nav__item.current-menu-item > .primary-nav__link::after,
+	.primary-nav__link[aria-current="page"]::after {
+		content: "";
+		position: absolute;
+		bottom: 4px;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 4px;
+		height: 4px;
+		border-radius: 50%;
+		background: var(--britto-accent);
 	}
 
 	.primary-nav__actions {
@@ -514,10 +955,6 @@ body.menu-is-open {
 		margin-top: 0;
 		border-top: none;
 		gap: 0.75rem;
-	}
-
-	.primary-nav__actions .button {
-		width: auto;
 	}
 }
 
@@ -586,8 +1023,7 @@ body.menu-is-open {
 .hero__bg-overlay {
 	position: absolute;
 	inset: 0;
-	background: color-mix(in srgb, var(--britto-bg) 84%, transparent);
-	backdrop-filter: blur(2px);
+	background: linear-gradient(180deg, rgba(13, 17, 16, 0.35) 0%, rgba(13, 17, 16, 0.7) 100%);
 	z-index: 2;
 }
 
@@ -595,6 +1031,56 @@ body.menu-is-open {
 	.hero__bg-video {
 		display: none;
 	}
+}
+
+/*
+ * Photo/video hero mode: the ambient image becomes the actual visual
+ * (not a barely-visible tint), so the card-style media column steps
+ * aside and text switches to light colors for contrast against the
+ * darkened photo/video beneath it.
+ */
+.hero--has-media .hero__media {
+	display: none;
+}
+
+.hero--has-media .hero__inner {
+	grid-template-columns: 1fr;
+	max-width: 44rem;
+}
+
+.hero--has-media .hero__badge {
+	background: rgba(255, 255, 255, 0.12);
+	border-color: rgba(255, 255, 255, 0.28);
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
+}
+
+.hero--has-media .hero__badge-text,
+.hero--has-media .hero__title,
+.hero--has-media .hero__lede,
+.hero--has-media .hero__metric-value,
+.hero--has-media .hero__metric-label {
+	color: var(--overlay-on-dark);
+}
+
+.hero--has-media .hero__lede {
+	color: var(--overlay-on-dark-soft);
+}
+
+.hero--has-media .hero__metric-divider {
+	background: rgba(255, 255, 255, 0.25);
+}
+
+.hero--has-media .button--ghost.hero__cta-phone {
+	background: rgba(255, 255, 255, 0.1);
+	color: var(--overlay-on-dark);
+	border-color: rgba(255, 255, 255, 0.32);
+}
+
+.hero--has-media .button--ghost.hero__cta-phone:hover {
+	background: rgba(255, 255, 255, 0.18);
+	border-color: var(--overlay-on-dark);
+	color: var(--overlay-on-dark);
 }
 
 .hero__inner {
@@ -617,6 +1103,59 @@ body.menu-is-open {
 	flex-direction: column;
 	align-items: flex-start;
 }
+
+/*
+ * Hero entrance: a one-shot fade-up on page load, staggered per element.
+ * Deliberately CSS-only (not IntersectionObserver-gated like the rest of
+ * the site) since this content is above the fold and visible immediately
+ * on arrival — a scroll trigger would never fire. The global
+ * prefers-reduced-motion rule in main.css already neutralizes this.
+ */
+@keyframes brittos-hero-fade-up {
+	from {
+		opacity: 0;
+		transform: translateY(18px);
+	}
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+.hero__badge,
+.hero__title,
+.hero__lede,
+.hero__actions,
+.hero__trust-metrics {
+	animation: brittos-hero-fade-up 700ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.hero__badge {
+	animation-delay: 40ms;
+}
+
+.hero__title {
+	animation-delay: 120ms;
+}
+
+.hero__lede {
+	animation-delay: 200ms;
+}
+
+.hero__actions {
+	animation-delay: 280ms;
+}
+
+.hero__trust-metrics {
+	animation-delay: 360ms;
+}
+
+/*
+ * Deliberately NOT animating .hero__media: it's frequently the LCP
+ * candidate (fetchpriority="high" image), and starting it at opacity:0
+ * would delay the measured Largest Contentful Paint until the fade
+ * completes — directly working against the Lighthouse performance target.
+ */
 
 .hero__badge {
 	display: inline-flex;
@@ -825,6 +1364,504 @@ body.menu-is-open {
 }
 
 /* -----------------------------
+   Treatment single page
+------------------------------ */
+.treatment-hero {
+	position: relative;
+	background: linear-gradient(180deg, var(--britto-secondary-soft) 0%, var(--britto-bg) 100%);
+	padding-block: var(--space-lg) var(--space-md);
+	overflow: hidden;
+}
+
+.treatment-hero__inner {
+	display: grid;
+	gap: var(--space-lg);
+	align-items: center;
+}
+
+@media (min-width: 900px) {
+	.treatment-hero__inner {
+		grid-template-columns: 1.05fr 0.95fr;
+	}
+}
+
+.treatment-hero__content {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+}
+
+.treatment-hero__badge {
+	text-decoration: none;
+	transition: border-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.treatment-hero__badge:hover {
+	border-color: var(--brand-sage);
+	transform: translateY(-1px);
+}
+
+.treatment-hero__title {
+	font-size: var(--fs-lg);
+}
+
+.treatment-hero__lede {
+	max-width: 46ch;
+}
+
+.treatment-hero__media {
+	border-radius: var(--radius-xl);
+	overflow: hidden;
+	box-shadow: var(--shadow-md);
+	border: 1px solid var(--color-border);
+}
+
+.treatment-hero__image {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	aspect-ratio: 4 / 3;
+}
+
+/*
+ * Optional overlay mode (Treatment Details > "Use featured image as a
+ * full-bleed hero background"): the featured image becomes the hero's
+ * backdrop with a dark scrim, text switches to light, and the
+ * side-by-side media card steps aside — mirrors the homepage's
+ * `.hero--has-media` treatment for visual consistency between hero types.
+ */
+.treatment-hero--overlay {
+	background: var(--brand-ink);
+	padding-block: clamp(4rem, 10vw, 7rem) var(--space-md);
+	min-height: 60vh;
+	display: flex;
+	align-items: center;
+}
+
+.treatment-hero__bg {
+	position: absolute;
+	inset: 0;
+	z-index: 0;
+}
+
+.treatment-hero__bg-image {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.treatment-hero__bg-overlay {
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(180deg, rgba(13, 17, 16, 0.35) 0%, rgba(13, 17, 16, 0.72) 100%);
+}
+
+.treatment-hero--overlay .treatment-hero__inner {
+	position: relative;
+	z-index: 1;
+	grid-template-columns: 1fr;
+	max-width: 44rem;
+}
+
+.treatment-hero--overlay .hero__badge {
+	background: rgba(255, 255, 255, 0.12);
+	border-color: rgba(255, 255, 255, 0.28);
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
+}
+
+.treatment-hero--overlay .hero__badge-text,
+.treatment-hero--overlay .treatment-hero__title,
+.treatment-hero--overlay .treatment-hero__lede {
+	color: var(--overlay-on-dark);
+}
+
+.treatment-hero--overlay .treatment-hero__lede {
+	color: rgba(255, 255, 255, 0.82);
+}
+
+/*
+ * Universal Breadcrumbs — Floating Modern Island.
+ * Floats gracefully at the top of the content / hero section.
+ * Glassmorphic pill badge with soft elevation and magnetic micro-interactions.
+ */
+.breadcrumbs {
+	display: flex;
+	justify-content: center;
+	width: 100%;
+	padding-inline: var(--space-xs);
+	margin-top: 1.25rem;
+	margin-bottom: 0.5rem;
+	position: relative;
+	z-index: 10;
+	pointer-events: none;
+}
+
+.breadcrumbs__inner {
+	pointer-events: auto;
+	width: fit-content;
+	min-width: min(90%, 300px);
+	max-width: 90%;
+	background: color-mix(in srgb, var(--britto-surface) 86%, transparent);
+	border: 1px solid color-mix(in srgb, var(--britto-border) 80%, transparent);
+	border-radius: var(--radius-pill);
+	box-shadow: 0 10px 30px -4px rgba(13, 17, 16, 0.08), 0 2px 8px rgba(13, 17, 16, 0.03);
+	backdrop-filter: blur(20px);
+	-webkit-backdrop-filter: blur(20px);
+	padding: 0.45rem 1.15rem;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+}
+
+.breadcrumbs__inner:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 16px 40px -4px rgba(13, 17, 16, 0.12), 0 4px 12px rgba(13, 17, 16, 0.04);
+	border-color: color-mix(in srgb, var(--britto-accent) 40%, var(--britto-border));
+}
+
+.breadcrumbs__list {
+	list-style: none;
+	display: inline-flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	gap: 0.35rem;
+	margin: 0;
+	padding: 0;
+	font-family: var(--font-ui);
+	font-size: 0.8125rem;
+	font-weight: 500;
+	line-height: 1.2;
+}
+
+.breadcrumbs__item {
+	display: inline-flex;
+	align-items: center;
+	min-width: 0;
+}
+
+.breadcrumbs__link {
+	color: var(--britto-text-muted);
+	text-decoration: none;
+	padding: 0.25rem 0.6rem;
+	border-radius: var(--radius-pill);
+	transition: background var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+}
+
+.breadcrumbs__link:hover {
+	color: var(--britto-text);
+	background: color-mix(in srgb, var(--britto-secondary-soft) 85%, transparent);
+	transform: translateY(-0.5px);
+}
+
+.breadcrumbs__link:focus-visible {
+	outline: 2px solid var(--britto-focus);
+	outline-offset: 2px;
+	color: var(--britto-text);
+}
+
+.breadcrumbs__current {
+	color: var(--britto-text);
+	font-weight: 600;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	max-width: min(55vw, 420px);
+	padding: 0.25rem 0.6rem;
+}
+
+.breadcrumbs__sep {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--britto-border);
+	flex-shrink: 0;
+	opacity: 0.65;
+}
+
+@media (max-width: 600px) {
+	.breadcrumbs {
+		margin-top: 0.85rem;
+		margin-bottom: 0.4rem;
+	}
+
+	.breadcrumbs__inner {
+		width: 90%;
+		padding: 0.45rem 0.95rem;
+	}
+
+	.breadcrumbs__current {
+		max-width: 44vw;
+	}
+}
+
+.treatment-facts {
+	padding-block: 0 var(--space-lg);
+}
+
+.treatment-facts__card {
+	background: var(--brand-white);
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-xl);
+	box-shadow: var(--shadow-sm);
+	padding: var(--space-md) var(--space-lg);
+}
+
+.treatment-facts__list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: var(--space-md) var(--space-xl);
+}
+
+.treatment-facts__item {
+	display: flex;
+	align-items: center;
+	gap: var(--space-xs);
+	text-align: left;
+}
+
+.treatment-facts__icon {
+	flex-shrink: 0;
+	width: 2.25rem;
+	height: 2.25rem;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: var(--britto-secondary-soft);
+	color: var(--brand-sage);
+}
+
+.treatment-facts__text {
+	display: flex;
+	flex-direction: column;
+}
+
+.treatment-facts__value {
+	font-family: var(--font-display);
+	font-size: var(--fs-md);
+	font-weight: 700;
+	color: var(--brand-ink);
+	line-height: var(--lh-heading);
+}
+
+.treatment-facts__label {
+	font-family: var(--font-ui);
+	font-size: var(--fs-2xs);
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	color: var(--color-text-muted);
+	margin-top: 0.15rem;
+}
+
+@media (min-width: 700px) {
+	.treatment-facts__card {
+		padding: var(--space-md) var(--space-xl);
+	}
+}
+
+.treatment-single__body {
+	padding-block: var(--space-lg);
+}
+
+.treatment-single__body section {
+	padding-block: 0;
+	margin-bottom: var(--space-lg);
+}
+
+.treatment-single__content > * + * {
+	margin-top: var(--space-sm);
+}
+
+.treatment-single__benefits,
+.treatment-single__process {
+	display: grid;
+	gap: var(--space-2xs);
+	padding-left: 0;
+	list-style: none;
+	counter-reset: process-step;
+}
+
+.treatment-single__benefits {
+	grid-template-columns: 1fr;
+	gap: var(--space-sm);
+}
+
+@media (min-width: 700px) {
+	.treatment-single__benefits {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+.treatment-single__benefits li {
+	display: flex;
+	align-items: flex-start;
+	gap: var(--space-xs);
+	background: var(--brand-white);
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-md);
+	padding: var(--space-sm);
+	color: var(--color-text);
+	transition: border-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
+}
+
+.treatment-single__benefits li:hover {
+	border-color: var(--brand-sage);
+	box-shadow: var(--shadow-sm);
+	transform: translateY(-2px);
+}
+
+.treatment-single__benefit-icon {
+	flex-shrink: 0;
+	width: 1.75rem;
+	height: 1.75rem;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: var(--britto-secondary-soft);
+	color: var(--brand-sage);
+	margin-top: 0.1rem;
+}
+
+.treatment-single__process {
+	position: relative;
+	gap: var(--space-lg);
+	padding-left: 0;
+	margin-top: var(--space-md);
+	max-width: 720px;
+}
+
+.treatment-single__process::before {
+	content: "";
+	position: absolute;
+	left: 1.4rem;
+	top: 0.5rem;
+	bottom: 0.5rem;
+	width: 2px;
+	background: linear-gradient(180deg, var(--brand-sage) 0%, var(--color-border) 100%);
+}
+
+.treatment-single__process li {
+	position: relative;
+	padding-left: 4rem;
+	color: var(--color-text);
+	counter-increment: process-step;
+	min-height: 2.75rem;
+}
+
+.treatment-single__process li::before {
+	content: counter(process-step);
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 2.75rem;
+	height: 2.75rem;
+	border-radius: 50%;
+	background: var(--brand-white);
+	border: 2px solid var(--brand-sage);
+	box-shadow: var(--shadow-sm);
+	color: var(--brand-ink);
+	font-family: var(--font-display);
+	font-size: var(--fs-md);
+	font-weight: 700;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 1;
+}
+
+.treatment-single__process-content {
+	display: block;
+	padding-top: 0.5rem;
+}
+
+.treatment-single__faq {
+	background: var(--britto-secondary-soft);
+}
+
+/* -----------------------------
+   Before & after gallery
+------------------------------ */
+.before-after__grid {
+	display: grid;
+	gap: var(--space-md);
+	grid-template-columns: 1fr;
+}
+
+@media (min-width: 700px) {
+	.before-after__grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+.before-after__pair {
+	margin: 0;
+	background: var(--brand-white);
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-lg);
+	padding: var(--space-xs);
+}
+
+.before-after__images {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: var(--space-2xs);
+}
+
+.before-after__image-wrap {
+	position: relative;
+	border-radius: var(--radius-md);
+	overflow: hidden;
+}
+
+.before-after__image {
+	width: 100%;
+	height: 100%;
+	aspect-ratio: 1 / 1;
+	object-fit: cover;
+}
+
+.before-after__tag {
+	position: absolute;
+	bottom: var(--space-2xs);
+	left: var(--space-2xs);
+	background: rgba(23, 24, 23, 0.72);
+	color: var(--brand-white);
+	font-family: var(--font-ui);
+	font-size: var(--fs-2xs);
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	padding: 0.2rem 0.6rem;
+	border-radius: var(--radius-pill);
+}
+
+.before-after__tag--after {
+	background: var(--brand-sage);
+}
+
+.before-after__caption {
+	margin-top: var(--space-xs);
+	font-size: var(--fs-sm);
+	color: var(--color-text-muted);
+	text-align: center;
+}
+
+.before-after__disclaimer {
+	margin-top: var(--space-md);
+	text-align: center;
+	font-size: var(--fs-2xs);
+	color: var(--color-text-muted);
+}
+
+/* -----------------------------
    About doctor
 ------------------------------ */
 .about-doctor__inner {
@@ -883,6 +1920,44 @@ body.menu-is-open {
 	margin-top: var(--space-lg);
 }
 
+/*
+ * Archive: treatments grouped by category (archive-treatment.php).
+ */
+.treatment-category-group {
+	margin-bottom: var(--space-xl);
+	padding-bottom: var(--space-lg);
+	border-bottom: 1px solid var(--color-border);
+}
+
+.treatment-category-group:last-of-type {
+	border-bottom: none;
+	margin-bottom: 0;
+	padding-bottom: 0;
+}
+
+.treatment-category-group__heading {
+	font-size: var(--fs-lg);
+	position: relative;
+	padding-left: 1.1rem;
+	margin-bottom: var(--space-2xs);
+}
+
+.treatment-category-group__heading::before {
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 0.25em;
+	bottom: 0.25em;
+	width: 4px;
+	border-radius: 2px;
+	background: var(--brand-sage);
+}
+
+.treatment-category-group__description {
+	max-width: 60ch;
+	margin-bottom: var(--space-md);
+}
+
 .treatment-card {
 	background: var(--brand-white);
 	border: 1px solid var(--color-border);
@@ -894,7 +1969,7 @@ body.menu-is-open {
 }
 
 .treatment-card:hover {
-	box-shadow: var(--shadow-md);
+	box-shadow: var(--shadow-md), 0 0 0 1px color-mix(in srgb, var(--brand-champagne) 40%, transparent);
 	transform: translateY(-4px);
 	border-color: var(--brand-champagne);
 }
@@ -1242,30 +2317,6 @@ body.menu-is-open {
 }
 
 /* -----------------------------
-   Breadcrumbs
------------------------------- */
-.breadcrumbs {
-	margin-bottom: var(--space-md);
-}
-
-.breadcrumbs__list {
-	list-style: none;
-	display: flex;
-	flex-wrap: wrap;
-	gap: 0.4rem;
-	padding: 0;
-	margin: 0;
-	font-size: var(--fs-sm);
-	color: var(--color-text-muted);
-}
-
-.breadcrumbs__item:not(:last-child)::after {
-	content: "/";
-	margin-left: 0.4rem;
-	color: var(--color-border);
-}
-
-/* -----------------------------
    Final CTA / appointment form
 ------------------------------ */
 .final-cta {
@@ -1284,14 +2335,26 @@ body.menu-is-open {
 	color: var(--brand-champagne);
 }
 
-.final-cta__form {
-	max-width: 660px;
-	margin-inline: auto;
-	background: var(--brand-white);
-	border-radius: var(--radius-xl);
-	padding: 2.5rem;
-	color: var(--color-text);
-	box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
+.final-cta__actions {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: var(--space-sm);
+	margin-top: var(--space-sm);
+}
+
+.final-cta__glow {
+	position: absolute;
+	inset: -20% -10% auto -10%;
+	height: 60%;
+	background: radial-gradient(closest-side, color-mix(in srgb, var(--brand-sage) 22%, transparent), transparent 70%);
+	pointer-events: none;
+	z-index: 0;
+}
+
+.final-cta__inner {
+	position: relative;
+	z-index: 1;
 }
 
 .appointment-form__row {
@@ -1322,20 +2385,28 @@ body.menu-is-open {
 .appointment-form textarea {
 	width: 100%;
 	font: inherit;
-	padding: 0.8rem 1rem;
-	border: 1px solid var(--color-border);
-	border-radius: var(--radius-sm);
-	background: var(--brand-white);
+	padding: 0.85rem 1.05rem;
+	border: 1.5px solid var(--color-border);
+	border-radius: var(--radius-md);
+	background: var(--brand-porcelain);
 	color: var(--color-text);
-	transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+	transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+}
+
+.appointment-form input:hover,
+.appointment-form select:hover,
+.appointment-form textarea:hover {
+	border-color: var(--brand-sage);
 }
 
 .appointment-form input:focus-visible,
 .appointment-form select:focus-visible,
 .appointment-form textarea:focus-visible {
-	border-color: var(--brand-ink);
+	border-color: var(--brand-sage);
+	background: var(--brand-white);
 	outline: 2px solid var(--color-focus);
-	outline-offset: 1px;
+	outline-offset: 2px;
+	box-shadow: 0 0 0 4px color-mix(in srgb, var(--brand-sage) 22%, transparent);
 }
 
 .appointment-form__hint {
@@ -1485,27 +2556,52 @@ body.menu-is-open {
 	margin: 0;
 	display: flex;
 	flex-direction: column;
-	gap: 0.75rem;
+	gap: 0.5rem;
 	font-size: var(--fs-sm);
 }
 
+.site-footer__list a,
 .site-footer__link {
 	display: inline-flex;
 	align-items: center;
-	gap: 0.5rem;
+	gap: 0.55rem;
 	color: var(--color-text-muted);
 	text-decoration: none;
-	transition: color var(--transition-fast), transform var(--transition-fast);
+	padding: 0.35rem 0.65rem;
+	margin-inline: -0.65rem;
+	border-radius: var(--radius-sm);
+	font-weight: 500;
+	transition: color var(--transition-fast), transform var(--transition-fast), background var(--transition-fast);
+	position: relative;
+}
+
+.site-footer__list a:hover,
+.site-footer__list a:focus-visible,
+.site-footer__link:hover,
+.site-footer__link:focus-visible {
+	color: var(--brand-ink);
+	transform: translateX(4px);
+	background: color-mix(in srgb, var(--britto-secondary-soft) 85%, transparent);
+}
+
+html[data-theme="dark"] .site-footer__list a:hover,
+html[data-theme="dark"] .site-footer__list a:focus-visible,
+html[data-theme="dark"] .site-footer__link:hover,
+html[data-theme="dark"] .site-footer__link:focus-visible {
+	color: var(--britto-text);
+	background: rgba(255, 255, 255, 0.08);
 }
 
 .site-footer__link svg {
 	color: var(--britto-accent);
 	flex-shrink: 0;
+	transition: transform var(--transition-fast), color var(--transition-fast);
 }
 
-.site-footer__link:hover {
-	color: var(--brand-ink);
-	transform: translateX(3px);
+.site-footer__link:hover svg,
+.site-footer__link:focus-visible svg {
+	transform: scale(1.18);
+	color: var(--britto-accent);
 }
 
 .site-footer__hours {
@@ -1644,7 +2740,7 @@ html.theme-ready section,
 html.theme-ready .treatment-card,
 html.theme-ready .testimonial-card,
 html.theme-ready .faq-item__details,
-html.theme-ready .final-cta__form,
+html.theme-ready .contact-form-card,
 html.theme-ready input,
 html.theme-ready select,
 html.theme-ready textarea,
@@ -1655,7 +2751,11 @@ html.theme-ready .theme-toggle {
 
 html[data-theme="dark"] .site-header,
 html[data-theme="dark"] .primary-nav,
-html[data-theme="dark"] .final-cta__form,
+html[data-theme="dark"] .contact-form-card,
+html[data-theme="dark"] .breadcrumbs__inner,
+html[data-theme="dark"] .treatment-facts__card,
+html[data-theme="dark"] .mega-panel,
+html[data-theme="dark"] .sub-menu,
 html[data-theme="dark"] .wp-block-search__input,
 html[data-theme="dark"] .wp-block-input,
 html[data-theme="dark"] .wp-block-post-template,
@@ -1666,6 +2766,18 @@ html[data-theme="dark"] .wp-block-pullquote {
 	background-color: var(--britto-surface);
 	color: var(--britto-text);
 	border-color: var(--britto-border);
+}
+
+/*
+ * The rule above wins on specificity over `.site-header--transparent`
+ * (extra `html` selector beats the two-class transparent variant), so it
+ * was force-painting the homepage header solid in dark mode even before
+ * scrolling. Re-assert transparency here with a selector specific enough
+ * to always win, regardless of source order.
+ */
+html[data-theme="dark"] .site-header.site-header--transparent:not(.is-scrolled) {
+	background-color: transparent;
+	border-color: transparent;
 }
 
 html[data-theme="dark"] .wp-block-button__link,
@@ -1702,7 +2814,7 @@ html[data-theme="dark"] textarea::placeholder {
 	html.theme-ready .treatment-card,
 	html.theme-ready .testimonial-card,
 	html.theme-ready .faq-item__details,
-	html.theme-ready .final-cta__form,
+	html.theme-ready .contact-form-card,
 	html.theme-ready input,
 	html.theme-ready select,
 	html.theme-ready textarea,
@@ -1710,4 +2822,129 @@ html[data-theme="dark"] textarea::placeholder {
 	html.theme-ready .theme-toggle {
 		transition: none;
 	}
+}
+
+/* -----------------------------
+   Contact / Book Appointment page
+------------------------------ */
+.contact-hero {
+	background: linear-gradient(180deg, var(--britto-secondary-soft) 0%, var(--britto-bg) 100%);
+	padding-block: var(--space-lg) var(--space-md);
+	text-align: center;
+}
+
+.contact-hero .section-heading {
+	margin-inline: auto;
+}
+
+.contact-layout {
+	padding-block: var(--space-lg);
+	display: grid;
+	gap: var(--space-lg);
+	align-items: start;
+}
+
+@media (min-width: 960px) {
+	.contact-layout {
+		grid-template-columns: 0.85fr 1.15fr;
+		gap: var(--space-xl);
+	}
+}
+
+.contact-info {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-md);
+}
+
+.contact-info__card {
+	background: var(--brand-white);
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-lg);
+	padding: var(--space-md);
+}
+
+.contact-info__row {
+	display: flex;
+	align-items: flex-start;
+	gap: var(--space-xs);
+}
+
+.contact-info__row + .contact-info__row {
+	margin-top: var(--space-sm);
+}
+
+.contact-info__icon {
+	flex-shrink: 0;
+	width: 2.5rem;
+	height: 2.5rem;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: var(--britto-secondary-soft);
+	color: var(--britto-accent);
+}
+
+.contact-info__label {
+	font-family: var(--font-ui);
+	font-size: var(--fs-2xs);
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	color: var(--color-text-muted);
+	margin-bottom: 0.15rem;
+}
+
+.contact-info__value {
+	color: var(--brand-ink);
+	font-weight: 600;
+}
+
+.contact-info__value a {
+	color: inherit;
+	text-decoration: none;
+}
+
+.contact-info__value a:hover {
+	color: var(--britto-accent);
+}
+
+.contact-info__map-note {
+	font-size: var(--fs-sm);
+	color: var(--color-text-muted);
+}
+
+/*
+ * The form card gets a restrained "glossy" treatment: a soft, layered
+ * shadow plus a barely-there top highlight — enough to feel premium
+ * without tipping into heavy glassmorphism.
+ */
+.contact-form-card {
+	position: relative;
+	background: var(--brand-white);
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-xl);
+	padding: clamp(1.75rem, 4vw, 2.75rem);
+	box-shadow: var(--shadow-lg);
+	overflow: hidden;
+}
+
+.contact-form-card::before {
+	content: "";
+	position: absolute;
+	inset: 0 0 auto 0;
+	height: 1px;
+	background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.9), transparent);
+}
+
+.contact-form-card .appointment-form button[type="submit"] {
+	width: 100%;
+	margin-top: 0.25rem;
+}
+
+.contact-form-card__required-note {
+	font-size: var(--fs-2xs);
+	color: var(--color-text-muted);
+	margin-top: var(--space-sm);
+	text-align: center;
 }

@@ -34,7 +34,7 @@ $para_2       = brittos_clinic_field(
 <section class="about-doctor" aria-labelledby="about-doctor-heading">
 	<div class="container about-doctor__inner">
 
-		<div class="about-doctor__media">
+		<div class="about-doctor__media" data-reveal>
 			<?php if ( $about_photo && wp_attachment_is_image( $about_photo ) ) : ?>
 				<?php echo wp_get_attachment_image( $about_photo, 'brittos-card', false, array(
 					'class'    => 'about-doctor__image',
@@ -47,7 +47,7 @@ $para_2       = brittos_clinic_field(
 			<?php endif; ?>
 		</div>
 
-		<div class="about-doctor__content">
+		<div class="about-doctor__content" data-reveal>
 			<?php get_template_part( 'template-parts/components/section-heading', null, array(
 				'eyebrow' => $eyebrow,
 				'heading' => $heading,
