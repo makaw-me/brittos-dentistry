@@ -23,6 +23,7 @@ function brittos_enqueue_assets() {
 	$main_js_path         = BRITTOS_THEME_DIR . '/assets/js/main.js';
 	$animations_js_path   = BRITTOS_THEME_DIR . '/assets/js/animations.js';
 	$theme_mode_js_path   = BRITTOS_THEME_DIR . '/assets/js/theme-mode.js';
+	$before_after_js_path = BRITTOS_THEME_DIR . '/assets/js/before-after-carousel.js';
 	$use_dist_css        = file_exists( $dist_css_path );
 	$use_dist_js         = file_exists( $dist_js_path ) && ! is_page( 'privacy-policy' );
 
@@ -103,6 +104,16 @@ function brittos_enqueue_assets() {
 			wp_dequeue_script( 'brittos-main' );
 			wp_dequeue_script( 'brittos-animations' );
 		}
+	}
+
+	if ( is_singular( 'treatment' ) && file_exists( $before_after_js_path ) ) {
+		wp_enqueue_script(
+			'brittos-before-after-carousel',
+			BRITTOS_THEME_URI . '/assets/js/before-after-carousel.js',
+			array(),
+			filemtime( $before_after_js_path ),
+			array( 'strategy' => 'defer', 'in_footer' => true )
+		);
 	}
 
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {

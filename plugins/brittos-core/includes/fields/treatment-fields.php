@@ -26,6 +26,23 @@ function brittos_core_get_treatment_field( $post_id, $key ) {
 	$meta_key = 'brittos_treatment_' . $key;
 	$value    = get_post_meta( $post_id, $meta_key, true );
 
+	if ( 'facts' === $key && is_string( $value ) && '' !== trim( $value ) ) {
+		$decoded = json_decode( $value, true );
+		if ( is_array( $decoded ) && function_exists( 'brittos_core_normalize_key_value_pairs' ) ) {
+			return brittos_core_normalize_key_value_pairs( $decoded, 'Fact' );
+		}
+
+		if ( function_exists( 'brittos_core_facts_lines_to_array' ) ) {
+			return brittos_core_facts_lines_to_array( $value );
+		}
+	}
+
+	if ( 'facts' === $key || 'process' === $key ) {
+		return function_exists( 'brittos_core_normalize_key_value_pairs' )
+			? brittos_core_normalize_key_value_pairs( $value, 'Step' )
+			: array();
+	}
+
 	if ( in_array( $key, array( 'benefits', 'process', 'facts', 'before_after' ), true ) ) {
 		return is_array( $value ) ? $value : array();
 	}
@@ -64,6 +81,17 @@ function brittos_core_render_treatment_meta_box( $post ) {
 	$hero_overlay       = brittos_core_get_treatment_field( $post->ID, 'hero_overlay' );
 	$cta_text           = brittos_core_get_treatment_field( $post->ID, 'cta_text' );
 	$cta_url            = brittos_core_get_treatment_field( $post->ID, 'cta_url' );
+	$single_page        = brittos_core_treatment_has_single_page( $post->ID );
+	$before_after_admin = array();
+	foreach ( $before_after as $pair ) {
+		$before_after_admin[] = array(
+			'before'    => isset( $pair['before'] ) ? absint( $pair['before'] ) : 0,
+			'after'     => isset( $pair['after'] ) ? absint( $pair['after'] ) : 0,
+			'beforeUrl' => ! empty( $pair['before'] ) ? ( wp_get_attachment_image_url( absint( $pair['before'] ), 'thumbnail' ) ?: '' ) : '',
+			'afterUrl'  => ! empty( $pair['after'] ) ? ( wp_get_attachment_image_url( absint( $pair['after'] ), 'thumbnail' ) ?: '' ) : '',
+			'caption'   => isset( $pair['caption'] ) ? sanitize_text_field( $pair['caption'] ) : '',
+		);
+	}
 	?>
 	<p>
 		<label for="brittos_treatment_short_description"><strong><?php esc_html_e( 'Short Description', 'brittos-core' ); ?></strong></label><br>
@@ -71,10 +99,20 @@ function brittos_core_render_treatment_meta_box( $post ) {
 		<span class="description"><?php esc_html_e( 'One or two sentences shown on cards, archive listings and the treatment hero.', 'brittos-core' ); ?></span>
 	</p>
 
+	<div class="brittos-key-value-field" data-field-name="facts">
+		<p><strong><?php esc_html_e( 'Quick Facts', 'brittos-core' ); ?></strong></p>
+		<input type="hidden" id="brittos_treatment_facts" name="brittos_treatment_facts" value="<?php echo esc_attr( wp_json_encode( array_values( $facts ) ) ); ?>">
+		<div class="brittos-key-value-field__rows"></div>
+		<button type="button" class="button brittos-key-value-field__add"><?php esc_html_e( 'Add quick fact', 'brittos-core' ); ?></button>
+		<p class="description"><?php esc_html_e( 'Add a label and its value. These appear in the Quick Facts strip on the treatment page.', 'brittos-core' ); ?></p>
+	</div>
+
 	<p>
-		<label for="brittos_treatment_facts"><strong><?php esc_html_e( 'Quick Facts (one per line, "Label: Value")', 'brittos-core' ); ?></strong></label><br>
-		<textarea id="brittos_treatment_facts" name="brittos_treatment_facts" rows="4" class="large-text" placeholder="<?php echo esc_attr( "Visits required: 1–2\nSession duration: 45 minutes\nRecovery time: 24–48 hours" ); ?>"><?php echo esc_textarea( brittos_core_facts_array_to_lines( $facts ) ); ?></textarea>
-		<span class="description"><?php esc_html_e( 'Shown as a quick-facts strip on the treatment page. Only enter details that are actually true for this treatment.', 'brittos-core' ); ?></span>
+		<label>
+			<input type="checkbox" name="brittos_treatment_single_page" value="1" <?php checked( $single_page ); ?>>
+			<strong><?php esc_html_e( 'Show a dedicated page for this treatment', 'brittos-core' ); ?></strong>
+		</label><br>
+		<span class="description"><?php esc_html_e( 'When unchecked, this treatment remains listed on the Treatments page but has no individual public page.', 'brittos-core' ); ?></span>
 	</p>
 
 	<p>
@@ -82,11 +120,13 @@ function brittos_core_render_treatment_meta_box( $post ) {
 		<textarea id="brittos_treatment_benefits" name="brittos_treatment_benefits" rows="4" class="large-text"><?php echo esc_textarea( brittos_core_array_to_lines( $benefits ) ); ?></textarea>
 	</p>
 
-	<p>
-		<label for="brittos_treatment_process"><strong><?php esc_html_e( 'Treatment Journey / Procedure Steps (one per line, optional)', 'brittos-core' ); ?></strong></label><br>
-		<textarea id="brittos_treatment_process" name="brittos_treatment_process" rows="4" class="large-text" placeholder="<?php echo esc_attr( "Initial consultation and X-ray\nLocal anaesthetic and preparation\nProcedure carried out\nFollow-up check" ); ?>"><?php echo esc_textarea( brittos_core_array_to_lines( $process ) ); ?></textarea>
-		<span class="description"><?php esc_html_e( 'The actual clinical steps a patient goes through for this specific procedure — not generic reassurance text.', 'brittos-core' ); ?></span>
-	</p>
+	<div class="brittos-key-value-field" data-field-name="process">
+		<p><strong><?php esc_html_e( 'Treatment Journey / Procedure Steps', 'brittos-core' ); ?></strong></p>
+		<input type="hidden" id="brittos_treatment_process" name="brittos_treatment_process" value="<?php echo esc_attr( wp_json_encode( array_values( $process ) ) ); ?>">
+		<div class="brittos-key-value-field__rows"></div>
+		<button type="button" class="button brittos-key-value-field__add"><?php esc_html_e( 'Add treatment step', 'brittos-core' ); ?></button>
+		<p class="description"><?php esc_html_e( 'Add a step label and describe what happens. These appear as the treatment journey on the treatment page.', 'brittos-core' ); ?></p>
+	</div>
 
 	<div class="brittos-before-after-field">
 		<p><strong><?php esc_html_e( 'Before &amp; After Gallery (optional)', 'brittos-core' ); ?></strong></p>
@@ -94,7 +134,7 @@ function brittos_core_render_treatment_meta_box( $post ) {
 			type="hidden"
 			id="brittos_treatment_before_after"
 			name="brittos_treatment_before_after"
-			value="<?php echo esc_attr( wp_json_encode( array_values( $before_after ) ) ); ?>"
+			value="<?php echo esc_attr( wp_json_encode( $before_after_admin ) ); ?>"
 		>
 		<div class="brittos-before-after-field__rows"></div>
 		<button type="button" class="button brittos-before-after-field__add"><?php esc_html_e( 'Add before/after pair', 'brittos-core' ); ?></button>
@@ -158,7 +198,7 @@ function brittos_core_save_treatment_meta( $post_id ) {
 		update_post_meta(
 			$post_id,
 			'brittos_treatment_facts',
-			brittos_core_facts_lines_to_array( wp_unslash( $_POST['brittos_treatment_facts'] ) )
+			brittos_core_sanitize_key_value_json( wp_unslash( $_POST['brittos_treatment_facts'] ) )
 		);
 	}
 
@@ -174,7 +214,7 @@ function brittos_core_save_treatment_meta( $post_id ) {
 		update_post_meta(
 			$post_id,
 			'brittos_treatment_process',
-			brittos_core_lines_to_array( wp_unslash( $_POST['brittos_treatment_process'] ) )
+			brittos_core_sanitize_key_value_json( wp_unslash( $_POST['brittos_treatment_process'] ) )
 		);
 	}
 
@@ -190,6 +230,12 @@ function brittos_core_save_treatment_meta( $post_id ) {
 		$post_id,
 		'brittos_treatment_hero_overlay',
 		! empty( $_POST['brittos_treatment_hero_overlay'] ) ? '1' : ''
+	);
+
+	update_post_meta(
+		$post_id,
+		'brittos_treatment_single_page',
+		! empty( $_POST['brittos_treatment_single_page'] ) ? '1' : '0'
 	);
 
 	if ( isset( $_POST['brittos_treatment_cta_text'] ) ) {
@@ -228,7 +274,7 @@ function brittos_core_treatment_fields_assets( $hook ) {
 		'brittos-core-treatment-fields',
 		BRITTOS_CORE_URL . 'assets/admin-treatment-fields.js',
 		array( 'jquery' ),
-		BRITTOS_CORE_VERSION,
+		filemtime( BRITTOS_CORE_DIR . 'assets/admin-treatment-fields.js' ),
 		true
 	);
 }
