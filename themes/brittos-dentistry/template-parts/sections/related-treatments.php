@@ -17,7 +17,10 @@ if ( ! function_exists( 'brittos_core_get_related_treatments' ) ) {
 	return;
 }
 
-if ( empty( $treatment_id ) ) {
+
+$treatment_id = isset( $args['treatment_id'] ) ? absint( $args['treatment_id'] ) : get_the_ID();
+
+if ( ! $treatment_id ) {
 	return;
 }
 
@@ -26,13 +29,16 @@ $related = brittos_core_get_related_treatments( $treatment_id, 3 );
 if ( ! $related->have_posts() ) {
 	return;
 }
+
+$eyebrow = function_exists( 'brittos_core_get_clinic_field' ) ? brittos_core_get_clinic_field( 'single_related_eyebrow' ) : '';
+$heading = function_exists( 'brittos_core_get_clinic_field' ) ? brittos_core_get_clinic_field( 'single_related_heading' ) : '';
 ?>
 <section class="related-treatments" aria-labelledby="related-treatments-heading">
 	<div class="container">
 
 		<?php get_template_part( 'template-parts/components/section-heading', null, array(
-			'eyebrow' => __( 'Continue exploring', 'brittos-dentistry' ),
-			'heading' => __( 'You might also be interested in', 'brittos-dentistry' ),
+			'eyebrow' => $eyebrow ? $eyebrow : __( 'Continue exploring', 'brittos-dentistry' ),
+			'heading' => $heading ? $heading : __( 'You might also be interested in', 'brittos-dentistry' ),
 			'align'   => 'center',
 			'id'      => 'related-treatments-heading',
 		) ); ?>
@@ -41,7 +47,7 @@ if ( ! $related->have_posts() ) {
 			<?php
 			while ( $related->have_posts() ) :
 				$related->the_post();
-				get_template_part( 'template-parts/components/treatment-card' );
+				get_template_part( 'template-parts/components/treatment-card', null, array( 'variant' => 'related' ) );
 			endwhile;
 			wp_reset_postdata();
 			?>

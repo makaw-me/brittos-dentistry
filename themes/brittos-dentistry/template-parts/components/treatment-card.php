@@ -22,6 +22,8 @@ if ( 'compact' === $args['variant'] ) {
 }
 
 $treatment_id  = get_the_ID();
+$image_id      = function_exists( 'brittos_core_get_treatment_image_id' ) ? brittos_core_get_treatment_image_id( $treatment_id ) : get_post_thumbnail_id( $treatment_id );
+$has_single_page = ! function_exists( 'brittos_core_treatment_has_single_page' ) || brittos_core_treatment_has_single_page( $treatment_id );
 $short_desc    = function_exists( 'brittos_core_get_treatment_field' )
 	? brittos_core_get_treatment_field( $treatment_id, 'short_description' )
 	: '';
@@ -30,34 +32,34 @@ if ( '' === $short_desc ) {
 }
 ?>
 <article <?php post_class( $card_classes ); ?> data-reveal data-reveal-group="treatments">
-	<a class="treatment-card__media-link" href="<?php the_permalink(); ?>" tabindex="-1" aria-hidden="true">
-		<?php if ( has_post_thumbnail() ) : ?>
-			<?php the_post_thumbnail( 'brittos-card', array(
+	<?php if ( $has_single_page ) : ?><a class="treatment-card__media-link" href="<?php the_permalink(); ?>" tabindex="-1" aria-hidden="true"><?php endif; ?>
+		<?php if ( $image_id ) : ?>
+			<?php echo wp_get_attachment_image( $image_id, 'brittos-card', false, array(
 				'class'    => 'treatment-card__image',
 				'loading'  => 'lazy',
 				'decoding' => 'async',
 				'alt'      => '',
-			) ); ?>
+			) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		<?php else : ?>
 			<span class="treatment-card__image treatment-card__image--placeholder" aria-hidden="true">
 				<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="treatment-card__icon-placeholder"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
 			</span>
 		<?php endif; ?>
-		<?php if ( 'index' !== $args['variant'] ) : ?>
+		<?php if ( ! in_array( $args['variant'], array( 'index', 'related' ), true ) ) : ?>
 			<span class="treatment-card__badge-overlay"><?php esc_html_e( 'Explore', 'brittos-dentistry' ); ?></span>
 		<?php endif; ?>
-	</a>
+	<?php if ( $has_single_page ) : ?></a><?php endif; ?>
 
 	<div class="treatment-card__body">
 		<h3 class="treatment-card__title">
-			<a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
+			<?php if ( $has_single_page ) : ?><a href="<?php the_permalink(); ?>"><?php endif; ?><?php the_title(); ?><?php if ( $has_single_page ) : ?></a><?php endif; ?>
 		</h3>
 
 		<?php if ( $short_desc ) : ?>
 			<p class="treatment-card__excerpt"><?php echo esc_html( wp_strip_all_tags( $short_desc ) ); ?></p>
 		<?php endif; ?>
 
-		<a class="treatment-card__link" href="<?php the_permalink(); ?>">
+		<?php if ( $has_single_page ) : ?><a class="treatment-card__link" href="<?php the_permalink(); ?>">
 			<span class="treatment-card__link-text"><?php echo 'index' === $args['variant'] ? esc_html__( 'Read treatment overview', 'brittos-dentistry' ) : esc_html__( 'View treatment details', 'brittos-dentistry' ); ?></span>
 			<span class="treatment-card__link-icon" aria-hidden="true">
 				<svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -73,6 +75,6 @@ if ( '' === $short_desc ) {
 				);
 				?>
 			</span>
-		</a>
+		</a><?php else : ?><span class="treatment-card__link treatment-card__link--unavailable"><?php esc_html_e( 'Available at the clinic', 'brittos-dentistry' ); ?></span><?php endif; ?>
 	</div>
 </article>

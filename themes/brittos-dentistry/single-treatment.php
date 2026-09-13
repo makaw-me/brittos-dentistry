@@ -30,6 +30,7 @@ while ( have_posts() ) :
 
 	$treatment_id = get_the_ID();
 	$has_field    = function_exists( 'brittos_core_get_treatment_field' );
+	$treatment_image_id = function_exists( 'brittos_core_get_treatment_image_id' ) ? brittos_core_get_treatment_image_id( $treatment_id ) : get_post_thumbnail_id( $treatment_id );
 
 	$short_desc = $has_field ? brittos_core_get_treatment_field( $treatment_id, 'short_description' ) : '';
 	if ( ! $short_desc ) {
@@ -38,17 +39,16 @@ while ( have_posts() ) :
 
 	$benefits = $has_field ? brittos_core_get_treatment_field( $treatment_id, 'benefits' ) : array();
 	$process  = $has_field ? brittos_core_get_treatment_field( $treatment_id, 'process' ) : array();
-	$cta_text = $has_field ? brittos_core_get_treatment_field( $treatment_id, 'cta_text' ) : '';
-	$cta_url  = $has_field ? brittos_core_get_treatment_field( $treatment_id, 'cta_url' ) : '';
-	if ( ! $cta_url ) {
-		$cta_url = function_exists( 'brittos_core_get_booking_url' ) ? brittos_core_get_booking_url() : home_url( '/' );
-	}
 
 	$hero_overlay = $has_field ? ( '1' === brittos_core_get_treatment_field( $treatment_id, 'hero_overlay' ) ) : false;
-	$hero_overlay = $hero_overlay && has_post_thumbnail();
+	$hero_overlay = $hero_overlay && $treatment_image_id;
 
 	$category = get_the_terms( $treatment_id, 'treatment_category' );
 	$category = ( $category && ! is_wp_error( $category ) ) ? $category[0] : null;
+	$treatment_label = function ( $key, $default ) use ( $treatment_id, $has_field ) {
+		$value = function_exists( 'brittos_core_get_clinic_field' ) ? brittos_core_get_clinic_field( $key ) : '';
+		return $value ? $value : $default;
+	};
 	?>
 
 	<article <?php post_class( 'treatment-single' ); ?>>
@@ -56,7 +56,7 @@ while ( have_posts() ) :
 		<header class="treatment-hero<?php echo $hero_overlay ? ' treatment-hero--overlay' : ''; ?>">
 			<?php if ( $hero_overlay ) : ?>
 				<div class="treatment-hero__bg" aria-hidden="true">
-					<?php echo get_the_post_thumbnail( $treatment_id, 'brittos-hero', array( 'class' => 'treatment-hero__bg-image' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+					<?php echo wp_get_attachment_image( $treatment_image_id, 'brittos-hero', false, array( 'class' => 'treatment-hero__bg-image' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 					<div class="treatment-hero__bg-overlay"></div>
 				</div>
 			<?php endif; ?>
@@ -77,23 +77,15 @@ while ( have_posts() ) :
 						<p class="hero__lede treatment-hero__lede"><?php echo esc_html( wp_strip_all_tags( $short_desc ) ); ?></p>
 					<?php endif; ?>
 
-					<div class="hero__actions">
-						<?php brittos_button( array(
-							'text'  => $cta_text ? $cta_text : __( 'Book an appointment', 'brittos-dentistry' ),
-							'url'   => $cta_url,
-							'style' => 'primary',
-							'icon'  => 'arrow',
-						) ); ?>
-					</div>
 				</div>
 
-				<?php if ( has_post_thumbnail() && ! $hero_overlay ) : ?>
+				<?php if ( $treatment_image_id && ! $hero_overlay ) : ?>
 					<div class="treatment-hero__media" data-reveal>
-						<?php the_post_thumbnail( 'brittos-hero', array(
+						<?php echo wp_get_attachment_image( $treatment_image_id, 'brittos-hero', false, array(
 							'class'    => 'treatment-hero__image',
 							'loading'  => 'lazy',
 							'decoding' => 'async',
-						) ); ?>
+						) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 					</div>
 				<?php endif; ?>
 
@@ -110,7 +102,7 @@ while ( have_posts() ) :
 
 			<?php if ( ! empty( $benefits ) ) : ?>
 				<section aria-labelledby="treatment-benefits-heading">
-					<h2 id="treatment-benefits-heading"><?php esc_html_e( 'Benefits', 'brittos-dentistry' ); ?></h2>
+					<h2 id="treatment-benefits-heading"><?php echo esc_html( $treatment_label( 'single_benefits_heading', __( 'Benefits', 'brittos-dentistry' ) ) ); ?></h2>
 					<ul class="treatment-single__benefits">
 						<?php foreach ( $benefits as $benefit ) : ?>
 							<li data-reveal data-reveal-group="benefits">
@@ -126,11 +118,18 @@ while ( have_posts() ) :
 
 			<?php if ( ! empty( $process ) ) : ?>
 				<section aria-labelledby="treatment-process-heading">
-					<h2 id="treatment-process-heading"><?php esc_html_e( 'Your treatment journey', 'brittos-dentistry' ); ?></h2>
+					<h2 id="treatment-process-heading"><?php echo esc_html( $treatment_label( 'single_process_heading', __( 'Your treatment journey', 'brittos-dentistry' ) ) ); ?></h2>
 					<ol class="treatment-single__process">
 						<?php foreach ( $process as $step ) : ?>
 							<li data-reveal data-reveal-group="process">
-								<span class="treatment-single__process-content"><?php echo wp_kses_post( $step ); ?></span>
+								<span class="treatment-single__process-content">
+									<?php if ( is_array( $step ) ) : ?>
+										<strong><?php echo esc_html( $step['label'] ); ?></strong>
+										<span><?php echo esc_html( $step['value'] ); ?></span>
+									<?php else : ?>
+										<?php echo esc_html( $step ); ?>
+									<?php endif; ?>
+								</span>
 							</li>
 						<?php endforeach; ?>
 					</ol>
@@ -147,8 +146,8 @@ while ( have_posts() ) :
 				<section class="faq treatment-single__faq" aria-labelledby="treatment-faq-heading">
 					<div class="container">
 						<?php get_template_part( 'template-parts/components/section-heading', null, array(
-							'eyebrow' => __( 'Questions about this treatment', 'brittos-dentistry' ),
-							'heading' => __( 'Common questions', 'brittos-dentistry' ),
+							'eyebrow' => $treatment_label( 'single_faq_eyebrow', __( 'Questions about this treatment', 'brittos-dentistry' ) ),
+							'heading' => $treatment_label( 'single_faq_heading', __( 'Common questions', 'brittos-dentistry' ) ),
 							'align'   => 'center',
 							'id'      => 'treatment-faq-heading',
 						) ); ?>
@@ -172,7 +171,7 @@ while ( have_posts() ) :
 
 		<?php get_template_part( 'template-parts/sections/related-treatments', null, array( 'treatment_id' => $treatment_id ) ); ?>
 
-		<?php get_template_part( 'template-parts/sections/final-cta' ); ?>
+		<?php get_template_part( 'template-parts/sections/final-cta', null, array( 'treatment_id' => $treatment_id ) ); ?>
 
 	</article>
 

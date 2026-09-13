@@ -56,6 +56,40 @@ function brittos_core_register_treatment_cpt() {
 add_action( 'init', 'brittos_core_register_treatment_cpt' );
 
 /**
+ * Determine whether a treatment should have its own public page.
+ *
+ * Missing values remain enabled so existing treatments keep their URLs until
+ * an editor explicitly turns this option off.
+ *
+ * @param int $treatment_id Treatment post ID.
+ * @return bool
+ */
+function brittos_core_treatment_has_single_page( $treatment_id ) {
+	$value = get_post_meta( $treatment_id, 'brittos_treatment_single_page', true );
+
+	return '' === $value || '1' === $value;
+}
+
+/**
+ * Get a treatment image, falling back to the shared clinic setting.
+ *
+ * @param int $treatment_id Treatment post ID.
+ * @return int Attachment ID or 0 when no image is available.
+ */
+function brittos_core_get_treatment_image_id( $treatment_id ) {
+	$thumbnail_id = get_post_thumbnail_id( $treatment_id );
+	if ( $thumbnail_id && wp_attachment_is_image( $thumbnail_id ) ) {
+		return $thumbnail_id;
+	}
+
+	$default_id = function_exists( 'brittos_core_get_clinic_field' )
+		? absint( brittos_core_get_clinic_field( 'single_default_image_id' ) )
+		: 0;
+
+	return $default_id && wp_attachment_is_image( $default_id ) ? $default_id : 0;
+}
+
+/**
  * Force the "Treatments" post-type-archive menu item to always display
  * as "Treatments" — even if it was added to a menu before the CPT's
  * `archives` label was corrected, since WordPress snapshots a menu

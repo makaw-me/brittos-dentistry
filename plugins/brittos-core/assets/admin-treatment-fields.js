@@ -7,6 +7,67 @@
 	'use strict';
 
 	$( function () {
+		$( '.brittos-key-value-field' ).each( function () {
+			var field = $( this );
+			var hiddenInput = field.find( 'input[type="hidden"]' );
+			var rowsWrap = field.find( '.brittos-key-value-field__rows' );
+			var addButton = field.find( '.brittos-key-value-field__add' );
+			var pairs = [];
+
+			try {
+				pairs = JSON.parse( hiddenInput.val() || '[]' );
+				if ( ! Array.isArray( pairs ) ) {
+					pairs = [];
+				}
+			} catch ( e ) {
+				pairs = [];
+			}
+
+			function sync() {
+				hiddenInput.val( JSON.stringify( pairs ) );
+			}
+
+			function renderAll() {
+				rowsWrap.empty();
+				pairs.forEach( function ( pair, index ) {
+					var row = $( '<div class="brittos-key-value-field__row"></div>' );
+					var labelInput = $( '<input type="text" class="regular-text" placeholder="Label" />' ).val( pair.label || '' );
+					var valueInput = $( '<textarea rows="2" class="large-text" placeholder="Value"></textarea>' ).val( pair.value || '' );
+					var removeButton = $( '<button type="button" class="button-link-delete">Remove</button>' );
+
+					labelInput.on( 'input', function () {
+						pairs[ index ].label = $( this ).val();
+						sync();
+					} );
+					valueInput.on( 'input', function () {
+						pairs[ index ].value = $( this ).val();
+						sync();
+					} );
+					removeButton.on( 'click', function ( event ) {
+						event.preventDefault();
+						pairs.splice( index, 1 );
+						sync();
+						renderAll();
+					} );
+
+					row.append( labelInput, valueInput, removeButton );
+					row.css( { display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '8px', maxWidth: '900px' } );
+					labelInput.css( { flex: '0 0 220px' } );
+					valueInput.css( { flex: '1 1 auto' } );
+					rowsWrap.append( row );
+				} );
+			}
+
+			addButton.on( 'click', function ( event ) {
+				event.preventDefault();
+				pairs.push( { label: '', value: '' } );
+				sync();
+				renderAll();
+			} );
+
+			renderAll();
+		} );
+
 		var field = $( '.brittos-before-after-field' );
 		if ( ! field.length ) {
 			return;

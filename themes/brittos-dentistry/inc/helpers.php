@@ -29,6 +29,26 @@ function brittos_clinic_field( $key, $default = '' ) {
 }
 
 /**
+ * Read a stored clinic checkbox while preserving an explicit disabled value.
+ *
+ * @param string $key     Clinic setting key.
+ * @param bool   $default Whether an unset setting should be enabled.
+ * @return bool
+ */
+function brittos_clinic_setting_enabled( $key, $default = true ) {
+	if ( ! function_exists( 'brittos_core_get_clinic_field' ) ) {
+		return (bool) $default;
+	}
+
+	$settings = brittos_core_get_clinic_field();
+	if ( ! is_array( $settings ) || ! array_key_exists( $key, $settings ) ) {
+		return (bool) $default;
+	}
+
+	return '1' === $settings[ $key ];
+}
+
+/**
  * Telephone-safe href for `tel:` links (strips everything but digits and +).
  *
  * @param string $phone Raw phone string.

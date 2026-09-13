@@ -79,6 +79,74 @@ function brittos_core_facts_lines_to_array( $raw ) {
 }
 
 /**
+ * Sanitize a key/value repeater payload posted as JSON.
+ *
+ * @param string $raw_json Raw JSON string from the admin repeater.
+ * @return array Array of [ 'label' => ..., 'value' => ... ] pairs.
+ */
+function brittos_core_sanitize_key_value_json( $raw_json ) {
+	$decoded = json_decode( (string) $raw_json, true );
+	if ( ! is_array( $decoded ) ) {
+		return array();
+	}
+
+	$pairs = array();
+	foreach ( $decoded as $pair ) {
+		if ( ! is_array( $pair ) ) {
+			continue;
+		}
+
+		$label = isset( $pair['label'] ) ? sanitize_text_field( $pair['label'] ) : '';
+		$value = isset( $pair['value'] ) ? sanitize_textarea_field( $pair['value'] ) : '';
+		if ( '' === $label || '' === $value ) {
+			continue;
+		}
+
+		$pairs[] = array(
+			'label' => $label,
+			'value' => $value,
+		);
+	}
+
+	return $pairs;
+}
+
+/**
+ * Convert legacy process strings and stored key/value rows to one shape.
+ *
+ * @param mixed  $value         Stored process value.
+ * @param string $default_label Label used for legacy string rows.
+ * @return array
+ */
+function brittos_core_normalize_key_value_pairs( $value, $default_label = 'Step' ) {
+	if ( ! is_array( $value ) ) {
+		return array();
+	}
+
+	$pairs = array();
+	$index = 1;
+	foreach ( $value as $pair ) {
+		if ( is_array( $pair ) ) {
+			$label = isset( $pair['label'] ) ? sanitize_text_field( $pair['label'] ) : '';
+			$text  = isset( $pair['value'] ) ? sanitize_textarea_field( $pair['value'] ) : '';
+		} else {
+			$label = $default_label . ' ' . $index;
+			$text  = sanitize_textarea_field( $pair );
+		}
+
+		if ( '' !== $label && '' !== $text ) {
+			$pairs[] = array(
+				'label' => $label,
+				'value' => $text,
+			);
+		}
+		$index++;
+	}
+
+	return $pairs;
+}
+
+/**
  * Render an array of fact pairs back into "Label: Value" lines for the
  * textarea.
  *

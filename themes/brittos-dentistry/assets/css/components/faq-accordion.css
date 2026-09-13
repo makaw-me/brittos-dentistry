@@ -80,9 +80,9 @@
   line-height: 1.6;
   opacity: 0;
   transition:
-    grid-template-rows 280ms cubic-bezier(0.16, 1, 0.3, 1),
-    opacity 180ms ease,
-    padding-top 280ms ease;
+    grid-template-rows 1s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 700ms ease,
+    padding-top 1s ease;
 }
 .faq-item__details[open] .faq-item__answer {
   grid-template-rows: 1fr;
@@ -136,9 +136,14 @@ html.theme-ready .theme-toggle {
     transition: none;
   }
 
-  .faq-item__answer,
+  .faq-item__answer {
+    transition-duration: 1s;
+    transition-timing-function: ease-out;
+  }
+
   .faq-item__icon:before,
   .faq-item__icon:after {
-    transition: none;
+    transition-duration: 240ms;
+    transition-timing-function: ease-out;
   }
 }
