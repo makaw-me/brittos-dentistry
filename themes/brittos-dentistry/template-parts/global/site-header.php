@@ -17,7 +17,8 @@ $clinic_name = brittos_clinic_field( 'clinic_name', get_bloginfo( 'name' ) );
 // until the visitor scrolls, when it solidifies for legibility over
 // ordinary content (see assets/js/navigation.js).
 $header_classes = array( 'site-header' );
-if ( is_front_page() ) {
+
+if ( is_front_page() && brittos_clinic_setting_enabled( 'hero_transparent_header', true ) ) {
 	$header_classes[] = 'site-header--transparent';
 }
 ?>

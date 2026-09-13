@@ -20,6 +20,18 @@ define( 'BRITTOS_CORE_APPOINTMENT_ACTION', 'brittos_core_submit_appointment' );
  */
 function brittos_core_render_appointment_form() {
 	$action_url = admin_url( 'admin-post.php' );
+	$text = static function ( $key, $default ) {
+		return brittos_core_get_clinic_field( $key, $default );
+	};
+	$name_label = $text( 'appointment_name_label', __( 'Name', 'brittos-core' ) );
+	$phone_label = $text( 'appointment_phone_label', __( 'Phone', 'brittos-core' ) );
+	$email_label = $text( 'appointment_email_label', __( 'Email (optional)', 'brittos-core' ) );
+	$date_label = $text( 'appointment_date_label', __( 'Preferred Date', 'brittos-core' ) );
+	$time_label = $text( 'appointment_time_label', __( 'Preferred Time', 'brittos-core' ) );
+	$reason_label = $text( 'appointment_reason_label', __( 'Reason for Visit', 'brittos-core' ) );
+	$message_label = $text( 'appointment_message_label', __( 'Message (optional)', 'brittos-core' ) );
+	$message_hint = $text( 'appointment_message_hint', __( 'Please avoid sharing detailed medical history here — this form is for scheduling only.', 'brittos-core' ) );
+	$submit_label = $text( 'appointment_submit_label', __( 'Request appointment', 'brittos-core' ) );
 	?>
 	<div
 		id="appointment-form-response"
@@ -46,46 +58,46 @@ function brittos_core_render_appointment_form() {
 
 		<div class="appointment-form__row appointment-form__row--split">
 			<div>
-				<label for="brittos_name"><?php esc_html_e( 'Name', 'brittos-core' ); ?> <span aria-hidden="true">*</span></label>
+				<label for="brittos_name"><?php echo esc_html( $name_label ); ?> <span aria-hidden="true">*</span></label>
 				<input type="text" id="brittos_name" name="brittos_name" required autocomplete="name">
 			</div>
 			<div>
-				<label for="brittos_phone"><?php esc_html_e( 'Phone', 'brittos-core' ); ?> <span aria-hidden="true">*</span></label>
+				<label for="brittos_phone"><?php echo esc_html( $phone_label ); ?> <span aria-hidden="true">*</span></label>
 				<input type="tel" id="brittos_phone" name="brittos_phone" required autocomplete="tel">
 			</div>
 		</div>
 
 		<div class="appointment-form__row">
-			<label for="brittos_email"><?php esc_html_e( 'Email (optional)', 'brittos-core' ); ?></label>
+			<label for="brittos_email"><?php echo esc_html( $email_label ); ?></label>
 			<input type="email" id="brittos_email" name="brittos_email" autocomplete="email">
 		</div>
 
 		<div class="appointment-form__row appointment-form__row--split">
 			<div>
-				<label for="brittos_preferred_date"><?php esc_html_e( 'Preferred Date', 'brittos-core' ); ?></label>
+				<label for="brittos_preferred_date"><?php echo esc_html( $date_label ); ?></label>
 				<input type="date" id="brittos_preferred_date" name="brittos_preferred_date">
 			</div>
 			<div>
-				<label for="brittos_preferred_time"><?php esc_html_e( 'Preferred Time', 'brittos-core' ); ?></label>
+				<label for="brittos_preferred_time"><?php echo esc_html( $time_label ); ?></label>
 				<input type="time" id="brittos_preferred_time" name="brittos_preferred_time">
 			</div>
 		</div>
 
 		<div class="appointment-form__row">
-			<label for="brittos_reason"><?php esc_html_e( 'Reason for Visit', 'brittos-core' ); ?></label>
+			<label for="brittos_reason"><?php echo esc_html( $reason_label ); ?></label>
 			<input type="text" id="brittos_reason" name="brittos_reason" autocomplete="off">
 		</div>
 
 		<div class="appointment-form__row">
-			<label for="brittos_message"><?php esc_html_e( 'Message (optional)', 'brittos-core' ); ?></label>
+			<label for="brittos_message"><?php echo esc_html( $message_label ); ?></label>
 			<textarea id="brittos_message" name="brittos_message" rows="4"></textarea>
-			<p class="appointment-form__hint">
-				<?php esc_html_e( 'Please avoid sharing detailed medical history here — this form is for scheduling only.', 'brittos-core' ); ?>
-			</p>
+			<?php if ( $message_hint ) : ?>
+				<p class="appointment-form__hint"><?php echo esc_html( $message_hint ); ?></p>
+			<?php endif; ?>
 		</div>
 
 		<button type="submit" class="button button--primary">
-			<?php esc_html_e( 'Request appointment', 'brittos-core' ); ?>
+			<?php echo esc_html( $submit_label ); ?>
 		</button>
 	</form>
 	<?php
@@ -103,14 +115,16 @@ function brittos_core_render_appointment_notice_from_redirect() {
 	$status = sanitize_key( wp_unslash( $_GET['brittos_appointment'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 	if ( 'success' === $status ) {
+		$message = brittos_core_get_clinic_field( 'appointment_success_message', __( 'Thank you — the clinic will be in touch shortly to confirm your appointment.', 'brittos-core' ) );
 		printf(
 			'<p class="appointment-form__notice appointment-form__notice--success" role="status">%s</p>',
-			esc_html__( 'Thank you — the clinic will be in touch shortly to confirm your appointment.', 'brittos-core' )
+			esc_html( $message )
 		);
 	} elseif ( 'error' === $status ) {
+		$message = brittos_core_get_clinic_field( 'appointment_error_message', __( 'Something went wrong. Please check the required fields and try again.', 'brittos-core' ) );
 		printf(
 			'<p class="appointment-form__notice appointment-form__notice--error" role="alert">%s</p>',
-			esc_html__( 'Something went wrong. Please check the required fields and try again.', 'brittos-core' )
+			esc_html( $message )
 		);
 	}
 }

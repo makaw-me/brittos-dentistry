@@ -27,6 +27,11 @@ $has_single_page = ! function_exists( 'brittos_core_treatment_has_single_page' )
 $short_desc    = function_exists( 'brittos_core_get_treatment_field' )
 	? brittos_core_get_treatment_field( $treatment_id, 'short_description' )
 	: '';
+$category_label = '';
+$categories     = get_the_terms( $treatment_id, 'treatment_category' );
+if ( $categories && ! is_wp_error( $categories ) ) {
+	$category_label = implode( ', ', wp_list_pluck( $categories, 'name' ) );
+}
 if ( '' === $short_desc ) {
 	$short_desc = get_the_excerpt();
 }
@@ -45,8 +50,8 @@ if ( '' === $short_desc ) {
 				<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="treatment-card__icon-placeholder"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
 			</span>
 		<?php endif; ?>
-		<?php if ( ! in_array( $args['variant'], array( 'index', 'related' ), true ) ) : ?>
-			<span class="treatment-card__badge-overlay"><?php esc_html_e( 'Explore', 'brittos-dentistry' ); ?></span>
+		<?php if ( 'default' === $args['variant'] && $category_label ) : ?>
+			<span class="treatment-card__badge-overlay"><?php echo esc_html( $category_label ); ?></span>
 		<?php endif; ?>
 	<?php if ( $has_single_page ) : ?></a><?php endif; ?>
 

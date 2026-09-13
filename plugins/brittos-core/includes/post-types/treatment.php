@@ -71,6 +71,69 @@ function brittos_core_treatment_has_single_page( $treatment_id ) {
 }
 
 /**
+ * Replace disabled treatment permalinks with the public treatment archive.
+ *
+ * @param string  $post_link The generated post permalink.
+ * @param WP_Post $post      The post object.
+ * @return string
+ */
+function brittos_core_filter_treatment_permalink( $post_link, $post ) {
+	if ( 'treatment' !== $post->post_type || brittos_core_treatment_has_single_page( $post->ID ) ) {
+		return $post_link;
+	}
+
+	$archive_link = get_post_type_archive_link( 'treatment' );
+	return $archive_link ? $archive_link : home_url( '/' );
+}
+add_filter( 'post_type_link', 'brittos_core_filter_treatment_permalink', 10, 2 );
+
+/**
+ * Prevent direct requests from rendering a disabled treatment page.
+ */
+function brittos_core_redirect_disabled_treatment() {
+	if ( ! is_singular( 'treatment' ) || brittos_core_treatment_has_single_page( get_queried_object_id() ) ) {
+		return;
+	}
+
+	$archive_link = get_post_type_archive_link( 'treatment' );
+	wp_safe_redirect( $archive_link ? $archive_link : home_url( '/' ), 301 );
+	exit;
+}
+add_action( 'template_redirect', 'brittos_core_redirect_disabled_treatment' );
+
+/**
+ * Keep treatments without dedicated pages out of the WordPress post sitemap.
+ * Missing legacy values remain included, matching the single-page fallback.
+ *
+ * @param array  $args      Sitemap query arguments.
+ * @param string $post_type Post type being queried.
+ * @return array
+ */
+function brittos_core_filter_treatment_sitemap_query( $args, $post_type ) {
+	if ( 'treatment' !== $post_type ) {
+		return $args;
+	}
+
+	$meta_query   = isset( $args['meta_query'] ) && is_array( $args['meta_query'] ) ? $args['meta_query'] : array();
+	$meta_query[] = array(
+		'relation' => 'OR',
+		array(
+			'key'     => 'brittos_treatment_single_page',
+			'compare' => 'NOT EXISTS',
+		),
+		array(
+			'key'     => 'brittos_treatment_single_page',
+			'value'   => '0',
+			'compare' => '!=',
+		),
+	);
+	$args['meta_query'] = $meta_query;
+
+	return $args;
+}
+add_filter( 'wp_sitemaps_posts_query_args', 'brittos_core_filter_treatment_sitemap_query', 10, 2 );
+
+/**
  * Get a treatment image, falling back to the shared clinic setting.
  *
  * @param int $treatment_id Treatment post ID.

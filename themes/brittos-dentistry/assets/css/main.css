@@ -30,6 +30,19 @@
 	--brand-muted: #737873;
 	--brand-border: #dedcd5;
 
+	/* Shared visual treatments. Components consume these global tokens. */
+	--header-background: color-mix(in srgb, var(--brand-porcelain) 82%, transparent);
+	--header-shadow: 0 10px 30px rgba(13, 17, 16, 0.08);
+	--hero-ambient-background:
+		radial-gradient(circle at 86% 12%,
+			color-mix(in srgb, var(--brand-champagne-soft) 56%, transparent),
+			transparent 60%),
+		radial-gradient(circle at 8% 88%,
+			color-mix(in srgb, var(--brand-sage-soft) 72%, transparent),
+			transparent 60%);
+	--surface-card-radius: 24px;
+	--surface-card-shadow: 0 14px 40px rgba(13, 17, 16, 0.08);
+
 	/* Semantic tokens. Components consume these instead of mode values. */
 	--britto-bg: var(--brand-porcelain);
 	--britto-surface: var(--brand-white);
