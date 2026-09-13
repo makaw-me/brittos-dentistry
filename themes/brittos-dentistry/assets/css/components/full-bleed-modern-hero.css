@@ -259,6 +259,72 @@
   color: var(--color-text-muted);
 }
 
+/* Homepage hero polish */
+.home .hero--full-bleed {
+  padding-block: clamp(4.25rem, 8vw, 7rem);
+  background-image: var(--hero-ambient-background);
+}
+
+.hero__inner {
+  align-items: center;
+  gap: clamp(2.6rem, 5vw, 4.5rem);
+}
+
+.hero__content {
+  max-width: 52rem;
+}
+
+.hero__title {
+  font-size: clamp(2.45rem, 5.1vw, 4.4rem);
+  line-height: 1.04;
+  margin-bottom: 1.1rem;
+}
+
+.hero__lede {
+  font-size: clamp(1.06rem, 1.2rem + 0.15vw, 1.28rem);
+  line-height: 1.62;
+  max-width: 48ch;
+}
+
+.hero__actions {
+  gap: 0.85rem;
+  margin-bottom: 2.25rem;
+}
+
+.hero__actions .button {
+  min-height: 48px;
+  padding-inline: 1.35rem;
+}
+
+.hero__trust-metrics {
+  gap: clamp(0.9rem, 1.5vw, 1.5rem);
+  padding-top: 1.25rem;
+}
+
+.hero__metric {
+  background: color-mix(in srgb, var(--brand-white) 74%, transparent);
+  border: 1px solid color-mix(in srgb, var(--brand-border) 88%, transparent);
+  border-radius: 16px;
+  padding: 0.65rem 0.75rem;
+  min-width: 132px;
+}
+
+html:not([data-theme="dark"]) .hero--has-media .hero__metric-value,
+html:not([data-theme="dark"]) .hero--has-media .hero__metric-label {
+  color: var(--brand-ink);
+}
+
+@media (max-width: 959px) {
+  .hero__trust-metrics {
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .hero__metric-divider {
+    display: none;
+  }
+}
+
 .hero__metric-divider {
   width: 1px;
   height: 32px;

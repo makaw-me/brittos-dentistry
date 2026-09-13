@@ -35,7 +35,7 @@ function brittos_core_get_clinic_field( $key = '', $default = '' ) {
  */
 function brittos_core_register_clinic_settings_page() {
 	add_options_page(
-		__( 'Clinic & Homepage Settings', 'brittos-core' ),
+		__( 'Clinic Details and Content Settings', 'brittos-core' ),
 		__( 'Clinic Info', 'brittos-core' ),
 		'manage_options',
 		'brittos-clinic-info',
@@ -52,6 +52,7 @@ add_action( 'admin_menu', 'brittos_core_register_clinic_settings_page' );
 function brittos_core_clinic_tabs() {
 	return array(
 		'general'        => __( 'General & Contact', 'brittos-core' ),
+		'contact_page'   => __( 'Contact Page', 'brittos-core' ),
 		'hero'           => __( 'Hero Section', 'brittos-core' ),
 		'trust_strip'    => __( 'Trust Strip', 'brittos-core' ),
 		'about_doctor'   => __( 'About Doctor', 'brittos-core' ),
@@ -87,11 +88,33 @@ function brittos_core_clinic_field_definitions() {
 		'booking_page_id'       => array( 'tab' => 'general', 'label' => __( 'Booking / Contact Page', 'brittos-core' ), 'type' => 'page', 'help' => __( 'The page "Book an appointment" CTAs link to. Assign the "Contact / Book Appointment" page template to a page, then select it here.', 'brittos-core' ) ),
 		'notification_email'    => array( 'tab' => 'general', 'label' => __( 'Appointment Notification Email', 'brittos-core' ), 'type' => 'email', 'help' => __( 'Where enquiries are sent. Defaults to the site admin email if left blank.', 'brittos-core' ) ),
 		'meta_description'      => array( 'tab' => 'general', 'label' => __( 'Homepage Meta Description (SEO)', 'brittos-core' ), 'type' => 'textarea', 'help' => __( 'Compelling 120–155 character description for Google search results and social cards.', 'brittos-core' ) ),
+		'contact_hero_eyebrow'  => array( 'tab' => 'contact_page', 'label' => __( 'Contact page eyebrow', 'brittos-core' ), 'type' => 'text', 'default' => __( 'Get in touch', 'brittos-core' ), 'help' => __( 'Shown above the Contact / Book Appointment page heading. Leave blank to hide it.', 'brittos-core' ) ),
+		'contact_hero_lede'     => array( 'tab' => 'contact_page', 'label' => __( 'Contact page description', 'brittos-core' ), 'type' => 'textarea', 'default' => __( 'Share a few details below and the clinic will confirm a time that works for you.', 'brittos-core' ), 'help' => __( 'Shown below the Contact / Book Appointment page heading. Leave blank to hide it.', 'brittos-core' ) ),
+		'contact_phone_label'   => array( 'tab' => 'contact_page', 'label' => __( 'Contact phone label', 'brittos-core' ), 'type' => 'text', 'default' => __( 'Phone', 'brittos-core' ) ),
+		'contact_whatsapp_label' => array( 'tab' => 'contact_page', 'label' => __( 'Contact WhatsApp label', 'brittos-core' ), 'type' => 'text', 'default' => __( 'WhatsApp', 'brittos-core' ) ),
+		'contact_email_label'   => array( 'tab' => 'contact_page', 'label' => __( 'Contact email label', 'brittos-core' ), 'type' => 'text', 'default' => __( 'Email', 'brittos-core' ) ),
+		'contact_address_label' => array( 'tab' => 'contact_page', 'label' => __( 'Contact address label', 'brittos-core' ), 'type' => 'text', 'default' => __( 'Address', 'brittos-core' ) ),
+		'contact_hours_label'   => array( 'tab' => 'contact_page', 'label' => __( 'Contact hours label', 'brittos-core' ), 'type' => 'text', 'default' => __( 'Hours', 'brittos-core' ) ),
+		'contact_required_note' => array( 'tab' => 'contact_page', 'label' => __( 'Required fields note', 'brittos-core' ), 'type' => 'text', 'default' => __( '* Required fields', 'brittos-core' ), 'help' => __( 'Shown below the appointment form. Leave blank to hide it.', 'brittos-core' ) ),
+		'contact_form_unavailable_text' => array( 'tab' => 'contact_page', 'label' => __( 'Unavailable form message', 'brittos-core' ), 'type' => 'textarea', 'default' => __( 'The appointment form is temporarily unavailable.', 'brittos-core' ) ),
+		'contact_form_call_text' => array( 'tab' => 'contact_page', 'label' => __( 'Unavailable form call-to-action', 'brittos-core' ), 'type' => 'text', 'default' => __( 'Please call %s to book.', 'brittos-core' ), 'help' => __( 'Use %s where the configured phone number should appear.', 'brittos-core' ) ),
+		'appointment_name_label' => array( 'tab' => 'contact_page', 'label' => __( 'Appointment form name label', 'brittos-core' ), 'type' => 'text', 'default' => __( 'Name', 'brittos-core' ) ),
+		'appointment_phone_label' => array( 'tab' => 'contact_page', 'label' => __( 'Appointment form phone label', 'brittos-core' ), 'type' => 'text', 'default' => __( 'Phone', 'brittos-core' ) ),
+		'appointment_email_label' => array( 'tab' => 'contact_page', 'label' => __( 'Appointment form email label', 'brittos-core' ), 'type' => 'text', 'default' => __( 'Email (optional)', 'brittos-core' ) ),
+		'appointment_date_label' => array( 'tab' => 'contact_page', 'label' => __( 'Appointment form date label', 'brittos-core' ), 'type' => 'text', 'default' => __( 'Preferred Date', 'brittos-core' ) ),
+		'appointment_time_label' => array( 'tab' => 'contact_page', 'label' => __( 'Appointment form time label', 'brittos-core' ), 'type' => 'text', 'default' => __( 'Preferred Time', 'brittos-core' ) ),
+		'appointment_reason_label' => array( 'tab' => 'contact_page', 'label' => __( 'Appointment form reason label', 'brittos-core' ), 'type' => 'text', 'default' => __( 'Reason for Visit', 'brittos-core' ) ),
+		'appointment_message_label' => array( 'tab' => 'contact_page', 'label' => __( 'Appointment form message label', 'brittos-core' ), 'type' => 'text', 'default' => __( 'Message (optional)', 'brittos-core' ) ),
+		'appointment_message_hint' => array( 'tab' => 'contact_page', 'label' => __( 'Appointment form message hint', 'brittos-core' ), 'type' => 'textarea', 'default' => __( 'Please avoid sharing detailed medical history here — this form is for scheduling only.', 'brittos-core' ), 'help' => __( 'Shown below the message field. Leave blank to hide it.', 'brittos-core' ) ),
+		'appointment_submit_label' => array( 'tab' => 'contact_page', 'label' => __( 'Appointment form submit label', 'brittos-core' ), 'type' => 'text', 'default' => __( 'Request appointment', 'brittos-core' ) ),
+		'appointment_success_message' => array( 'tab' => 'contact_page', 'label' => __( 'Appointment success message', 'brittos-core' ), 'type' => 'textarea', 'default' => __( 'Thank you — the clinic will be in touch shortly to confirm your appointment.', 'brittos-core' ) ),
+		'appointment_error_message' => array( 'tab' => 'contact_page', 'label' => __( 'Appointment error message', 'brittos-core' ), 'type' => 'textarea', 'default' => __( 'Something went wrong. Please check the required fields and try again.', 'brittos-core' ) ),
 
 		// TAB: Hero Section
 		'hero_badge_text'       => array( 'tab' => 'hero', 'label' => __( 'Badge Text', 'brittos-core' ), 'type' => 'text', 'help' => __( 'Default: Independent Private Dental Practice', 'brittos-core' ) ),
 		'hero_title'            => array( 'tab' => 'hero', 'label' => __( 'Hero Main Title / H1', 'brittos-core' ), 'type' => 'textarea', 'help' => __( 'Default: Gentle, unhurried dentistry from someone who knows your name.', 'brittos-core' ) ),
 		'hero_lede'             => array( 'tab' => 'hero', 'label' => __( 'Hero Subtitle / Description', 'brittos-core' ), 'type' => 'textarea', 'help' => __( 'Main introductory statement. Fallback uses dentist name if left empty.', 'brittos-core' ) ),
+		'hero_transparent_header' => array( 'tab' => 'hero', 'label' => __( 'Use transparent header over hero', 'brittos-core' ), 'type' => 'checkbox', 'default' => '1', 'help' => __( 'When enabled, the homepage header overlays the hero at the top and becomes solid after scrolling.', 'brittos-core' ) ),
 		'hero_cta_primary_text' => array( 'tab' => 'hero', 'label' => __( 'Primary CTA Button Text', 'brittos-core' ), 'type' => 'text', 'help' => __( 'Default: Book an appointment', 'brittos-core' ) ),
 		'hero_cta_primary_url'  => array( 'tab' => 'hero', 'label' => __( 'Primary CTA Button URL', 'brittos-core' ), 'type' => 'text', 'help' => __( 'Leave blank to use the Booking/Contact page set under General & Contact.', 'brittos-core' ) ),
 		'hero_bg_image_id'      => array( 'tab' => 'hero', 'label' => __( 'Hero Background Image', 'brittos-core' ), 'type' => 'media', 'help' => __( 'Atmospheric background image / video poster.', 'brittos-core' ) ),
@@ -159,6 +182,10 @@ function brittos_core_clinic_field_definitions() {
 		'treatments_heading'    => array( 'tab' => 'treatments_cta', 'label' => __( 'Treatments Heading', 'brittos-core' ), 'type' => 'text', 'help' => __( 'Default: Care built around what you actually need', 'brittos-core' ) ),
 		'treatments_lede'       => array( 'tab' => 'treatments_cta', 'label' => __( 'Treatments Description', 'brittos-core' ), 'type' => 'textarea', 'help' => __( 'Default: A focused range of general and cosmetic treatments — explained clearly, with no upselling.', 'brittos-core' ) ),
 		'treatments_btn_text'   => array( 'tab' => 'treatments_cta', 'label' => __( 'Treatments Button Text', 'brittos-core' ), 'type' => 'text', 'help' => __( 'Default: View all treatments', 'brittos-core' ) ),
+		'treatments_archive_eyebrow' => array( 'tab' => 'treatments_cta', 'label' => __( 'Treatments archive eyebrow', 'brittos-core' ), 'type' => 'text', 'default' => __( 'Explore by category', 'brittos-core' ), 'help' => __( 'Shown above the archive category heading. Leave blank to hide it.', 'brittos-core' ) ),
+		'treatments_archive_heading' => array( 'tab' => 'treatments_cta', 'label' => __( 'Treatments archive heading', 'brittos-core' ), 'type' => 'text', 'default' => __( 'Browse by Category', 'brittos-core' ), 'help' => __( 'Shown above the archive category accordions. Leave blank to hide the heading block.', 'brittos-core' ) ),
+		'treatments_archive_other_label' => array( 'tab' => 'treatments_cta', 'label' => __( 'Uncategorized treatments label', 'brittos-core' ), 'type' => 'text', 'default' => __( 'Other Treatments', 'brittos-core' ), 'help' => __( 'Label for treatments without a category. Leave blank to use an accessible fallback label.', 'brittos-core' ) ),
+		'treatments_archive_empty_text' => array( 'tab' => 'treatments_cta', 'label' => __( 'Empty treatments archive message', 'brittos-core' ), 'type' => 'textarea', 'default' => __( 'Treatment listings are being added — please check back soon.', 'brittos-core' ), 'help' => __( 'Shown when no treatments are available. Leave blank to hide the message.', 'brittos-core' ) ),
 		'cta_eyebrow'           => array( 'tab' => 'treatments_cta', 'label' => __( 'Final CTA Eyebrow', 'brittos-core' ), 'type' => 'text', 'help' => __( 'Default: Ready when you are', 'brittos-core' ) ),
 		'cta_heading'           => array( 'tab' => 'treatments_cta', 'label' => __( 'Final CTA Heading', 'brittos-core' ), 'type' => 'text', 'help' => __( 'Default: Request an appointment', 'brittos-core' ) ),
 		'cta_lede'              => array( 'tab' => 'treatments_cta', 'label' => __( 'Final CTA Description', 'brittos-core' ), 'type' => 'textarea', 'help' => __( 'Default: Send a few details and the clinic will get back to you to confirm a time.', 'brittos-core' ) ),
@@ -416,7 +443,7 @@ function brittos_core_render_clinic_settings_page() {
 	$active_tab  = isset( $_GET['tab'] ) && array_key_exists( $_GET['tab'], $tabs ) ? sanitize_key( $_GET['tab'] ) : 'general';
 	?>
 	<div class="wrap brittos-settings-wrap">
-		<h1><?php esc_html_e( 'Clinic & Homepage Settings', 'brittos-core' ); ?></h1>
+		<h1><?php esc_html_e( 'Clinic Details and Content Settings', 'brittos-core' ); ?></h1>
 		<p class="description">
 			<?php esc_html_e( 'Customize all clinic information, headlines, copy, trust metrics, images, and background videos across the site. All fields have polished fallbacks if left blank.', 'brittos-core' ); ?>
 		</p>

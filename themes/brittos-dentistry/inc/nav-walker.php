@@ -116,6 +116,15 @@ class Brittos_Primary_Nav_Walker extends Walker_Nav_Menu {
 				continue;
 			}
 
+			$treatments = array_values( array_filter( $treatments, function ( $treatment ) {
+				return ! function_exists( 'brittos_core_treatment_has_single_page' )
+					|| brittos_core_treatment_has_single_page( $treatment->ID );
+			} ) );
+
+			if ( ! $treatments ) {
+				continue;
+			}
+
 			// Category heading links to the real taxonomy archive for
 			// that category — derived from the actual term, never hard-coded.
 			$term_link     = get_term_link( $category );
