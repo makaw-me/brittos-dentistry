@@ -30,6 +30,7 @@ while ( have_posts() ) :
 
 	$treatment_id = get_the_ID();
 	$has_field    = function_exists( 'brittos_core_get_treatment_field' );
+	$treatment_image_id = function_exists( 'brittos_core_get_treatment_image_id' ) ? brittos_core_get_treatment_image_id( $treatment_id ) : get_post_thumbnail_id( $treatment_id );
 
 	$short_desc = $has_field ? brittos_core_get_treatment_field( $treatment_id, 'short_description' ) : '';
 	if ( ! $short_desc ) {
@@ -40,7 +41,7 @@ while ( have_posts() ) :
 	$process  = $has_field ? brittos_core_get_treatment_field( $treatment_id, 'process' ) : array();
 
 	$hero_overlay = $has_field ? ( '1' === brittos_core_get_treatment_field( $treatment_id, 'hero_overlay' ) ) : false;
-	$hero_overlay = $hero_overlay && has_post_thumbnail();
+	$hero_overlay = $hero_overlay && $treatment_image_id;
 
 	$category = get_the_terms( $treatment_id, 'treatment_category' );
 	$category = ( $category && ! is_wp_error( $category ) ) ? $category[0] : null;
@@ -55,7 +56,7 @@ while ( have_posts() ) :
 		<header class="treatment-hero<?php echo $hero_overlay ? ' treatment-hero--overlay' : ''; ?>">
 			<?php if ( $hero_overlay ) : ?>
 				<div class="treatment-hero__bg" aria-hidden="true">
-					<?php echo get_the_post_thumbnail( $treatment_id, 'brittos-hero', array( 'class' => 'treatment-hero__bg-image' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+					<?php echo wp_get_attachment_image( $treatment_image_id, 'brittos-hero', false, array( 'class' => 'treatment-hero__bg-image' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 					<div class="treatment-hero__bg-overlay"></div>
 				</div>
 			<?php endif; ?>
@@ -78,13 +79,13 @@ while ( have_posts() ) :
 
 				</div>
 
-				<?php if ( has_post_thumbnail() && ! $hero_overlay ) : ?>
+				<?php if ( $treatment_image_id && ! $hero_overlay ) : ?>
 					<div class="treatment-hero__media" data-reveal>
-						<?php the_post_thumbnail( 'brittos-hero', array(
+						<?php echo wp_get_attachment_image( $treatment_image_id, 'brittos-hero', false, array(
 							'class'    => 'treatment-hero__image',
 							'loading'  => 'lazy',
 							'decoding' => 'async',
-						) ); ?>
+						) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 					</div>
 				<?php endif; ?>
 

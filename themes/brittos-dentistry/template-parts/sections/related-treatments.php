@@ -47,7 +47,7 @@ $heading = function_exists( 'brittos_core_get_clinic_field' ) ? brittos_core_get
 			<?php
 			while ( $related->have_posts() ) :
 				$related->the_post();
-				get_template_part( 'template-parts/components/treatment-card' );
+				get_template_part( 'template-parts/components/treatment-card', null, array( 'variant' => 'related' ) );
 			endwhile;
 			wp_reset_postdata();
 			?>

@@ -22,6 +22,7 @@ if ( 'compact' === $args['variant'] ) {
 }
 
 $treatment_id  = get_the_ID();
+$image_id      = function_exists( 'brittos_core_get_treatment_image_id' ) ? brittos_core_get_treatment_image_id( $treatment_id ) : get_post_thumbnail_id( $treatment_id );
 $has_single_page = ! function_exists( 'brittos_core_treatment_has_single_page' ) || brittos_core_treatment_has_single_page( $treatment_id );
 $short_desc    = function_exists( 'brittos_core_get_treatment_field' )
 	? brittos_core_get_treatment_field( $treatment_id, 'short_description' )
@@ -32,19 +33,19 @@ if ( '' === $short_desc ) {
 ?>
 <article <?php post_class( $card_classes ); ?> data-reveal data-reveal-group="treatments">
 	<?php if ( $has_single_page ) : ?><a class="treatment-card__media-link" href="<?php the_permalink(); ?>" tabindex="-1" aria-hidden="true"><?php endif; ?>
-		<?php if ( has_post_thumbnail() ) : ?>
-			<?php the_post_thumbnail( 'brittos-card', array(
+		<?php if ( $image_id ) : ?>
+			<?php echo wp_get_attachment_image( $image_id, 'brittos-card', false, array(
 				'class'    => 'treatment-card__image',
 				'loading'  => 'lazy',
 				'decoding' => 'async',
 				'alt'      => '',
-			) ); ?>
+			) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		<?php else : ?>
 			<span class="treatment-card__image treatment-card__image--placeholder" aria-hidden="true">
 				<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="treatment-card__icon-placeholder"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
 			</span>
 		<?php endif; ?>
-		<?php if ( 'index' !== $args['variant'] ) : ?>
+		<?php if ( ! in_array( $args['variant'], array( 'index', 'related' ), true ) ) : ?>
 			<span class="treatment-card__badge-overlay"><?php esc_html_e( 'Explore', 'brittos-dentistry' ); ?></span>
 		<?php endif; ?>
 	<?php if ( $has_single_page ) : ?></a><?php endif; ?>
