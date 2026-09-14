@@ -1,0 +1,59 @@
+/* Contact page map section — only enqueued on the Contact page template
+   when the map is enabled and configured (see inc/enqueue.php). */
+
+.contact-map {
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+.contact-map__card {
+  padding: var(--space-md);
+  background: var(--brand-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  margin: 0;
+  overflow: hidden;
+}
+
+.contact-map__header {
+  padding-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+
+.contact-map__heading {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  line-height: 1.4;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+/* Fixed aspect-ratio reserves the iframe's space up front so it never
+   causes layout shift once it loads. */
+.contact-map__frame-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--britto-secondary-soft);
+}
+
+.contact-map__frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.contact-map__directions {
+  flex: 0 0 auto;
+}

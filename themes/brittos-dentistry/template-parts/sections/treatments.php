@@ -52,7 +52,12 @@ $treatments = post_type_exists( 'treatment' ) ? new WP_Query( array(
 				?>
 				<p class="treatments__all">
 					<a class="button button--secondary" href="<?php echo esc_url( $archive_link ); ?>">
-						<?php echo esc_html( $btn_text ); ?>
+						<span class="button__text"><?php echo esc_html( $btn_text ); ?></span>
+						<span class="button__icon" aria-hidden="true">
+							<svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<path d="M3.33337 8H12.6667M12.6667 8L8.66671 4M12.6667 8L8.66671 12" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+							</svg>
+						</span>
 					</a>
 				</p>
 			<?php endif; ?>

@@ -69,11 +69,30 @@
   overflow-wrap: anywhere;
 }
 .contact-info__value a {
+  position: relative;
+  display: inline-block;
   color: inherit;
   text-decoration: none;
+  transition: color var(--transition-fast);
 }
 .contact-info__value a:hover {
   color: var(--britto-accent);
+}
+.contact-info__value a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 2px;
+  background: var(--britto-accent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--transition-base);
+}
+.contact-info__value a:hover::after,
+.contact-info__value a:focus-visible::after {
+  transform: scaleX(1);
 }
 .contact-info__map-note {
   font-size: var(--fs-sm);

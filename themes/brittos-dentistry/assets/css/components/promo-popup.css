@@ -1,0 +1,131 @@
+/* Global promotional popup — only enqueued when the feature is enabled
+   (see inc/enqueue.php), so this file never loads on a disabled site. */
+
+.promo-popup {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-sm);
+}
+
+.promo-popup[hidden] {
+  display: none;
+}
+
+.promo-popup__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(13, 17, 16, 0.55);
+  opacity: 0;
+  transition: opacity var(--transition-base);
+}
+
+.promo-popup.is-open .promo-popup__backdrop {
+  opacity: 1;
+}
+
+.promo-popup__dialog {
+  position: relative;
+  width: min(560px, 100%);
+  max-height: min(720px, calc(100vh - 2rem));
+  overflow-y: auto;
+  background: var(--brand-white);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  opacity: 0;
+  transform: translateY(12px) scale(0.98);
+  transition: opacity var(--transition-base), transform var(--transition-base);
+}
+
+.promo-popup.is-open .promo-popup__dialog {
+  opacity: 1;
+  transform: none;
+}
+
+.promo-popup__close {
+  position: absolute;
+  top: var(--space-xs);
+  right: var(--space-xs);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--brand-ink);
+  cursor: pointer;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+
+.promo-popup__close:hover {
+  background: var(--brand-white);
+}
+
+.promo-popup__close:active {
+  transform: scale(0.94);
+}
+
+.promo-popup__media {
+  width: 100%;
+  overflow: hidden;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  background: var(--britto-secondary-soft);
+}
+
+.promo-popup__image {
+  width: 100%;
+  height: auto;
+  max-height: min(440px, 52vh);
+  object-fit: contain;
+  display: block;
+}
+
+.promo-popup__body {
+  padding: 1.25rem 1.5rem 1.5rem;
+  text-align: center;
+}
+
+.promo-popup__heading {
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  margin: 0 0 var(--space-xs);
+  color: var(--brand-ink);
+}
+
+.promo-popup__text {
+  max-width: 42ch;
+  margin-inline: auto;
+  color: var(--color-text-muted);
+  margin-block: 0 var(--space-md);
+}
+
+.promo-popup__cta {
+  display: inline-flex;
+}
+
+@media (max-width: 480px) {
+  .promo-popup {
+    padding: var(--space-xs);
+  }
+
+  .promo-popup__dialog {
+    max-height: calc(100vh - 1.5rem);
+  }
+
+  .promo-popup__body {
+    padding: 1rem var(--space-sm) 1.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .promo-popup__backdrop,
+  .promo-popup__dialog,
+  .promo-popup__close {
+    transition: none;
+  }
+}

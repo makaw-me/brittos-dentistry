@@ -3,7 +3,7 @@
  * Plugin Name:       Britto's Core
  * Plugin URI:        https://example.com/brittos-dentistry
  * Description:       Functionality and structured clinic data for Dr. Britto's Dentistry: treatments, testimonials, FAQs, clinic settings, the appointment enquiry form and local-business schema. Presentation lives in the theme.
- * Version:           1.0.0
+ * Version:           1.0.1
  * Requires at least: 6.4
  * Requires PHP:      8.1
  * Author:            Britto's Dentistry
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'BRITTOS_CORE_VERSION', '1.0.0' );
+define( 'BRITTOS_CORE_VERSION', '1.0.1' );
 define( 'BRITTOS_CORE_DIR', plugin_dir_path( __FILE__ ) );
 define( 'BRITTOS_CORE_URL', plugin_dir_url( __FILE__ ) );
 define( 'BRITTOS_CORE_FILE', __FILE__ );
