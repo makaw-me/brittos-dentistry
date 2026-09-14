@@ -63,6 +63,7 @@ $floating_sub     = brittos_clinic_field( 'hero_floating_sub', __( 'Same trusted
 				muted
 				loop
 				playsinline
+				preload="metadata"
 				<?php if ( $hero_bg_img ) : ?>poster="<?php echo esc_url( wp_get_attachment_image_url( $hero_bg_img, 'brittos-hero' ) ); ?>"<?php endif; ?>
 			>
 				<source src="<?php echo esc_url( $hero_video ); ?>" type="video/mp4">

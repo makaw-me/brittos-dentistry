@@ -56,15 +56,22 @@
   width: 2.75rem;
   height: 2.75rem;
   border-radius: 50%;
-  border: none;
-  background: rgba(255, 255, 255, 0.85);
-  color: var(--brand-ink);
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  background: var(--brand-ink);
+  color: var(--brand-white);
   cursor: pointer;
-  transition: background var(--transition-fast), transform var(--transition-fast);
+  transition: background var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
 }
 
 .promo-popup__close:hover {
-  background: var(--brand-white);
+  background: var(--britto-accent);
+  border-color: var(--britto-accent);
+  color: var(--brand-ink);
+}
+
+.promo-popup__close:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 3px;
 }
 
 .promo-popup__close:active {

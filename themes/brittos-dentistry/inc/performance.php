@@ -47,6 +47,28 @@ remove_action( 'wp_head', 'wp_oembed_add_host_js' );
 add_filter( 'wp_lazy_loading_enabled', '__return_true' );
 
 /**
+ * Add efficient defaults to attachment images without overriding component
+ * decisions such as eager loading and high fetch priority for hero media.
+ *
+ * @param array  $attr       Image attributes.
+ * @param object $attachment Attachment object.
+ * @param string $size       Requested image size.
+ * @return array
+ */
+function brittos_attachment_image_attributes( $attr, $attachment, $size ) {
+	if ( empty( $attr['decoding'] ) ) {
+		$attr['decoding'] = 'async';
+	}
+
+	if ( ! isset( $attr['loading'] ) && empty( $attr['fetchpriority'] ) ) {
+		$attr['loading'] = 'lazy';
+	}
+
+	return $attr;
+}
+add_filter( 'wp_get_attachment_image_attributes', 'brittos_attachment_image_attributes', 10, 3 );
+
+/**
  * Helper: render an <img> for the hero/LCP image with fetchpriority=high
  * and no lazy-loading, sized to avoid layout shift.
  *
