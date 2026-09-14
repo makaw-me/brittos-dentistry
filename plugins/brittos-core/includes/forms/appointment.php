@@ -25,7 +25,7 @@ function brittos_core_render_appointment_form() {
 	};
 	$name_label = $text( 'appointment_name_label', __( 'Name', 'brittos-core' ) );
 	$phone_label = $text( 'appointment_phone_label', __( 'Phone', 'brittos-core' ) );
-	$email_label = $text( 'appointment_email_label', __( 'Email (optional)', 'brittos-core' ) );
+	$email_label = $text( 'appointment_email_label', __( 'Email', 'brittos-core' ) );
 	$date_label = $text( 'appointment_date_label', __( 'Preferred Date', 'brittos-core' ) );
 	$time_label = $text( 'appointment_time_label', __( 'Preferred Time', 'brittos-core' ) );
 	$reason_label = $text( 'appointment_reason_label', __( 'Reason for Visit', 'brittos-core' ) );
@@ -56,20 +56,19 @@ function brittos_core_render_appointment_form() {
 			<input type="text" id="brittos_website" name="brittos_website" tabindex="-1" autocomplete="off" value="">
 		</p>
 
-		<div class="appointment-form__row appointment-form__row--split">
-			<div>
-				<label for="brittos_name"><?php echo esc_html( $name_label ); ?> <span aria-hidden="true">*</span></label>
-				<input type="text" id="brittos_name" name="brittos_name" required autocomplete="name">
-			</div>
-			<div>
-				<label for="brittos_phone"><?php echo esc_html( $phone_label ); ?> <span aria-hidden="true">*</span></label>
-				<input type="tel" id="brittos_phone" name="brittos_phone" required autocomplete="tel">
-			</div>
+		<div class="appointment-form__row">
+			<label for="brittos_name"><?php echo esc_html( $name_label ); ?> <span aria-hidden="true">*</span></label>
+			<input type="text" id="brittos_name" name="brittos_name" required aria-required="true" autocomplete="name">
 		</div>
 
 		<div class="appointment-form__row">
-			<label for="brittos_email"><?php echo esc_html( $email_label ); ?></label>
-			<input type="email" id="brittos_email" name="brittos_email" autocomplete="email">
+			<label for="brittos_phone"><?php echo esc_html( $phone_label ); ?> <span aria-hidden="true">*</span></label>
+			<input type="tel" id="brittos_phone" name="brittos_phone" required aria-required="true" autocomplete="tel">
+		</div>
+
+		<div class="appointment-form__row">
+			<label for="brittos_email"><?php echo esc_html( $email_label ); ?> <span aria-hidden="true">*</span></label>
+			<input type="email" id="brittos_email" name="brittos_email" required aria-required="true" autocomplete="email">
 		</div>
 
 		<div class="appointment-form__row appointment-form__row--split">
@@ -158,7 +157,9 @@ function brittos_core_validate_appointment_submission() {
 		$errors[] = __( 'Please enter a valid phone number.', 'brittos-core' );
 	}
 
-	if ( '' !== $email && ! is_email( $email ) ) {
+	if ( '' === $email ) {
+		$errors[] = __( 'Please enter your email address.', 'brittos-core' );
+	} elseif ( ! is_email( $email ) ) {
 		$errors[] = __( 'Please enter a valid email address.', 'brittos-core' );
 	}
 

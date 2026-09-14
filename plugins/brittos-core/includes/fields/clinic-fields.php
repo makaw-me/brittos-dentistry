@@ -62,6 +62,7 @@ function brittos_core_clinic_tabs() {
 		'single_page_labels' => __( 'Single Treatment Page Labels', 'brittos-core' ),
 		'gallery'        => __( 'Gallery', 'brittos-core' ),
 		'footer'         => __( 'Footer', 'brittos-core' ),
+		'popup'          => __( 'Promotional Popup', 'brittos-core' ),
 	);
 }
 
@@ -100,7 +101,7 @@ function brittos_core_clinic_field_definitions() {
 		'contact_form_call_text' => array( 'tab' => 'contact_page', 'label' => __( 'Unavailable form call-to-action', 'brittos-core' ), 'type' => 'text', 'default' => __( 'Please call %s to book.', 'brittos-core' ), 'help' => __( 'Use %s where the configured phone number should appear.', 'brittos-core' ) ),
 		'appointment_name_label' => array( 'tab' => 'contact_page', 'label' => __( 'Appointment form name label', 'brittos-core' ), 'type' => 'text', 'default' => __( 'Name', 'brittos-core' ) ),
 		'appointment_phone_label' => array( 'tab' => 'contact_page', 'label' => __( 'Appointment form phone label', 'brittos-core' ), 'type' => 'text', 'default' => __( 'Phone', 'brittos-core' ) ),
-		'appointment_email_label' => array( 'tab' => 'contact_page', 'label' => __( 'Appointment form email label', 'brittos-core' ), 'type' => 'text', 'default' => __( 'Email (optional)', 'brittos-core' ) ),
+		'appointment_email_label' => array( 'tab' => 'contact_page', 'label' => __( 'Appointment form email label', 'brittos-core' ), 'type' => 'text', 'default' => __( 'Email', 'brittos-core' ) ),
 		'appointment_date_label' => array( 'tab' => 'contact_page', 'label' => __( 'Appointment form date label', 'brittos-core' ), 'type' => 'text', 'default' => __( 'Preferred Date', 'brittos-core' ) ),
 		'appointment_time_label' => array( 'tab' => 'contact_page', 'label' => __( 'Appointment form time label', 'brittos-core' ), 'type' => 'text', 'default' => __( 'Preferred Time', 'brittos-core' ) ),
 		'appointment_reason_label' => array( 'tab' => 'contact_page', 'label' => __( 'Appointment form reason label', 'brittos-core' ), 'type' => 'text', 'default' => __( 'Reason for Visit', 'brittos-core' ) ),
@@ -109,6 +110,11 @@ function brittos_core_clinic_field_definitions() {
 		'appointment_submit_label' => array( 'tab' => 'contact_page', 'label' => __( 'Appointment form submit label', 'brittos-core' ), 'type' => 'text', 'default' => __( 'Request appointment', 'brittos-core' ) ),
 		'appointment_success_message' => array( 'tab' => 'contact_page', 'label' => __( 'Appointment success message', 'brittos-core' ), 'type' => 'textarea', 'default' => __( 'Thank you — the clinic will be in touch shortly to confirm your appointment.', 'brittos-core' ) ),
 		'appointment_error_message' => array( 'tab' => 'contact_page', 'label' => __( 'Appointment error message', 'brittos-core' ), 'type' => 'textarea', 'default' => __( 'Something went wrong. Please check the required fields and try again.', 'brittos-core' ) ),
+
+		'contact_map_enabled'        => array( 'tab' => 'contact_page', 'label' => __( 'Show map on Contact page', 'brittos-core' ), 'type' => 'checkbox', 'help' => __( 'Adds a Google Maps location section to the Contact page. Off by default.', 'brittos-core' ) ),
+		'contact_map_heading'        => array( 'tab' => 'contact_page', 'label' => __( 'Map section heading', 'brittos-core' ), 'type' => 'text', 'default' => __( 'Find Us', 'brittos-core' ) ),
+		'contact_map_embed_url'      => array( 'tab' => 'contact_page', 'label' => __( 'Custom map embed URL (optional)', 'brittos-core' ), 'type' => 'url', 'help' => __( 'Paste a URL from Google Maps > Share > Embed a map (no API key needed). Leave blank to auto-generate one from the Address field above — no key required either way.', 'brittos-core' ) ),
+		'contact_map_directions_url' => array( 'tab' => 'contact_page', 'label' => __( 'Custom "Get Directions" URL (optional)', 'brittos-core' ), 'type' => 'url', 'help' => __( 'Leave blank to auto-generate a directions link from the Address field above.', 'brittos-core' ) ),
 
 		// TAB: Hero Section
 		'hero_badge_text'       => array( 'tab' => 'hero', 'label' => __( 'Badge Text', 'brittos-core' ), 'type' => 'text', 'help' => __( 'Default: Independent Private Dental Practice', 'brittos-core' ) ),
@@ -232,6 +238,15 @@ function brittos_core_clinic_field_definitions() {
 		'footer_credit_prefix'  => array( 'tab' => 'footer', 'label' => __( 'Credit link prefix', 'brittos-core' ), 'type' => 'text', 'default' => __( 'Powered by', 'brittos-core' ) ),
 		'footer_credit_name'    => array( 'tab' => 'footer', 'label' => __( 'Credit link name', 'brittos-core' ), 'type' => 'text', 'default' => 'MAKAW' ),
 		'footer_credit_url'     => array( 'tab' => 'footer', 'label' => __( 'Credit link URL', 'brittos-core' ), 'type' => 'url', 'default' => 'https://makaw.me' ),
+
+		// TAB: Promotional Popup
+		'popup_enabled'     => array( 'tab' => 'popup', 'label' => __( 'Show promotional popup', 'brittos-core' ), 'type' => 'checkbox', 'help' => __( 'Shows a one-time dismissible popup to first-time visitors. Off by default, and adds no JS/CSS to the site while off.', 'brittos-core' ) ),
+		'popup_image_id'    => array( 'tab' => 'popup', 'label' => __( 'Popup Image (optional)', 'brittos-core' ), 'type' => 'media' ),
+		'popup_heading'     => array( 'tab' => 'popup', 'label' => __( 'Popup Heading', 'brittos-core' ), 'type' => 'text', 'default' => __( 'A warm welcome', 'brittos-core' ) ),
+		'popup_text'        => array( 'tab' => 'popup', 'label' => __( 'Popup Text', 'brittos-core' ), 'type' => 'textarea', 'default' => __( 'Book your first visit and let us take care of the rest.', 'brittos-core' ) ),
+		'popup_cta_text'    => array( 'tab' => 'popup', 'label' => __( 'Popup Button Label (optional)', 'brittos-core' ), 'type' => 'text', 'help' => __( 'Leave blank to hide the button. If provided, the button links to the configured URL or the site Booking/Contact page.', 'brittos-core' ) ),
+		'popup_cta_url'     => array( 'tab' => 'popup', 'label' => __( 'Popup Button URL (optional)', 'brittos-core' ), 'type' => 'url', 'help' => __( 'Leave blank to use the site\'s Booking/Contact page automatically.', 'brittos-core' ) ),
+		'popup_cookie_days' => array( 'tab' => 'popup', 'label' => __( 'Days before showing again after dismissal', 'brittos-core' ), 'type' => 'number', 'default' => '30', 'help' => __( 'How long the "don\'t show again" dismissal lasts. Default: 30 days.', 'brittos-core' ) ),
 	);
 }
 
@@ -295,6 +310,9 @@ function brittos_core_sanitize_clinic_fields( $input ) {
 			case 'checkbox':
 				$clean[ $key ] = ! empty( $raw ) ? '1' : '';
 				break;
+			case 'number':
+				$clean[ $key ] = '' === $raw ? '' : absint( $raw );
+				break;
 			default:
 				$clean[ $key ] = sanitize_text_field( $raw );
 		}
@@ -338,6 +356,15 @@ function brittos_core_render_single_field( $key, $field ) {
 						esc_attr( $name ),
 						checked( '1', $value, false ),
 						esc_html__( 'Enabled', 'brittos-core' )
+					);
+					break;
+
+				case 'number':
+					printf(
+						'<input type="number" min="0" step="1" id="%1$s" name="%2$s" value="%3$s" class="small-text">',
+						esc_attr( $key ),
+						esc_attr( $name ),
+						esc_attr( $value )
 					);
 					break;
 
@@ -529,4 +556,82 @@ function brittos_core_get_booking_url() {
 	}
 
 	return home_url( '/#appointment-form' );
+}
+
+/**
+ * The clinic's postal address as a single line, used to auto-build the
+ * Maps embed/directions URLs when no custom override is configured.
+ *
+ * @return string Empty string if no address is configured.
+ */
+function brittos_core_get_map_address() {
+	$address = brittos_core_get_clinic_field( 'address' );
+	$city    = brittos_core_get_clinic_field( 'city' );
+	return trim( $address . ( $address && $city ? ', ' : '' ) . $city );
+}
+
+/**
+ * A key-free Google Maps embed URL for the Contact page iframe. Prefers
+ * an explicit override (e.g. pasted from Google Maps > Share > Embed a
+ * map, also key-free), otherwise builds a plain query-based embed from
+ * the configured address. Never uses the Maps JavaScript/Embed API, so
+ * no API key is ever required or stored.
+ *
+ * @return string Empty string when the map has nothing to point at.
+ */
+function brittos_core_get_map_embed_url() {
+	$override = trim( brittos_core_get_clinic_field( 'contact_map_embed_url' ) );
+	if ( $override ) {
+		$parts = wp_parse_url( $override );
+		$host  = isset( $parts['host'] ) ? strtolower( $parts['host'] ) : '';
+		$path  = isset( $parts['path'] ) ? $parts['path'] : '';
+		$is_embed_url = ( 'www.google.com' === $host && 0 === strpos( $path, '/maps/embed' ) )
+			|| ( 'maps.google.com' === $host && 0 === strpos( $path, '/maps' ) );
+
+		if ( $is_embed_url ) {
+			return $override;
+		}
+	}
+
+	$address = brittos_core_get_map_address();
+	if ( ! $address ) {
+		return '';
+	}
+
+	return 'https://maps.google.com/maps?output=embed&q=' . rawurlencode( $address );
+}
+
+/**
+ * A key-free "Get Directions" URL using Google's documented Universal
+ * Maps URL scheme (maps/dir/?api=1), so the map is never the visitor's
+ * only source of location information.
+ *
+ * @return string Empty string when there's nothing to link to.
+ */
+function brittos_core_get_map_directions_url() {
+	$override = brittos_core_get_clinic_field( 'contact_map_directions_url' );
+	if ( $override ) {
+		return $override;
+	}
+
+	$address = brittos_core_get_map_address();
+	if ( ! $address ) {
+		return '';
+	}
+
+	return 'https://www.google.com/maps/dir/?api=1&destination=' . rawurlencode( $address );
+}
+
+/**
+ * The URL the promotional popup's button should point to. Falls back to
+ * the same site-wide booking URL used elsewhere so it never links nowhere.
+ *
+ * @return string
+ */
+function brittos_core_get_popup_cta_url() {
+	$custom = brittos_core_get_clinic_field( 'popup_cta_url' );
+	if ( $custom ) {
+		return $custom;
+	}
+	return brittos_core_get_booking_url();
 }

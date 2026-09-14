@@ -13,6 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <?php get_template_part( 'template-parts/global/site-footer' ); ?>
 <?php get_template_part( 'template-parts/global/mobile-cta' ); ?>
+<?php get_template_part( 'template-parts/global/promo-popup' ); ?>
 
 <?php wp_footer(); ?>
 </body>

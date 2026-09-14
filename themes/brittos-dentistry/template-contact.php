@@ -127,6 +127,50 @@ while ( have_posts() ) :
 				</div>
 			<?php endif; ?>
 
+			<?php
+			$map_embed_url = '1' === brittos_clinic_field( 'contact_map_enabled' ) && function_exists( 'brittos_core_get_map_embed_url' )
+				? brittos_core_get_map_embed_url()
+				: '';
+			if ( $map_embed_url ) :
+				$map_heading    = $contact_text( 'contact_map_heading', __( 'Find Us', 'brittos-dentistry' ) );
+				$directions_url = function_exists( 'brittos_core_get_map_directions_url' ) ? brittos_core_get_map_directions_url() : '';
+				?>
+				<section
+					class="contact-map"
+					<?php echo $map_heading ? 'aria-labelledby="contact-map-heading"' : 'aria-label="' . esc_attr__( 'Clinic location map', 'brittos-dentistry' ) . '"'; ?>
+				>
+					<div class="contact-map__card">
+						<div class="contact-map__header">
+							<?php if ( $map_heading ) : ?>
+								<h2 id="contact-map-heading" class="contact-map__heading"><?php echo esc_html( $map_heading ); ?></h2>
+							<?php endif; ?>
+
+							<?php if ( $directions_url ) : ?>
+								<a
+									class="button button--ghost contact-map__directions"
+									href="<?php echo esc_url( $directions_url ); ?>"
+									target="_blank"
+									rel="noopener noreferrer"
+									aria-label="<?php echo esc_attr( sprintf( __( 'Get directions to %s', 'brittos-dentistry' ), $map_heading ? $map_heading : __( 'the clinic', 'brittos-dentistry' ) ) ); ?>"
+								>
+									<?php esc_html_e( 'Get Directions', 'brittos-dentistry' ); ?>
+								</a>
+							<?php endif; ?>
+						</div>
+
+						<div class="contact-map__frame-wrap">
+							<iframe
+								class="contact-map__frame"
+								src="<?php echo esc_url( $map_embed_url ); ?>"
+								title="<?php echo esc_attr( $map_heading ? $map_heading : __( 'Clinic location map', 'brittos-dentistry' ) ); ?>"
+								loading="lazy"
+								referrerpolicy="no-referrer-when-downgrade"
+							></iframe>
+						</div>
+					</div>
+				</section>
+			<?php endif; ?>
+
 		</aside>
 
 		<div id="appointment-form" class="contact-form-card" data-reveal>
