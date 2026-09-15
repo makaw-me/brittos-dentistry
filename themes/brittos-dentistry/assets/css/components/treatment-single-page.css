@@ -350,6 +350,9 @@
 .treatment-single__faq {
   background: var(--britto-secondary-soft);
 }
+.related-treatments {
+  padding-block: clamp(3rem, 6vw, 5rem);
+}
 
 /* Single treatment refresh */
 .single-treatment .treatment-hero {

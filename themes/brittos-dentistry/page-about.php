@@ -1,5 +1,7 @@
 <?php
 /**
+ * Template Name: About
+ *
  * About page: the dentist and the practice philosophy, with optional clinic
  * context and patient experience content from Clinic Info settings.
  *

@@ -1,0 +1,10 @@
+/*
+ * Contact / Book Appointment page stylesheet — loaded only when
+ * is_page_template('template-contact.php').
+ *
+ * Covers: the appointment form and booking page layout.
+ * The final-cta-appointment-form sheet is included because it contains
+ * shared form field tokens consumed by the contact form styles.
+ */
+@import "./components/final-cta-appointment-form.css";
+@import "./components/contact-book-appointment-page.css";

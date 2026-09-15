@@ -1,0 +1,17 @@
+/*
+ * Global component stylesheet — loaded on every page.
+ *
+ * Only includes sheets whose selectors are referenced from markup that
+ * appears on every route: header, footer, buttons, mobile sticky CTA,
+ * dark/light theme transitions, and base typography prose styles.
+ *
+ * Page-specific components (hero, treatment cards, FAQs, etc.) are
+ * loaded only on the pages that actually use them — see the other
+ * page-*.css manifests alongside this file.
+ */
+@import "./components/buttons-interactive.css";
+@import "./components/site-header-navigation.css";
+@import "./components/modern-sleek-footer.css";
+@import "./components/mobile-sticky-cta.css";
+@import "./components/theme-transitions-core-blocks.css";
+@import "./components/polished-typography.css";

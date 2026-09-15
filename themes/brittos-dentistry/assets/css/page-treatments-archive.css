@@ -1,0 +1,14 @@
+/*
+ * Treatments archive component stylesheet — loaded only on the
+ * treatment CPT archive (is_post_type_archive('treatment')).
+ *
+ * Covers: archive hero (reuses the .treatment-hero BEM block from
+ * treatment-single-page.css), treatments grid cards, FAQ accordion,
+ * and final CTA banner.
+ */
+@import "./components/full-bleed-modern-hero.css";
+@import "./components/treatment-single-page.css";
+@import "./components/treatments-grid-card.css";
+@import "./components/faq-accordion.css";
+@import "./components/final-cta-appointment-form.css";
+
