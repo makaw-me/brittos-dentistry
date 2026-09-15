@@ -56,7 +56,12 @@ while ( have_posts() ) :
 		<header class="treatment-hero<?php echo $hero_overlay ? ' treatment-hero--overlay' : ''; ?>">
 			<?php if ( $hero_overlay ) : ?>
 				<div class="treatment-hero__bg" aria-hidden="true">
-					<?php echo wp_get_attachment_image( $treatment_image_id, 'brittos-hero', false, array( 'class' => 'treatment-hero__bg-image' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+					<?php echo wp_get_attachment_image( $treatment_image_id, 'brittos-hero', false, array(
+						'class'         => 'treatment-hero__bg-image',
+						'loading'       => 'eager',  // Above-the-fold BG — must not lazy-load.
+						'fetchpriority' => 'high',
+						'decoding'      => 'async',
+					) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 					<div class="treatment-hero__bg-overlay"></div>
 				</div>
 			<?php endif; ?>
@@ -82,9 +87,10 @@ while ( have_posts() ) :
 				<?php if ( $treatment_image_id && ! $hero_overlay ) : ?>
 					<div class="treatment-hero__media" data-reveal>
 						<?php echo wp_get_attachment_image( $treatment_image_id, 'brittos-hero', false, array(
-							'class'    => 'treatment-hero__image',
-							'loading'  => 'lazy',
-							'decoding' => 'async',
+							'class'         => 'treatment-hero__image',
+							'loading'       => 'eager',  // LCP candidate — never lazy-load.
+							'fetchpriority' => 'high',
+							'decoding'      => 'async',
 						) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 					</div>
 				<?php endif; ?>
