@@ -119,12 +119,16 @@ function brittos_js_asset( $handle, $source_rel ) {
  */
 function brittos_enqueue_assets() {
 
-	$is_privacy   = is_page( 'privacy-policy' );
+	$is_privacy   = is_page( 'privacy-policy' ) || is_privacy_policy();
 	$is_front     = is_front_page();
 	$is_singular_treatment = is_singular( 'treatment' );
 	$is_treatment_archive  = is_post_type_archive( 'treatment' );
-	$is_about     = is_page_template( 'page-about.php' );
-	$is_contact   = is_page_template( 'template-contact.php' );
+	$is_about     = is_page( 'about' ) || is_page( 'about-us' ) || is_page_template( 'page-about.php' );
+	$booking_page_id = function_exists( 'brittos_core_get_clinic_field' ) ? absint( brittos_core_get_clinic_field( 'booking_page_id' ) ) : 0;
+	$is_contact   = is_page_template( 'template-contact.php' )
+		|| ( $booking_page_id && is_page( $booking_page_id ) )
+		|| is_page( 'contact' )
+		|| is_page( 'contact-us' );
 
 	// Pages that show a .faq__list.
 	$has_faq = $is_front || $is_singular_treatment || $is_treatment_archive;
