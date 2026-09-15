@@ -1,6 +1,6 @@
 .privacy-policy-hero {
 	padding-block: clamp(4rem, 9vw, 8rem) clamp(3rem, 6vw, 5rem);
-	border-bottom: 1px solid var(--color-border);
+	/* border-bottom: 1px solid var(--color-border); */
 }
 
 .privacy-policy-hero__inner,
@@ -52,7 +52,7 @@
 	counter-reset: privacy-section;
 }
 
-.privacy-policy-content__inner > * {
+.privacy-policy-content__inner>* {
 	max-width: 72ch;
 }
 
@@ -66,7 +66,7 @@
 	margin-bottom: var(--space-sm);
 	padding-top: 1.25rem;
 	border-top: 1px solid var(--color-border);
-	font-size: clamp(1.75rem, 3vw, 2.5rem);
+	font-size: clamp(1.75rem, 3vw, 2.25rem);
 	counter-increment: privacy-section;
 	transition: border-color var(--transition-fast);
 }
@@ -88,7 +88,6 @@
 	font-family: var(--font-ui);
 	font-size: var(--fs-2xs);
 	font-weight: var(--fw-heading);
-	letter-spacing: 0.1em;
 	transition: background-color var(--transition-fast), color var(--transition-fast);
 }
 
@@ -110,7 +109,7 @@
 	padding-left: 1.35rem;
 }
 
-.privacy-policy-content__inner li + li {
+.privacy-policy-content__inner li+li {
 	margin-top: 0.6rem;
 }
 
