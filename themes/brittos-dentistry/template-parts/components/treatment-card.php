@@ -40,10 +40,13 @@ if ( '' === $short_desc ) {
 	<?php if ( $has_single_page ) : ?><a class="treatment-card__media-link" href="<?php the_permalink(); ?>" tabindex="-1" aria-hidden="true"><?php endif; ?>
 		<?php if ( $image_id ) : ?>
 			<?php echo wp_get_attachment_image( $image_id, 'brittos-card', false, array(
-				'class'    => 'treatment-card__image',
-				'loading'  => 'lazy',
+				'class'   => 'treatment-card__image',
+				'loading' => 'lazy',
 				'decoding' => 'async',
-				'alt'      => '',
+				'alt'     => '',
+				// Cards sit in a 3-col grid (≈380 px), 2-col at tablet (≈480 px),
+				// full-width on mobile — give the browser real render widths.
+				'sizes'   => '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 380px',
 			) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		<?php else : ?>
 			<span class="treatment-card__image treatment-card__image--placeholder" aria-hidden="true">

@@ -25,7 +25,12 @@ $has_media   = '1' === brittos_clinic_field( 'treatments_hero_fullbleed' ) && $h
 <header class="treatment-hero<?php echo $has_media ? ' treatment-hero--overlay' : ''; ?>">
 	<?php if ( $has_media ) : ?>
 		<div class="treatment-hero__bg" aria-hidden="true">
-			<?php echo wp_get_attachment_image( $bg_image_id, 'brittos-hero', false, array( 'class' => 'treatment-hero__bg-image' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+			<?php echo wp_get_attachment_image( $bg_image_id, 'brittos-hero', false, array(
+				'class'         => 'treatment-hero__bg-image',
+				'loading'       => 'eager',  // Above-the-fold BG — must not lazy-load.
+				'fetchpriority' => 'high',
+				'decoding'      => 'async',
+			) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 			<div class="treatment-hero__bg-overlay"></div>
 		</div>
 	<?php endif; ?>

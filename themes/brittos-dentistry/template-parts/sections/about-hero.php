@@ -18,7 +18,12 @@ $booking  = function_exists( 'brittos_core_get_booking_url' ) ? brittos_core_get
 <section class="hero hero--full-bleed about-hero<?php echo $fullbleed ? ' about-hero--fullbleed' : ''; ?>" aria-labelledby="about-hero-title">
 	<?php if ( $fullbleed ) : ?>
 		<div class="about-hero__background" aria-hidden="true">
-			<?php echo wp_get_attachment_image( $image_id, 'brittos-hero', false, array( 'class' => 'about-hero__background-image' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+			<?php echo wp_get_attachment_image( $image_id, 'brittos-hero', false, array(
+				'class'         => 'about-hero__background-image',
+				'loading'       => 'eager',  // Above-the-fold BG — must not lazy-load.
+				'fetchpriority' => 'high',
+				'decoding'      => 'async',
+			) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 			<div class="about-hero__background-overlay"></div>
 		</div>
 	<?php endif; ?>
