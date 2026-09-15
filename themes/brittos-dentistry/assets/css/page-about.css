@@ -1,0 +1,11 @@
+/*
+ * About page component stylesheet — loaded only when
+ * is_page_template('page-about.php').
+ *
+ * Covers: about page hero, about-doctor section (shared with homepage),
+ * about-page-specific layouts, and the final CTA banner.
+ */
+@import "./components/full-bleed-modern-hero.css";
+@import "./components/about-doctor.css";
+@import "./components/about-page.css";
+@import "./components/final-cta-appointment-form.css";

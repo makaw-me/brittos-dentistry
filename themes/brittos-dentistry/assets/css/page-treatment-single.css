@@ -1,0 +1,12 @@
+/*
+ * Single treatment component stylesheet — loaded only on is_singular('treatment').
+ *
+ * Covers: treatment hero (reuses full-bleed-modern-hero tokens), the
+ * full single-page layout, before/after gallery, FAQ accordion,
+ * and final CTA banner.
+ */
+@import "./components/full-bleed-modern-hero.css";
+@import "./components/treatment-single-page.css";
+@import "./components/before-after-gallery.css";
+@import "./components/faq-accordion.css";
+@import "./components/final-cta-appointment-form.css";

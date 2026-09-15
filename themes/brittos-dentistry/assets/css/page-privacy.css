@@ -1,0 +1,4 @@
+/*
+ * Privacy Policy page stylesheet — loaded only on is_page('privacy-policy').
+ */
+@import "./components/privacy-policy.css";

@@ -1,0 +1,14 @@
+/*
+ * Homepage component stylesheet — loaded only on is_front_page().
+ *
+ * Covers: hero, about-doctor strip, treatments grid, why-choose-us,
+ * testimonials, clinic gallery, FAQ accordion, and final CTA banner.
+ */
+@import "./components/full-bleed-modern-hero.css";
+@import "./components/about-doctor.css";
+@import "./components/treatments-grid-card.css";
+@import "./components/why-choose-us.css";
+@import "./components/testimonials.css";
+@import "./components/gallery.css";
+@import "./components/faq-accordion.css";
+@import "./components/final-cta-appointment-form.css";
