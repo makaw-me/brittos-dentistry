@@ -29,7 +29,7 @@ function brittos_core_render_appointment_form() {
 	$date_label = $text( 'appointment_date_label', __( 'Preferred Date', 'brittos-core' ) );
 	$time_label = $text( 'appointment_time_label', __( 'Preferred Time', 'brittos-core' ) );
 	$reason_label = $text( 'appointment_reason_label', __( 'Reason for Visit', 'brittos-core' ) );
-	$message_label = $text( 'appointment_message_label', __( 'Message (optional)', 'brittos-core' ) );
+	$message_label = $text( 'appointment_message_label', __( 'Message', 'brittos-core' ) );
 	$message_hint = $text( 'appointment_message_hint', __( 'Please avoid sharing detailed medical history here — this form is for scheduling only.', 'brittos-core' ) );
 	$submit_label = $text( 'appointment_submit_label', __( 'Request appointment', 'brittos-core' ) );
 	?>
@@ -56,44 +56,120 @@ function brittos_core_render_appointment_form() {
 			<input type="text" id="brittos_website" name="brittos_website" tabindex="-1" autocomplete="off" value="">
 		</p>
 
-		<div class="appointment-form__row">
-			<label for="brittos_name"><?php echo esc_html( $name_label ); ?> <span aria-hidden="true">*</span></label>
-			<input type="text" id="brittos_name" name="brittos_name" required aria-required="true" autocomplete="name">
-		</div>
-
-		<div class="appointment-form__row">
-			<label for="brittos_phone"><?php echo esc_html( $phone_label ); ?> <span aria-hidden="true">*</span></label>
-			<input type="tel" id="brittos_phone" name="brittos_phone" required aria-required="true" autocomplete="tel">
-		</div>
-
-		<div class="appointment-form__row">
-			<label for="brittos_email"><?php echo esc_html( $email_label ); ?> <span aria-hidden="true">*</span></label>
-			<input type="email" id="brittos_email" name="brittos_email" required aria-required="true" autocomplete="email">
-		</div>
-
-		<div class="appointment-form__row appointment-form__row--split">
-			<div>
-				<label for="brittos_preferred_date"><?php echo esc_html( $date_label ); ?></label>
-				<input type="date" id="brittos_preferred_date" name="brittos_preferred_date">
+		<?php if ( brittos_core_appointment_field_visible( 'name' ) ) : ?>
+			<div class="appointment-form__row">
+				<label for="brittos_name">
+					<?php echo esc_html( $name_label ); ?>
+					<?php if ( brittos_core_appointment_field_required( 'name' ) ) : ?><span aria-hidden="true">*</span><?php endif; ?>
+				</label>
+				<input
+					type="text"
+					id="brittos_name"
+					name="brittos_name"
+					autocomplete="name"
+					<?php echo brittos_core_appointment_field_required( 'name' ) ? 'required aria-required="true"' : ''; ?>
+				>
 			</div>
-			<div>
-				<label for="brittos_preferred_time"><?php echo esc_html( $time_label ); ?></label>
-				<input type="time" id="brittos_preferred_time" name="brittos_preferred_time">
+		<?php endif; ?>
+
+		<?php if ( brittos_core_appointment_field_visible( 'phone' ) ) : ?>
+			<div class="appointment-form__row">
+				<label for="brittos_phone">
+					<?php echo esc_html( $phone_label ); ?>
+					<?php if ( brittos_core_appointment_field_required( 'phone' ) ) : ?><span aria-hidden="true">*</span><?php endif; ?>
+				</label>
+				<input
+					type="tel"
+					id="brittos_phone"
+					name="brittos_phone"
+					autocomplete="tel"
+					<?php echo brittos_core_appointment_field_required( 'phone' ) ? 'required aria-required="true"' : ''; ?>
+				>
 			</div>
-		</div>
+		<?php endif; ?>
 
-		<div class="appointment-form__row">
-			<label for="brittos_reason"><?php echo esc_html( $reason_label ); ?></label>
-			<input type="text" id="brittos_reason" name="brittos_reason" autocomplete="off">
-		</div>
+		<?php if ( brittos_core_appointment_field_visible( 'email' ) ) : ?>
+			<div class="appointment-form__row">
+				<label for="brittos_email">
+					<?php echo esc_html( $email_label ); ?>
+					<?php if ( brittos_core_appointment_field_required( 'email' ) ) : ?><span aria-hidden="true">*</span><?php endif; ?>
+				</label>
+				<input
+					type="email"
+					id="brittos_email"
+					name="brittos_email"
+					autocomplete="email"
+					<?php echo brittos_core_appointment_field_required( 'email' ) ? 'required aria-required="true"' : ''; ?>
+				>
+			</div>
+		<?php endif; ?>
 
-		<div class="appointment-form__row">
-			<label for="brittos_message"><?php echo esc_html( $message_label ); ?></label>
-			<textarea id="brittos_message" name="brittos_message" rows="4"></textarea>
-			<?php if ( $message_hint ) : ?>
-				<p class="appointment-form__hint"><?php echo esc_html( $message_hint ); ?></p>
-			<?php endif; ?>
-		</div>
+		<?php if ( brittos_core_appointment_field_visible( 'preferred_date' ) || brittos_core_appointment_field_visible( 'preferred_time' ) ) : ?>
+			<div class="appointment-form__row appointment-form__row--split">
+				<?php if ( brittos_core_appointment_field_visible( 'preferred_date' ) ) : ?>
+					<div>
+						<label for="brittos_preferred_date">
+							<?php echo esc_html( $date_label ); ?>
+							<?php if ( brittos_core_appointment_field_required( 'preferred_date' ) ) : ?><span aria-hidden="true">*</span><?php endif; ?>
+						</label>
+						<input
+							type="date"
+							id="brittos_preferred_date"
+							name="brittos_preferred_date"
+							<?php echo brittos_core_appointment_field_required( 'preferred_date' ) ? 'required aria-required="true"' : ''; ?>
+						>
+					</div>
+				<?php endif; ?>
+				<?php if ( brittos_core_appointment_field_visible( 'preferred_time' ) ) : ?>
+					<div>
+						<label for="brittos_preferred_time">
+							<?php echo esc_html( $time_label ); ?>
+							<?php if ( brittos_core_appointment_field_required( 'preferred_time' ) ) : ?><span aria-hidden="true">*</span><?php endif; ?>
+						</label>
+						<input
+							type="time"
+							id="brittos_preferred_time"
+							name="brittos_preferred_time"
+							<?php echo brittos_core_appointment_field_required( 'preferred_time' ) ? 'required aria-required="true"' : ''; ?>
+						>
+					</div>
+				<?php endif; ?>
+			</div>
+		<?php endif; ?>
+
+		<?php if ( brittos_core_appointment_field_visible( 'reason' ) ) : ?>
+			<div class="appointment-form__row">
+				<label for="brittos_reason">
+					<?php echo esc_html( $reason_label ); ?>
+					<?php if ( brittos_core_appointment_field_required( 'reason' ) ) : ?><span aria-hidden="true">*</span><?php endif; ?>
+				</label>
+				<input
+					type="text"
+					id="brittos_reason"
+					name="brittos_reason"
+					autocomplete="off"
+					<?php echo brittos_core_appointment_field_required( 'reason' ) ? 'required aria-required="true"' : ''; ?>
+				>
+			</div>
+		<?php endif; ?>
+
+		<?php if ( brittos_core_appointment_field_visible( 'message' ) ) : ?>
+			<div class="appointment-form__row">
+				<label for="brittos_message">
+					<?php echo esc_html( $message_label ); ?>
+					<?php if ( brittos_core_appointment_field_required( 'message' ) ) : ?><span aria-hidden="true">*</span><?php endif; ?>
+				</label>
+				<textarea
+					id="brittos_message"
+					name="brittos_message"
+					rows="4"
+					<?php echo brittos_core_appointment_field_required( 'message' ) ? 'required aria-required="true"' : ''; ?>
+				></textarea>
+				<?php if ( $message_hint ) : ?>
+					<p class="appointment-form__hint"><?php echo esc_html( $message_hint ); ?></p>
+				<?php endif; ?>
+			</div>
+		<?php endif; ?>
 
 		<button type="submit" class="button button--primary">
 			<?php echo esc_html( $submit_label ); ?>
@@ -147,27 +223,42 @@ function brittos_core_validate_appointment_submission() {
 	$reason  = isset( $_POST['brittos_reason'] ) ? sanitize_text_field( wp_unslash( $_POST['brittos_reason'] ) ) : '';
 	$message = isset( $_POST['brittos_message'] ) ? sanitize_textarea_field( wp_unslash( $_POST['brittos_message'] ) ) : '';
 
-	if ( '' === $name ) {
+	if ( brittos_core_appointment_field_required( 'name' ) && '' === $name ) {
 		$errors[] = __( 'Please enter your name.', 'brittos-core' );
 	}
 
-	if ( '' === $phone ) {
+	if ( brittos_core_appointment_field_required( 'phone' ) && '' === $phone ) {
 		$errors[] = __( 'Please enter a phone number.', 'brittos-core' );
-	} elseif ( ! preg_match( '/^[0-9+()\-\s]{6,20}$/', $phone ) ) {
+	} elseif ( '' !== $phone && ! preg_match( '/^[0-9+()\-\s]{6,20}$/', $phone ) ) {
 		$errors[] = __( 'Please enter a valid phone number.', 'brittos-core' );
 	}
 
-	if ( '' === $email ) {
+	if ( brittos_core_appointment_field_required( 'email' ) && '' === $email ) {
 		$errors[] = __( 'Please enter your email address.', 'brittos-core' );
-	} elseif ( ! is_email( $email ) ) {
+	} elseif ( '' !== $email && ! is_email( $email ) ) {
 		$errors[] = __( 'Please enter a valid email address.', 'brittos-core' );
 	}
 
+	if ( brittos_core_appointment_field_required( 'preferred_date' ) && '' === $date ) {
+		$errors[] = __( 'Please choose a preferred date.', 'brittos-core' );
+	}
 	if ( $date && ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $date ) ) {
 		$date = '';
 	}
+
+	if ( brittos_core_appointment_field_required( 'preferred_time' ) && '' === $time ) {
+		$errors[] = __( 'Please choose a preferred time.', 'brittos-core' );
+	}
 	if ( $time && ! preg_match( '/^\d{2}:\d{2}$/', $time ) ) {
 		$time = '';
+	}
+
+	if ( brittos_core_appointment_field_required( 'reason' ) && '' === $reason ) {
+		$errors[] = __( 'Please share your reason for visiting.', 'brittos-core' );
+	}
+
+	if ( brittos_core_appointment_field_required( 'message' ) && '' === $message ) {
+		$errors[] = __( 'Please add a short message.', 'brittos-core' );
 	}
 
 	return array(
@@ -224,11 +315,14 @@ function brittos_core_send_appointment_email( $data ) {
 	/* translators: %s: clinic name */
 	$subject = sprintf( __( 'New appointment enquiry — %s', 'brittos-core' ), $clinic_name );
 
-	$lines = array(
-		sprintf( __( 'Name: %s', 'brittos-core' ), $data['name'] ),
-		sprintf( __( 'Phone: %s', 'brittos-core' ), $data['phone'] ),
-	);
+	$lines = array();
 
+	if ( $data['name'] ) {
+		$lines[] = sprintf( __( 'Name: %s', 'brittos-core' ), $data['name'] );
+	}
+	if ( $data['phone'] ) {
+		$lines[] = sprintf( __( 'Phone: %s', 'brittos-core' ), $data['phone'] );
+	}
 	if ( $data['email'] ) {
 		$lines[] = sprintf( __( 'Email: %s', 'brittos-core' ), $data['email'] );
 	}

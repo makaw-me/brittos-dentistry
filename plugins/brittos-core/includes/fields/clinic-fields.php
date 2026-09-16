@@ -99,13 +99,14 @@ function brittos_core_clinic_field_definitions() {
 		'contact_required_note' => array( 'tab' => 'contact_page', 'label' => __( 'Required fields note', 'brittos-core' ), 'type' => 'text', 'default' => __( '* Required fields', 'brittos-core' ), 'help' => __( 'Shown below the appointment form. Leave blank to hide it.', 'brittos-core' ) ),
 		'contact_form_unavailable_text' => array( 'tab' => 'contact_page', 'label' => __( 'Unavailable form message', 'brittos-core' ), 'type' => 'textarea', 'default' => __( 'The appointment form is temporarily unavailable.', 'brittos-core' ) ),
 		'contact_form_call_text' => array( 'tab' => 'contact_page', 'label' => __( 'Unavailable form call-to-action', 'brittos-core' ), 'type' => 'text', 'default' => __( 'Please call %s to book.', 'brittos-core' ), 'help' => __( 'Use %s where the configured phone number should appear.', 'brittos-core' ) ),
+		'appointment_fields'     => array( 'tab' => 'contact_page', 'label' => __( 'Appointment Form Fields', 'brittos-core' ), 'type' => 'appointment_fields', 'help' => __( 'Choose which fields appear on the appointment form and which of the visible ones are required. Hiding a field also clears its "required" status.', 'brittos-core' ) ),
 		'appointment_name_label' => array( 'tab' => 'contact_page', 'label' => __( 'Appointment form name label', 'brittos-core' ), 'type' => 'text', 'default' => __( 'Name', 'brittos-core' ) ),
 		'appointment_phone_label' => array( 'tab' => 'contact_page', 'label' => __( 'Appointment form phone label', 'brittos-core' ), 'type' => 'text', 'default' => __( 'Phone', 'brittos-core' ) ),
 		'appointment_email_label' => array( 'tab' => 'contact_page', 'label' => __( 'Appointment form email label', 'brittos-core' ), 'type' => 'text', 'default' => __( 'Email', 'brittos-core' ) ),
 		'appointment_date_label' => array( 'tab' => 'contact_page', 'label' => __( 'Appointment form date label', 'brittos-core' ), 'type' => 'text', 'default' => __( 'Preferred Date', 'brittos-core' ) ),
 		'appointment_time_label' => array( 'tab' => 'contact_page', 'label' => __( 'Appointment form time label', 'brittos-core' ), 'type' => 'text', 'default' => __( 'Preferred Time', 'brittos-core' ) ),
 		'appointment_reason_label' => array( 'tab' => 'contact_page', 'label' => __( 'Appointment form reason label', 'brittos-core' ), 'type' => 'text', 'default' => __( 'Reason for Visit', 'brittos-core' ) ),
-		'appointment_message_label' => array( 'tab' => 'contact_page', 'label' => __( 'Appointment form message label', 'brittos-core' ), 'type' => 'text', 'default' => __( 'Message (optional)', 'brittos-core' ) ),
+		'appointment_message_label' => array( 'tab' => 'contact_page', 'label' => __( 'Appointment form message label', 'brittos-core' ), 'type' => 'text', 'default' => __( 'Message', 'brittos-core' ) ),
 		'appointment_message_hint' => array( 'tab' => 'contact_page', 'label' => __( 'Appointment form message hint', 'brittos-core' ), 'type' => 'textarea', 'default' => __( 'Please avoid sharing detailed medical history here — this form is for scheduling only.', 'brittos-core' ), 'help' => __( 'Shown below the message field. Leave blank to hide it.', 'brittos-core' ) ),
 		'appointment_submit_label' => array( 'tab' => 'contact_page', 'label' => __( 'Appointment form submit label', 'brittos-core' ), 'type' => 'text', 'default' => __( 'Request appointment', 'brittos-core' ) ),
 		'appointment_success_message' => array( 'tab' => 'contact_page', 'label' => __( 'Appointment success message', 'brittos-core' ), 'type' => 'textarea', 'default' => __( 'Thank you — the clinic will be in touch shortly to confirm your appointment.', 'brittos-core' ) ),
@@ -263,6 +264,102 @@ function brittos_core_register_clinic_settings() {
 add_action( 'admin_init', 'brittos_core_register_clinic_settings' );
 
 /**
+ * Canonical list of appointment-form fields that can be shown/hidden and
+ * marked required from Settings > Clinic Info > Contact Page, with the
+ * defaults that match the form's original hardcoded behaviour.
+ *
+ * @return array Keyed by field id, each with 'label', 'visible', 'required'.
+ */
+function brittos_core_appointment_field_defaults() {
+	return array(
+		'name'           => array( 'label' => __( 'Name', 'brittos-core' ), 'visible' => true, 'required' => true ),
+		'phone'          => array( 'label' => __( 'Phone', 'brittos-core' ), 'visible' => true, 'required' => true ),
+		'email'          => array( 'label' => __( 'Email', 'brittos-core' ), 'visible' => true, 'required' => true ),
+		'preferred_date' => array( 'label' => __( 'Preferred Date', 'brittos-core' ), 'visible' => true, 'required' => false ),
+		'preferred_time' => array( 'label' => __( 'Preferred Time', 'brittos-core' ), 'visible' => true, 'required' => false ),
+		'reason'         => array( 'label' => __( 'Reason for Visit', 'brittos-core' ), 'visible' => true, 'required' => false ),
+		'message'        => array( 'label' => __( 'Message', 'brittos-core' ), 'visible' => true, 'required' => false ),
+	);
+}
+
+/**
+ * Sanitize a posted appointment-fields configuration into a fixed shape
+ * covering every known field, forcing 'required' off for any field that
+ * isn't visible.
+ *
+ * @param mixed $raw Raw posted value for the appointment_fields field.
+ * @return array
+ */
+function brittos_core_sanitize_appointment_fields( $raw ) {
+	$raw   = is_array( $raw ) ? $raw : array();
+	$clean = array();
+
+	foreach ( brittos_core_appointment_field_defaults() as $field_key => $defaults ) {
+		$posted  = isset( $raw[ $field_key ] ) && is_array( $raw[ $field_key ] ) ? $raw[ $field_key ] : array();
+		$visible = ! empty( $posted['visible'] );
+
+		$clean[ $field_key ] = array(
+			'visible'  => $visible,
+			'required' => $visible && ! empty( $posted['required'] ),
+		);
+	}
+
+	return $clean;
+}
+
+/**
+ * The appointment-fields configuration, merging any saved choices with the
+ * original defaults for fields the clinic hasn't touched yet.
+ *
+ * @return array Keyed by field id, each with 'visible' and 'required' booleans.
+ */
+function brittos_core_get_appointment_fields_config() {
+	$stored = brittos_core_get_clinic_field( 'appointment_fields', array() );
+	$stored = is_array( $stored ) ? $stored : array();
+	$config = array();
+
+	foreach ( brittos_core_appointment_field_defaults() as $field_key => $defaults ) {
+		if ( isset( $stored[ $field_key ] ) && is_array( $stored[ $field_key ] ) ) {
+			$visible = ! empty( $stored[ $field_key ]['visible'] );
+			$config[ $field_key ] = array(
+				'visible'  => $visible,
+				'required' => $visible && ! empty( $stored[ $field_key ]['required'] ),
+			);
+		} else {
+			$config[ $field_key ] = array(
+				'visible'  => $defaults['visible'],
+				'required' => $defaults['required'],
+			);
+		}
+	}
+
+	return $config;
+}
+
+/**
+ * Whether one appointment-form field should be rendered at all.
+ *
+ * @param string $field_key One of brittos_core_appointment_field_defaults()'s keys.
+ * @return bool
+ */
+function brittos_core_appointment_field_visible( $field_key ) {
+	$config = brittos_core_get_appointment_fields_config();
+	return isset( $config[ $field_key ] ) ? ! empty( $config[ $field_key ]['visible'] ) : true;
+}
+
+/**
+ * Whether one appointment-form field is required. Always false when the
+ * field isn't visible.
+ *
+ * @param string $field_key One of brittos_core_appointment_field_defaults()'s keys.
+ * @return bool
+ */
+function brittos_core_appointment_field_required( $field_key ) {
+	$config = brittos_core_get_appointment_fields_config();
+	return isset( $config[ $field_key ] ) ? ! empty( $config[ $field_key ]['required'] ) : false;
+}
+
+/**
  * Sanitize the full clinic option array against the field definitions.
  *
  * @param array $input Raw posted values.
@@ -286,6 +383,9 @@ function brittos_core_sanitize_clinic_fields( $input ) {
 		switch ( $field['type'] ) {
 			case 'email':
 				$clean[ $key ] = sanitize_email( $raw );
+				break;
+			case 'appointment_fields':
+				$clean[ $key ] = brittos_core_sanitize_appointment_fields( $raw );
 				break;
 			case 'url':
 			case 'video':
@@ -319,6 +419,49 @@ function brittos_core_sanitize_clinic_fields( $input ) {
 	}
 
 	return $clean;
+}
+
+/**
+ * Render the appointment-fields visibility/required table: one row per
+ * form field with "Show on form" and "Required" checkboxes. Still fully
+ * usable with JavaScript disabled; assets/admin-clinic-fields.js only
+ * adds live disabling of "Required" while "Show on form" is unchecked.
+ *
+ * @param string $name  Base option field name, e.g. "brittos_core_clinic[appointment_fields]".
+ * @param array  $value Sanitized appointment-fields config.
+ */
+function brittos_core_render_appointment_fields_editor( $name, $value ) {
+	$value = is_array( $value ) ? $value : array();
+	?>
+	<table class="brittos-appointment-fields widefat striped" style="max-width:520px;">
+		<thead>
+			<tr>
+				<th><?php esc_html_e( 'Field', 'brittos-core' ); ?></th>
+				<th style="text-align:center;"><?php esc_html_e( 'Show on form', 'brittos-core' ); ?></th>
+				<th style="text-align:center;"><?php esc_html_e( 'Required', 'brittos-core' ); ?></th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php foreach ( brittos_core_appointment_field_defaults() as $field_key => $defaults ) :
+				$stored     = isset( $value[ $field_key ] ) && is_array( $value[ $field_key ] ) ? $value[ $field_key ] : $defaults;
+				$visible    = ! empty( $stored['visible'] );
+				$required   = $visible && ! empty( $stored['required'] );
+				$field_name = $name . '[' . $field_key . ']';
+				?>
+				<tr class="brittos-appointment-fields__row">
+					<td><?php echo esc_html( $defaults['label'] ); ?></td>
+					<td style="text-align:center;">
+						<input type="checkbox" class="brittos-appointment-fields__visible" name="<?php echo esc_attr( $field_name ); ?>[visible]" value="1" <?php checked( $visible ); ?>>
+					</td>
+					<td style="text-align:center;">
+						<input type="checkbox" class="brittos-appointment-fields__required" name="<?php echo esc_attr( $field_name ); ?>[required]" value="1" <?php checked( $required ); ?> <?php disabled( $visible, false ); ?>>
+					</td>
+				</tr>
+			<?php endforeach; ?>
+		</tbody>
+	</table>
+	<p class="description"><?php esc_html_e( 'Name, Phone, and Email are recommended to stay visible and required so the clinic can respond to enquiries.', 'brittos-core' ); ?></p>
+	<?php
 }
 
 /**
@@ -436,6 +579,10 @@ function brittos_core_render_single_field( $key, $field ) {
 						! empty( $ids ) ? '' : 'style="display:none"',
 						esc_html__( 'Clear Gallery', 'brittos-core' )
 					);
+					break;
+
+				case 'appointment_fields':
+					brittos_core_render_appointment_fields_editor( $name, is_array( $value ) ? $value : array() );
 					break;
 
 				default:

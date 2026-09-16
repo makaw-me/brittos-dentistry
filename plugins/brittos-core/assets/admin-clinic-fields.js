@@ -125,5 +125,14 @@
 			wrapper.find( '.brittos-gallery-field__preview' ).empty();
 			$( this ).hide();
 		} );
+
+		// Appointment fields: hiding a field also un-requires it.
+		$( document ).on( 'change', '.brittos-appointment-fields__visible', function () {
+			var required = $( this ).closest( '.brittos-appointment-fields__row' ).find( '.brittos-appointment-fields__required' );
+			required.prop( 'disabled', ! this.checked );
+			if ( ! this.checked ) {
+				required.prop( 'checked', false );
+			}
+		} );
 	} );
 } )( jQuery );
