@@ -360,6 +360,24 @@ function brittos_enqueue_assets() {
 			brittos_asset_version( $main_js['path'] ),
 			array( 'strategy' => 'defer', 'in_footer' => true )
 		);
+
+		// Appointment slot picker — only shipped when the clinic has
+		// actually configured working hours; otherwise the date/time
+		// fields stay plain inputs and this adds nothing to the page.
+		if ( function_exists( 'brittos_core_get_appointment_schedule_for_js' ) ) {
+			$schedule_data = brittos_core_get_appointment_schedule_for_js();
+			if ( ! empty( $schedule_data['active'] ) ) {
+				$scheduler_js = brittos_js_asset( 'brittos-appointment-scheduler', 'assets/js/appointment-scheduler.js' );
+				wp_enqueue_script(
+					'brittos-appointment-scheduler',
+					$scheduler_js['uri'],
+					array(),
+					brittos_asset_version( $scheduler_js['path'] ),
+					array( 'strategy' => 'defer', 'in_footer' => true )
+				);
+				wp_localize_script( 'brittos-appointment-scheduler', 'brittosAppointmentSchedule', $schedule_data );
+			}
+		}
 	}
 
 	// -------------------------------------------------------------------------

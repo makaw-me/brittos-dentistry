@@ -84,7 +84,8 @@ function brittos_core_clinic_field_definitions() {
 		'address'               => array( 'tab' => 'general', 'label' => __( 'Street Address', 'brittos-core' ), 'type' => 'text' ),
 		'city'                  => array( 'tab' => 'general', 'label' => __( 'City', 'brittos-core' ), 'type' => 'text' ),
 		'postal_code'           => array( 'tab' => 'general', 'label' => __( 'Postal Code', 'brittos-core' ), 'type' => 'text' ),
-		'opening_hours'         => array( 'tab' => 'general', 'label' => __( 'Opening Hours', 'brittos-core' ), 'type' => 'textarea', 'help' => __( 'One line per schedule item, e.g. "Mon–Sat: 9:00 AM – 7:00 PM".', 'brittos-core' ) ),
+		'opening_hours'         => array( 'tab' => 'general', 'label' => __( 'Opening Hours (display text)', 'brittos-core' ), 'type' => 'textarea', 'help' => __( 'One line per schedule item, e.g. "Mon–Sat: 9:00 AM – 7:00 PM". Shown as plain text in the footer and Contact page; does not affect the appointment form below.', 'brittos-core' ) ),
+		'working_hours'         => array( 'tab' => 'general', 'label' => __( 'Working Hours & Appointment Availability', 'brittos-core' ), 'type' => 'schedule', 'help' => __( 'Drives the date/time choices on the appointment form. Leave every day unchecked with no time ranges to disable these restrictions and accept any date/time as before.', 'brittos-core' ) ),
 		'appointment_url'       => array( 'tab' => 'general', 'label' => __( 'External Booking URL (optional)', 'brittos-core' ), 'type' => 'url', 'help' => __( 'If set, this takes priority over the Booking Page below for all CTA buttons.', 'brittos-core' ) ),
 		'booking_page_id'       => array( 'tab' => 'general', 'label' => __( 'Booking / Contact Page', 'brittos-core' ), 'type' => 'page', 'help' => __( 'The page "Book an appointment" CTAs link to. Assign the "Contact / Book Appointment" page template to a page, then select it here.', 'brittos-core' ) ),
 		'notification_email'    => array( 'tab' => 'general', 'label' => __( 'Appointment Notification Email', 'brittos-core' ), 'type' => 'email', 'help' => __( 'Where enquiries are sent. Defaults to the site admin email if left blank.', 'brittos-core' ) ),
@@ -110,6 +111,7 @@ function brittos_core_clinic_field_definitions() {
 		'appointment_submit_label' => array( 'tab' => 'contact_page', 'label' => __( 'Appointment form submit label', 'brittos-core' ), 'type' => 'text', 'default' => __( 'Request appointment', 'brittos-core' ) ),
 		'appointment_success_message' => array( 'tab' => 'contact_page', 'label' => __( 'Appointment success message', 'brittos-core' ), 'type' => 'textarea', 'default' => __( 'Thank you — the clinic will be in touch shortly to confirm your appointment.', 'brittos-core' ) ),
 		'appointment_error_message' => array( 'tab' => 'contact_page', 'label' => __( 'Appointment error message', 'brittos-core' ), 'type' => 'textarea', 'default' => __( 'Something went wrong. Please check the required fields and try again.', 'brittos-core' ) ),
+		'appointment_slot_duration' => array( 'tab' => 'contact_page', 'label' => __( 'Appointment slot duration (minutes)', 'brittos-core' ), 'type' => 'number', 'default' => '30', 'help' => __( 'Length of each bookable time slot generated from Working Hours & Appointment Availability above, e.g. 15, 30, or 60.', 'brittos-core' ) ),
 
 		'contact_map_enabled'        => array( 'tab' => 'contact_page', 'label' => __( 'Show map on Contact page', 'brittos-core' ), 'type' => 'checkbox', 'help' => __( 'Adds a Google Maps location section to the Contact page. Off by default.', 'brittos-core' ) ),
 		'contact_map_heading'        => array( 'tab' => 'contact_page', 'label' => __( 'Map section heading', 'brittos-core' ), 'type' => 'text', 'default' => __( 'Find Us', 'brittos-core' ) ),
@@ -263,6 +265,56 @@ function brittos_core_register_clinic_settings() {
 add_action( 'admin_init', 'brittos_core_register_clinic_settings' );
 
 /**
+ * Sanitize a posted working-hours schedule into a fixed 7-day shape
+ * keyed by ISO-8601 weekday number (1 = Monday ... 7 = Sunday), each
+ * holding a `closed` flag and a list of validated `HH:MM` start/end
+ * time ranges. Used by the 'schedule' field type.
+ *
+ * @param mixed $raw Raw posted value for the working_hours field.
+ * @return array
+ */
+function brittos_core_sanitize_working_hours( $raw ) {
+	$raw   = is_array( $raw ) ? $raw : array();
+	$clean = array();
+
+	foreach ( range( 1, 7 ) as $iso_weekday ) {
+		$day_key = (string) $iso_weekday;
+		$day     = isset( $raw[ $day_key ] ) && is_array( $raw[ $day_key ] ) ? $raw[ $day_key ] : array();
+		$ranges_raw = isset( $day['ranges'] ) && is_array( $day['ranges'] ) ? $day['ranges'] : array();
+
+		$ranges = array();
+		foreach ( $ranges_raw as $range ) {
+			if ( ! is_array( $range ) ) {
+				continue;
+			}
+			$start = isset( $range['start'] ) ? sanitize_text_field( $range['start'] ) : '';
+			$end   = isset( $range['end'] ) ? sanitize_text_field( $range['end'] ) : '';
+
+			// Only keep well-formed 24h HH:MM pairs where the end is after the start.
+			if ( ! preg_match( '/^([01]\d|2[0-3]):[0-5]\d$/', $start ) || ! preg_match( '/^([01]\d|2[0-3]):[0-5]\d$/', $end ) || $start >= $end ) {
+				continue;
+			}
+
+			$ranges[] = array(
+				'start' => $start,
+				'end'   => $end,
+			);
+		}
+
+		usort( $ranges, static function ( $a, $b ) {
+			return strcmp( $a['start'], $b['start'] );
+		} );
+
+		$clean[ $day_key ] = array(
+			'closed' => ! empty( $day['closed'] ),
+			'ranges' => array_values( $ranges ),
+		);
+	}
+
+	return $clean;
+}
+
+/**
  * Sanitize the full clinic option array against the field definitions.
  *
  * @param array $input Raw posted values.
@@ -286,6 +338,9 @@ function brittos_core_sanitize_clinic_fields( $input ) {
 		switch ( $field['type'] ) {
 			case 'email':
 				$clean[ $key ] = sanitize_email( $raw );
+				break;
+			case 'schedule':
+				$clean[ $key ] = brittos_core_sanitize_working_hours( $raw );
 				break;
 			case 'url':
 			case 'video':
@@ -319,6 +374,60 @@ function brittos_core_sanitize_clinic_fields( $input ) {
 	}
 
 	return $clean;
+}
+
+/**
+ * Render the day-by-day working-hours editor: a "Closed" toggle plus a
+ * repeatable list of start/end time ranges per day, so split shifts
+ * (e.g. 10:00–14:00 and 16:00–21:00) are supported. Row add/remove is
+ * handled by assets/admin-clinic-fields.js; this only renders the
+ * initial state so the field still works with JavaScript disabled.
+ *
+ * @param string $name     Base option field name, e.g. "brittos_core_clinic[working_hours]".
+ * @param array  $schedule Sanitized working-hours array keyed by ISO weekday (1-7).
+ */
+function brittos_core_render_schedule_field( $name, $schedule ) {
+	$day_labels = array(
+		'1' => __( 'Monday', 'brittos-core' ),
+		'2' => __( 'Tuesday', 'brittos-core' ),
+		'3' => __( 'Wednesday', 'brittos-core' ),
+		'4' => __( 'Thursday', 'brittos-core' ),
+		'5' => __( 'Friday', 'brittos-core' ),
+		'6' => __( 'Saturday', 'brittos-core' ),
+		'7' => __( 'Sunday', 'brittos-core' ),
+	);
+	?>
+	<div class="brittos-schedule-field">
+		<?php foreach ( $day_labels as $day_key => $day_label ) :
+			$day       = isset( $schedule[ $day_key ] ) && is_array( $schedule[ $day_key ] ) ? $schedule[ $day_key ] : array();
+			$closed    = ! empty( $day['closed'] );
+			$ranges    = isset( $day['ranges'] ) && is_array( $day['ranges'] ) ? array_values( $day['ranges'] ) : array();
+			$day_name  = $name . '[' . $day_key . ']';
+			$ranges_name = $day_name . '[ranges]';
+			?>
+			<div class="brittos-schedule-field__day" style="border:1px solid #dcdcde;border-radius:4px;padding:10px 12px;margin-bottom:8px;max-width:640px;">
+				<div class="brittos-schedule-field__day-header" style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px;">
+					<strong><?php echo esc_html( $day_label ); ?></strong>
+					<label>
+						<input type="checkbox" name="<?php echo esc_attr( $day_name ); ?>[closed]" value="1" <?php checked( $closed ); ?>>
+						<?php esc_html_e( 'Closed', 'brittos-core' ); ?>
+					</label>
+				</div>
+				<div class="brittos-schedule-field__ranges" data-name-base="<?php echo esc_attr( $ranges_name ); ?>">
+					<?php foreach ( $ranges as $i => $range ) : ?>
+						<div class="brittos-schedule-field__range" style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+							<input type="time" name="<?php echo esc_attr( $ranges_name . '[' . $i . '][start]' ); ?>" value="<?php echo esc_attr( isset( $range['start'] ) ? $range['start'] : '' ); ?>">
+							<span aria-hidden="true">&ndash;</span>
+							<input type="time" name="<?php echo esc_attr( $ranges_name . '[' . $i . '][end]' ); ?>" value="<?php echo esc_attr( isset( $range['end'] ) ? $range['end'] : '' ); ?>">
+							<button type="button" class="button-link-delete brittos-schedule-field__remove-range"><?php esc_html_e( 'Remove', 'brittos-core' ); ?></button>
+						</div>
+					<?php endforeach; ?>
+				</div>
+				<button type="button" class="button button-small brittos-schedule-field__add-range"><?php esc_html_e( '+ Add time range', 'brittos-core' ); ?></button>
+			</div>
+		<?php endforeach; ?>
+	</div>
+	<?php
 }
 
 /**
@@ -436,6 +545,10 @@ function brittos_core_render_single_field( $key, $field ) {
 						! empty( $ids ) ? '' : 'style="display:none"',
 						esc_html__( 'Clear Gallery', 'brittos-core' )
 					);
+					break;
+
+				case 'schedule':
+					brittos_core_render_schedule_field( $name, is_array( $value ) ? $value : array() );
 					break;
 
 				default:

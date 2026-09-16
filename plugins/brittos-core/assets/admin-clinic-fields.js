@@ -125,5 +125,31 @@
 			wrapper.find( '.brittos-gallery-field__preview' ).empty();
 			$( this ).hide();
 		} );
+
+		// Working-hours schedule: add a new time-range row for a day.
+		$( document ).on( 'click', '.brittos-schedule-field__add-range', function ( event ) {
+			event.preventDefault();
+			var dayWrap = $( this ).closest( '.brittos-schedule-field__day' );
+			var rangesWrap = dayWrap.find( '.brittos-schedule-field__ranges' );
+			var nameBase = rangesWrap.data( 'name-base' );
+			var index = rangesWrap.children( '.brittos-schedule-field__range' ).length;
+
+			var row = $( '<div class="brittos-schedule-field__range"></div>' ).css( {
+				display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px'
+			} );
+			row.append(
+				$( '<input type="time">' ).attr( 'name', nameBase + '[' + index + '][start]' ),
+				$( '<span aria-hidden="true">&ndash;</span>' ),
+				$( '<input type="time">' ).attr( 'name', nameBase + '[' + index + '][end]' ),
+				$( '<button type="button" class="button-link-delete brittos-schedule-field__remove-range">Remove</button>' )
+			);
+			rangesWrap.append( row );
+		} );
+
+		// Working-hours schedule: remove a time-range row.
+		$( document ).on( 'click', '.brittos-schedule-field__remove-range', function ( event ) {
+			event.preventDefault();
+			$( this ).closest( '.brittos-schedule-field__range' ).remove();
+		} );
 	} );
 } )( jQuery );

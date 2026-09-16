@@ -45,6 +45,7 @@ function brittos_core_includes() {
 		'includes/fields/clinic-fields.php',
 		'includes/fields/treatment-fields.php',
 		'includes/fields/faq-fields.php',
+		'includes/scheduling.php',
 		'includes/forms/appointment.php',
 		'includes/seo/schema.php',
 		'includes/seo/meta-tags.php',

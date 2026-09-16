@@ -74,11 +74,21 @@ function brittos_core_render_appointment_form() {
 		<div class="appointment-form__row appointment-form__row--split">
 			<div>
 				<label for="brittos_preferred_date"><?php echo esc_html( $date_label ); ?></label>
-				<input type="date" id="brittos_preferred_date" name="brittos_preferred_date">
+				<input type="date" id="brittos_preferred_date" name="brittos_preferred_date" min="<?php echo esc_attr( current_time( 'Y-m-d' ) ); ?>">
 			</div>
 			<div>
 				<label for="brittos_preferred_time"><?php echo esc_html( $time_label ); ?></label>
-				<input type="time" id="brittos_preferred_time" name="brittos_preferred_time">
+				<?php if ( function_exists( 'brittos_core_working_hours_active' ) && brittos_core_working_hours_active() ) : ?>
+					<select id="brittos_preferred_time" name="brittos_preferred_time">
+						<option value=""><?php esc_html_e( 'Select a time (optional)', 'brittos-core' ); ?></option>
+						<?php foreach ( brittos_core_get_all_possible_slots() as $slot ) : ?>
+							<option value="<?php echo esc_attr( $slot ); ?>"><?php echo esc_html( $slot ); ?></option>
+						<?php endforeach; ?>
+					</select>
+					<p class="appointment-form__hint" id="brittos_preferred_time_status" aria-live="polite"></p>
+				<?php else : ?>
+					<input type="time" id="brittos_preferred_time" name="brittos_preferred_time">
+				<?php endif; ?>
 			</div>
 		</div>
 
@@ -168,6 +178,16 @@ function brittos_core_validate_appointment_submission() {
 	}
 	if ( $time && ! preg_match( '/^\d{2}:\d{2}$/', $time ) ) {
 		$time = '';
+	}
+
+	if ( $date && function_exists( 'brittos_core_is_date_open' ) && ! brittos_core_is_date_open( $date ) ) {
+		$errors[] = __( 'The clinic is closed on the selected date. Please choose another date.', 'brittos-core' );
+		$date     = '';
+	}
+
+	if ( $date && $time && function_exists( 'brittos_core_is_slot_available' ) && ! brittos_core_is_slot_available( $date, $time ) ) {
+		$errors[] = __( 'The selected time is not available on that date. Please choose another time.', 'brittos-core' );
+		$time     = '';
 	}
 
 	return array(
