@@ -153,3 +153,46 @@ class Brittos_Primary_Nav_Walker extends Walker_Nav_Menu {
 		return $panel;
 	}
 }
+
+/**
+ * Ensure primary nav top-level list items receive .primary-nav__item.
+ *
+ * @param string[] $classes Array of CSS classes for the menu item.
+ * @param WP_Post  $item    The current menu item object.
+ * @param stdClass $args    An object of wp_nav_menu() arguments.
+ * @param int      $depth   Depth of menu item. Used for padding.
+ * @return string[]
+ */
+function brittos_primary_nav_item_classes( $classes, $item, $args, $depth = 0 ) {
+	if ( isset( $args->theme_location ) && 'primary' === $args->theme_location ) {
+		if ( 0 === $depth && ! in_array( 'primary-nav__item', $classes, true ) ) {
+			$classes[] = 'primary-nav__item';
+		}
+	}
+	return $classes;
+}
+add_filter( 'nav_menu_css_class', 'brittos_primary_nav_item_classes', 10, 4 );
+
+/**
+ * Ensure primary nav top-level links receive .primary-nav__link.
+ *
+ * @param array<string, string> $atts  The HTML attributes applied to the menu item's <a> element.
+ * @param WP_Post               $item  The current menu item object.
+ * @param stdClass              $args  An object of wp_nav_menu() arguments.
+ * @param int                   $depth Depth of menu item.
+ * @return array<string, string>
+ */
+function brittos_primary_nav_link_attributes( $atts, $item, $args, $depth = 0 ) {
+	if ( isset( $args->theme_location ) && 'primary' === $args->theme_location ) {
+		if ( 0 === $depth ) {
+			$existing = ! empty( $atts['class'] ) ? explode( ' ', $atts['class'] ) : array();
+			if ( ! in_array( 'primary-nav__link', $existing, true ) ) {
+				$existing[] = 'primary-nav__link';
+			}
+			$atts['class'] = trim( implode( ' ', $existing ) );
+		}
+	}
+	return $atts;
+}
+add_filter( 'nav_menu_link_attributes', 'brittos_primary_nav_link_attributes', 10, 4 );
+
