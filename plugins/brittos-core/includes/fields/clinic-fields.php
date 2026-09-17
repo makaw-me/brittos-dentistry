@@ -83,6 +83,7 @@ function brittos_core_clinic_field_definitions() {
 		'email'                 => array( 'tab' => 'general', 'label' => __( 'Email Address', 'brittos-core' ), 'type' => 'email' ),
 		'address'               => array( 'tab' => 'general', 'label' => __( 'Street Address', 'brittos-core' ), 'type' => 'text' ),
 		'city'                  => array( 'tab' => 'general', 'label' => __( 'City', 'brittos-core' ), 'type' => 'text' ),
+		'state'                 => array( 'tab' => 'general', 'label' => __( 'State / Province', 'brittos-core' ), 'type' => 'text' ),
 		'postal_code'           => array( 'tab' => 'general', 'label' => __( 'Postal Code', 'brittos-core' ), 'type' => 'text' ),
 		'opening_hours'         => array( 'tab' => 'general', 'label' => __( 'Opening Hours', 'brittos-core' ), 'type' => 'textarea', 'help' => __( 'One line per schedule item, e.g. "Mon–Sat: 9:00 AM – 7:00 PM".', 'brittos-core' ) ),
 		'appointment_url'       => array( 'tab' => 'general', 'label' => __( 'External Booking URL (optional)', 'brittos-core' ), 'type' => 'url', 'help' => __( 'If set, this takes priority over the Booking Page below for all CTA buttons.', 'brittos-core' ) ),

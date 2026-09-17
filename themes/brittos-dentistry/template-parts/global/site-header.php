@@ -42,7 +42,7 @@ if ( is_front_page() && brittos_clinic_setting_enabled( 'hero_transparent_header
 				height="128"
 				decoding="async"
 			>
-			<span class="site-header__name"><?php echo esc_html( $clinic_name ); ?></span>
+			<!-- <span class="site-header__name"><?php echo esc_html( $clinic_name ); ?></span> -->
 		</a>
 
 		<button
