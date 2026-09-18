@@ -27,6 +27,9 @@ $has_single_page = ! function_exists( 'brittos_core_treatment_has_single_page' )
 $short_desc    = function_exists( 'brittos_core_get_treatment_field' )
 	? brittos_core_get_treatment_field( $treatment_id, 'short_description' )
 	: '';
+$starting_price = function_exists( 'brittos_core_get_treatment_field' )
+	? brittos_core_get_treatment_field( $treatment_id, 'starting_price' )
+	: '';
 $category_label = '';
 $categories     = get_the_terms( $treatment_id, 'treatment_category' );
 if ( $categories && ! is_wp_error( $categories ) ) {
@@ -59,9 +62,15 @@ if ( '' === $short_desc ) {
 	<?php if ( $has_single_page ) : ?></a><?php endif; ?>
 
 	<div class="treatment-card__body">
-		<h3 class="treatment-card__title">
-			<?php if ( $has_single_page ) : ?><a href="<?php the_permalink(); ?>"><?php endif; ?><?php the_title(); ?><?php if ( $has_single_page ) : ?></a><?php endif; ?>
-		</h3>
+		<div class="treatment-card__heading-row">
+			<h3 class="treatment-card__title">
+				<?php if ( $has_single_page ) : ?><a href="<?php the_permalink(); ?>"><?php endif; ?><?php the_title(); ?><?php if ( $has_single_page ) : ?></a><?php endif; ?>
+			</h3>
+
+			<?php if ( '' !== (string) $starting_price && is_numeric( $starting_price ) ) : ?>
+				<p class="treatment-card__price"><?php printf( esc_html__( 'Starting from INR %s', 'brittos-dentistry' ), esc_html( number_format_i18n( absint( $starting_price ) ) ) ); ?></p>
+			<?php endif; ?>
+		</div>
 
 		<?php if ( $short_desc ) : ?>
 			<p class="treatment-card__excerpt"><?php echo esc_html( wp_strip_all_tags( $short_desc ) ); ?></p>

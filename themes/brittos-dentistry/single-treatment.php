@@ -36,6 +36,9 @@ while ( have_posts() ) :
 	if ( ! $short_desc ) {
 		$short_desc = get_the_excerpt();
 	}
+	$starting_price = $has_field ? brittos_core_get_treatment_field( $treatment_id, 'starting_price' ) : '';
+	$show_starting_price = function_exists( 'brittos_core_get_clinic_field' )
+		&& '1' === brittos_core_get_clinic_field( 'single_show_starting_price', '1' );
 
 	$benefits = $has_field ? brittos_core_get_treatment_field( $treatment_id, 'benefits' ) : array();
 	$process  = $has_field ? brittos_core_get_treatment_field( $treatment_id, 'process' ) : array();
@@ -80,6 +83,13 @@ while ( have_posts() ) :
 
 					<?php if ( $short_desc ) : ?>
 						<p class="hero__lede treatment-hero__lede"><?php echo esc_html( wp_strip_all_tags( $short_desc ) ); ?></p>
+					<?php endif; ?>
+
+					<?php if ( $show_starting_price && '' !== (string) $starting_price && is_numeric( $starting_price ) ) : ?>
+						<p class="treatment-hero__price">
+							<span class="treatment-hero__price-label"><?php esc_html_e( 'Starting from', 'brittos-dentistry' ); ?></span>
+							<span class="treatment-hero__price-value">INR <?php echo esc_html( number_format_i18n( absint( $starting_price ) ) ); ?></span>
+						</p>
 					<?php endif; ?>
 
 				</div>

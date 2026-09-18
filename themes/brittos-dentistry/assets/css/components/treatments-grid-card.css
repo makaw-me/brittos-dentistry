@@ -137,6 +137,9 @@
   flex-direction: column;
   flex-grow: 1;
 }
+.treatment-card__heading-row {
+  display: block;
+}
 .treatment-card__title {
   font-size: 1.25rem;
   margin-bottom: 0.5rem;
@@ -148,6 +151,31 @@
 }
 .treatment-card__title a:hover {
   color: var(--britto-accent);
+}
+.treatment-card__price {
+  margin: -0.1rem 0 0.75rem;
+  color: var(--britto-accent);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+}
+@media (min-width: 1024px) {
+  .treatment-card__heading-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .treatment-card__heading-row .treatment-card__title {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  .treatment-card__heading-row .treatment-card__price {
+    flex: 0 0 auto;
+    margin-top: 0.15rem;
+    margin-bottom: 0.5rem;
+    text-align: right;
+    white-space: nowrap;
+  }
 }
 .treatment-card__excerpt {
   font-size: var(--fs-sm);
@@ -363,7 +391,7 @@
   font-size: 0.9rem;
   line-height: 1.6;
   margin-bottom: 0.65rem;
-  max-width: 64ch;
+  max-width: 100%;
 }
 
 .post-type-archive-treatment .treatment-card--index .treatment-card__link {

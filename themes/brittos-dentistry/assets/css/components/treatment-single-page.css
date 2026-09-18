@@ -40,6 +40,29 @@
 .treatment-hero__lede {
   max-width: 46ch;
 }
+.treatment-hero__price {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 0.5rem;
+  max-width: 100%;
+  margin: 0 0 var(--space-sm);
+  padding: 0.15rem 0 0.15rem 0.65rem;
+  border-left: 2px solid var(--brand-champagne);
+  color: var(--britto-text);
+}
+.treatment-hero__price-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.treatment-hero__price-value {
+  font-size: clamp(1.15rem, 2vw, 1.4rem);
+  font-weight: 700;
+  line-height: 1.1;
+  white-space: nowrap;
+}
 .treatment-hero__media {
   border-radius: var(--radius-xl);
   overflow: hidden;
@@ -93,6 +116,9 @@
 }
 .treatment-hero--overlay .treatment-hero__lede {
   color: #ffffffd1;
+}
+.treatment-hero--overlay .treatment-hero__price {
+  color: var(--overlay-on-dark);
 }
 .treatment-facts {
   padding-block: var(--space-lg);
