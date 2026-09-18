@@ -9,7 +9,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$logo_url    = get_template_directory_uri() . '/assets/images/logo.png';
+$logo_url    = get_template_directory_uri() . '/assets/images/brittos-dentistry-logo-light.svg';
+$dark_logo_url = get_template_directory_uri() . '/assets/images/brittos-dentistry-logo-dark.svg';
 $clinic_name = brittos_clinic_field( 'clinic_name', get_bloginfo( 'name' ) );
 
 // On the homepage the hero already carries the primary/secondary CTAs and
@@ -31,15 +32,15 @@ if ( is_front_page() && brittos_clinic_setting_enabled( 'hero_transparent_header
 				alt=""
 				class="site-header__logo site-header__logo--light"
 				width="160"
-				height="128"
+				height="42"
 				decoding="async"
 			>
 			<img
-				src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/logo-dark.png' ); ?>"
+				src="<?php echo esc_url( $dark_logo_url ); ?>"
 				alt=""
 				class="site-header__logo site-header__logo--dark"
-				width="158"
-				height="128"
+				width="160"
+				height="42"
 				decoding="async"
 			>
 			<!-- <span class="site-header__name"><?php echo esc_html( $clinic_name ); ?></span> -->
