@@ -39,6 +39,8 @@ $credit_link_enabled = brittos_clinic_setting_enabled( 'footer_credit_link_enabl
 $credit_prefix = brittos_clinic_field( 'footer_credit_prefix', __( 'Powered by', 'brittos-dentistry' ) );
 $credit_name = brittos_clinic_field( 'footer_credit_name', 'MAKAW' );
 $credit_url = brittos_clinic_field( 'footer_credit_url', 'https://makaw.me' );
+$logo_url = get_template_directory_uri() . '/assets/images/brittos-dentistry-logo-light.svg';
+$dark_logo_url = get_template_directory_uri() . '/assets/images/brittos-dentistry-logo-dark.svg';
 ?>
 <footer class="site-footer" role="contentinfo">
 	<div class="site-footer__ambient" aria-hidden="true"></div>
@@ -46,7 +48,18 @@ $credit_url = brittos_clinic_field( 'footer_credit_url', 'https://makaw.me' );
 
 		<div class="site-footer__intro">
 			<div class="site-footer__brand-block">
-				<p class="site-footer__brand"><?php echo esc_html( $clinic_name ); ?></p>
+				<div class="site-footer__brand">
+					<img
+						src="<?php echo esc_url( $logo_url ); ?>"
+						alt="<?php echo esc_attr( $clinic_name ); ?>"
+						class="site-footer__logo"
+						data-theme-logo-light="<?php echo esc_url( $logo_url ); ?>"
+						data-theme-logo-dark="<?php echo esc_url( $dark_logo_url ); ?>"
+						width="160"
+						height="42"
+						decoding="async"
+					>
+				</div>
 				<?php if ( $show_tagline ) : ?>
 					<p class="site-footer__tagline"><?php echo esc_html( $footer_tagline ); ?></p>
 				<?php endif; ?>

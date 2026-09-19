@@ -23,6 +23,12 @@
   backdrop-filter: blur(12px) saturate(160%);
   -webkit-backdrop-filter: blur(12px) saturate(160%);
 }
+.site-header--transparent:not(.is-scrolled) .site-header__logo--light {
+  display: none !important;
+}
+.site-header--transparent:not(.is-scrolled) .site-header__logo--dark {
+  display: block !important;
+}
 .site-header__inner {
   display: flex;
   align-items: center;
@@ -687,7 +693,7 @@ html[data-theme="dark"]
 }
 
 .site-header__brand {
-  padding: 0.2rem 0.45rem 0.2rem 0.2rem;
+  /* padding: 0.2rem 0.45rem 0.2rem 0.2rem; */
   border-radius: 999px;
   transition:
     background var(--transition-fast),

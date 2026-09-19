@@ -7,11 +7,18 @@
 	var root = document.documentElement;
 	var toggles = document.querySelectorAll( '[data-theme-toggle]' );
 
-	if ( ! toggles.length ) {
-		return;
+	function updateThemeLogos( theme ) {
+		var logos = document.querySelectorAll( '[data-theme-logo-light][data-theme-logo-dark]' );
+		logos.forEach( function ( logo ) {
+			var source = 'dark' === theme ? logo.getAttribute( 'data-theme-logo-dark' ) : logo.getAttribute( 'data-theme-logo-light' );
+			if ( source ) {
+				logo.setAttribute( 'src', source );
+			}
+		} );
 	}
 
 	function updateToggle( theme ) {
+		updateThemeLogos( theme );
 		var nextTheme = 'dark' === theme ? 'light' : 'dark';
 		toggles.forEach( function ( toggle ) {
 			toggle.setAttribute( 'aria-label', 'dark' === theme ? 'Switch to light mode' : 'Switch to dark mode' );

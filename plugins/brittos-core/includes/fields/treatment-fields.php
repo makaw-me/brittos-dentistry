@@ -19,7 +19,7 @@ define( 'BRITTOS_CORE_TREATMENT_NONCE', 'brittos_core_treatment_nonce' );
  * Read one structured treatment field.
  *
  * @param int    $post_id Treatment post ID.
- * @param string $key     One of: short_description, benefits, process, facts, before_after, hero_overlay, cta_text, cta_url.
+ * @param string $key     One of: short_description, starting_price, benefits, process, facts, before_after, hero_overlay, cta_text, cta_url.
  * @return mixed
  */
 function brittos_core_get_treatment_field( $post_id, $key ) {
@@ -74,6 +74,7 @@ function brittos_core_render_treatment_meta_box( $post ) {
 	wp_nonce_field( 'brittos_core_save_treatment', BRITTOS_CORE_TREATMENT_NONCE );
 
 	$short_description = brittos_core_get_treatment_field( $post->ID, 'short_description' );
+	$starting_price    = brittos_core_get_treatment_field( $post->ID, 'starting_price' );
 	$benefits           = brittos_core_get_treatment_field( $post->ID, 'benefits' );
 	$process            = brittos_core_get_treatment_field( $post->ID, 'process' );
 	$facts              = brittos_core_get_treatment_field( $post->ID, 'facts' );
@@ -97,6 +98,13 @@ function brittos_core_render_treatment_meta_box( $post ) {
 		<label for="brittos_treatment_short_description"><strong><?php esc_html_e( 'Short Description', 'brittos-core' ); ?></strong></label><br>
 		<textarea id="brittos_treatment_short_description" name="brittos_treatment_short_description" rows="2" class="large-text"><?php echo esc_textarea( $short_description ); ?></textarea>
 		<span class="description"><?php esc_html_e( 'One or two sentences shown on cards, archive listings and the treatment hero.', 'brittos-core' ); ?></span>
+	</p>
+
+	<p>
+		<label for="brittos_treatment_starting_price"><strong><?php esc_html_e( 'Starting Price (optional)', 'brittos-core' ); ?></strong></label><br>
+		<span class="brittos-currency-prefix">Rs.</span>
+		<input type="number" id="brittos_treatment_starting_price" name="brittos_treatment_starting_price" value="<?php echo esc_attr( $starting_price ); ?>" min="0" step="1" class="small-text">
+		<span class="description"><?php esc_html_e( 'Shown as the starting price on treatment listings. Enter the amount in rupees without the currency symbol.', 'brittos-core' ); ?></span>
 	</p>
 
 	<div class="brittos-key-value-field" data-field-name="facts">
@@ -191,6 +199,15 @@ function brittos_core_save_treatment_meta( $post_id ) {
 			$post_id,
 			'brittos_treatment_short_description',
 			sanitize_textarea_field( wp_unslash( $_POST['brittos_treatment_short_description'] ) )
+		);
+	}
+
+	if ( isset( $_POST['brittos_treatment_starting_price'] ) ) {
+		$starting_price = trim( wp_unslash( $_POST['brittos_treatment_starting_price'] ) );
+		update_post_meta(
+			$post_id,
+			'brittos_treatment_starting_price',
+			'' === $starting_price ? '' : absint( $starting_price )
 		);
 	}
 
