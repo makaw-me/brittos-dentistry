@@ -38,6 +38,7 @@ add_action( 'init', 'brittos_core_load_textdomain' );
 function brittos_core_includes() {
 	$files = array(
 		'includes/helpers.php',
+		'includes/google-reviews.php',
 		'includes/post-types/treatment.php',
 		'includes/post-types/testimonial.php',
 		'includes/post-types/faq.php',
